@@ -214,3 +214,102 @@ function showRegisterForm(elementId) {
     document.getElementById(elementId).style.display = "block";
 
 }
+
+
+/////////////////////////////////////////////////////
+// login status management
+/////////////////////////////////////////////////////
+
+function saveLoginInfo(kiiUser) {
+
+    Global.currentUser = kiiUser;
+    setCookie("login_name", kiiUser.getUsername(), 1);
+    setCookie("access_token", kiiUser.getAccessToken(), 1);
+
+    console.log("save login info", kiiUser);
+}
+
+function clearLoginInfo() {
+    Global.currentUser = undefined;
+    clearCookie("login_name");
+    clearCookie("access_token");
+
+    console.log("clear login info");
+}
+
+function loadCurrentUserInfo(onSuccess, onFailure) {
+
+    onSuccess = toSafeCallback(onSuccess);
+    onFailure = toSafeCallback(onFailure);
+
+    var accessToken = getCookie("access_token");
+
+    // Authenticate a user with the access token.
+    KiiUser.authenticateWithToken(accessToken, {
+        success: function(theUser) {
+            saveLoginInfo(theUser);
+            onSuccess(theUser);
+        },
+        failure: function(theUser, errorString) {
+            // Handle the error.
+            console.log(errorString);
+            onFailure();
+        }
+    })
+}
+
+// check login status
+function checkLoginStatus(isBackToHomePage) {
+
+    var d = $.Deferred();
+
+    var loginName = getCookie("login_name");
+
+    var elementsBeforeLogin = document.getElementsByName("before_login");
+    var elementsAfterLogin = document.getElementsByName("after_login");
+
+    if (loginName !== undefined && loginName != null && loginName != "") {
+        // show login info
+        for (var i = 0; i < elementsBeforeLogin.length; i++) {
+            elementsBeforeLogin[i].style.display = "none";
+        }
+
+        for (var i = 0; i < elementsAfterLogin.length; i++) {
+            elementsAfterLogin[i].style.display = "block";
+        }
+
+        clearErrorMessage("navbar_error_message");
+
+        // display login name
+        document.getElementById("login_name_display").innerHTML = loginName;
+
+        // refresh Kii user info
+        loadCurrentUserInfo(function(theUser){
+            d.resolve();
+        }, function(errorString) {
+            d.reject();
+        });
+
+    } else {
+
+        // hide login info
+        for (var i = 0; i < elementsBeforeLogin.length; i++) {
+            elementsBeforeLogin[i].style.display = "block";
+        }
+
+        for (var i = 0; i < elementsAfterLogin.length; i++) {
+            elementsAfterLogin[i].style.display = "none";
+        }
+
+        clearErrorMessage("navbar_error_message");
+
+        if (isBackToHomePage == true) {
+            // go back to home page
+            window.location.href = "/";
+        }
+
+        d.reject();
+    }
+
+    return d.promise();
+}

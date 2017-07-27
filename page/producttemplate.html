@@ -1,0 +1,20 @@
+
+<tr id="{ProductID}_display">
+    <td>{Name}</td>
+    <td>{Ice}</td>
+    <td>{Milk}</td>
+    <td>{Sugar}</td>
+    <td>{Description}</td>
+    <td><a href="#" onclick="changeProductDisplayMode('{ProductID}', 'display')">{Edit}</a></td>
+</tr>
+<tr id="{ProductID}_edit" style="display:none">
+    <td>{Name}</td>
+    <td>{Ice}</td>
+    <td>{Milk}</td>
+    <td>{Sugar}</td>
+    <td>{Description}</td>
+    <td>
+        <a href="#" onclick="saveProductTemplate('{ProductID}')">{Save}</a> &nbsp;&nbsp;
+        <a href="#" onclick="changeProductDisplayMode('{ProductID}', 'edit')">{Cancel}</a>
+    <</td>
+</tr>

@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../js/mqttws31.js"></script>
     <script type="text/javascript" src="../js/common.js" ></script>
     <script type="text/javascript" src="../js/auth.js" ></script>
-    <script type="text/javascript" src="../js/order-list.js" ></script>
+    <script type="text/javascript" src="../js/product-list.js" ></script>
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/customise.css">
 
@@ -74,36 +74,35 @@
 
             <div class="panel-group" id="accordion">
 
-                <!--display order list-->
+                <!--display product list-->
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion"
-                               href="#collapseOrderList">
-                                {Product}
+                               href="#collapseProductList">
+                                {Shop List}
                             </a>
                             <!--error message-->
                             <span style="margin-left:20px; color:red; display:none" id="product_list_error_message">
                                 Errormessagesss</span>
                         </h4>
                     </div>
-                    <div id="collapseOrderList" class="panel-collapse collapse in">
+                    <div id="collapseProductList" class="panel-collapse collapse in">
                         <div class="panel-body">
                             <div class="center-block" style="width:80%">
                                 <table class="table">
-                                    <!-- <thead>
+                                    <thead>
                                         <tr>
-                                            <th>{ID}</th>
-                                            <th>{Consumer}</th>
-                                            <th>{Driver}</th>
-                                            <th>{Coffee}</th>
-                                            <th>{OrderStatus}</th>
-                                            <th>{Description}</th>
-                                            <th>{Feedback}</th>
+                                            <th>{NameLabel}</th>
+                                            <th>{IceLabel}</th>
+                                            <th>{MilkLabel}</th>
+                                            <th>{SugarLabel}</th>
+                                            <th>{DescriptionLabel}</th>
+                                            <th>{OperateLabel}</th>
                                         </tr>
-                                    </thead> -->
-                                    <tbody id="order_list">
+                                    </thead>
+                                    <tbody id="product_list">
                                         <!--<tr><td>123</td><td>some product</td></tr>-->
                                         <!--<tr><td>124</td><td>some product</td></tr>-->
                                         <!--<tr><td>125</td><td>some product</td></tr>-->
@@ -126,7 +125,7 @@
 
 
         translateHtmlPage();
-        loadOrderListForDisplay();
+        loadProductListForDisplay();
 
     </script>
 

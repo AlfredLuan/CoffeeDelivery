@@ -1,0 +1,39 @@
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse"
+               href="#collapsePanel-{CollapsePanelID}">
+                Shop ID: {ShopID}
+            </a>
+
+            <!-- <a class="btn btn-default pull-right" style="display:{display}" onclick="markOrderReady('{OrderID}')">{MarkReady}</a> -->
+        </h4>
+    </div>
+    <div id="collapsePanel-{CollapsePanelID}" class="panel-collapse collapse in">
+        <div class="panel-body">
+
+            <div class="center-block" style="width:75%">
+                <div class="form-horizontal" role="form" id="shop_form">
+
+                    <div class="form-group order-row">
+                        <label class="col-sm-2 control-label">{NameLabel}</label>
+                        <div class="col-sm-9">
+                            <span class="col-sm-12 control-label content-display">
+                                {Name}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group order-row">
+                        <label class="col-sm-2 control-label">{AddressLabel}</label>
+                        <div class="col-sm-9">
+                            <span class="col-sm-12 control-label content-display">{Address}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
