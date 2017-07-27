@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/jquery-3.1.0.min.js" ></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/KiiSDK.min.js"></script>
+    <script type="text/javascript" src="../js/mqttws31.js"></script>
+    <script type="text/javascript" src="../js/common.js" ></script>
+    <script type="text/javascript" src="../js/auth.js" ></script>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/customise.css">
+
+    <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon"/>
+    <title>{title}</title>
+
+</head>
+<body>
+
+<!--nav bar-->
+<!--customised navbar for this page-->
+<nav class="navbar navbar-default" role="navigation">
+
+    <div class="container-fluid" id="navbar_before_login" style="width:90%">
+
+        <ul class="nav navbar-nav navbar-left">
+            <li><label class="logo">Logo</label></li>
+        </ul>
+
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+
+            <div class="panel-group" id="accordion">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse"
+                               href="#collapsePanel" id="shop_name">
+                                Shop Name
+                            </a>
+
+                            <!--error message-->
+                            <span style="margin-left:20px; color:red; display:none" id="error_message">
+                                Errormessagesss</span>
+                        </h4>
+                    </div>
+                    <div id="collapsePanel" class="panel-collapse collapse in">
+                        <div class="panel-body">
+
+                            <div class="center-block" style="width:80%">
+                                <div class="form-horizontal" role="form" id="product_form">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">{ProductName}</label>
+                                        <div class="col-sm-9">
+                                            <span class="col-sm-12 control-label content-display"
+                                                  id="product_name">Product Name
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">{ProductDescription}</label>
+                                        <div class="col-sm-9">
+                                            <span class="col-sm-12 control-label content-display"
+                                                  id="product_description">
+                                                Product Description</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+    <!-- script -->
+    <script type="text/javascript">
+
+        translateHtmlPageWInBrowserLang();
+
+    </script>
+
+</body>
+</html>

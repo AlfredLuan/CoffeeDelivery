@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/jquery-3.1.0.min.js" ></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/KiiSDK.min.js"></script>
+    <script type="text/javascript" src="../js/mqttws31.js"></script>
+    <script type="text/javascript" src="../js/common.js" ></script>
+    <script type="text/javascript" src="../js/auth.js" ></script>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/customise.css">
+
+    <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon"/>
+    <title>{title}</title>
+
+</head>
+<body>
+
+<!--nav bar-->
+<!--only index page's navbar should be with margin-bottom:0px-->
+<nav class="navbar navbar-default" role="navigation" style="margin-bottom:0px">
+
+    <div class="container-fluid">
+        <ul class="nav navbar-nav navbar-left">
+            <li><a href="/page/index.html">{Home}</a></li>
+            <li name="after_login"><a href="/page/dashboard.html">{DashBoard}</a></li>
+            <li name="after_login"><a href="/page/productlist.html">{ProductList}</a></li>
+            <li name="after_login"><a href="/page/orderlist.html">{OrderList}</a></li>
+            <li name="after_login"><a href="/page/drivermap.html">{DriverMap}</a></li>
+            <li name="after_login"><a href="/page/myprofile.html">{MyProfile}</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li><a style="color:red" id="navbar_error_message" > messages</a></li>
+            <li name="before_login">
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="login_name" placeholder="{placeholder-name}"/>
+                        <input type="password" class="form-control" id="password" placeholder="{placeholder-password}"/>
+                    </div>
+                </form>
+            </li>
+            <li name="before_login"><a href="#" onclick="login()">{Login}</a></li>
+            <li name="before_login"><a href="/page/register.html" >{Register}</a></li>
+
+            <li name="after_login"><a id="login_name_display" > messages</a></li>
+            <li name="after_login"><a href="#" onclick="logout()">{Logout}</a></li>
+
+            <!-- <li>
+                <form class="navbar-form" role="search">
+                    <select class="form-control" id="lang" onchange="changeLanguage()">
+                        <option value="en">English</option>
+                        <option value="cn">中文</option>
+                        <option value="jp">日本語</option>
+                    </select>
+                </form>
+            </li> -->
+        </ul>
+
+    </div>
+</nav>
+
+<script type="text/javascript">
+    checkLoginStatus();
+</script>
+
+<!--scroll pictures-->
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner" role="listbox">
+        <div class="item active">
+            <img src="../img/cover2.jpg" alt="slide1">
+            <!-- <div class="carousel-caption">
+                <h1>{slide1-title}</h1>
+                <h4>{slide1-content}</h4>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<!--body-->
+<div class="container" style="margin-top:30px; margin-bottom:30px">
+    <div class="row clearfix">
+        <div class="col-md-4 column">
+            <h2>
+                {introduce1-title}
+            </h2>
+            <p>
+                {introduce1-content}
+            </p>
+            <p>
+                <!--<a class="btn" href="#">View details »</a>-->
+            </p>
+        </div>
+        <div class="col-md-4 column">
+            <h2>
+                {introduce2-title}
+            </h2>
+            <p>
+                {introduce2-content}
+            </p>
+            <p>
+                <!--<a class="btn" href="#">View details »</a>-->
+            </p>
+        </div>
+        <div class="col-md-4 column">
+            <h2>
+                {introduce3-title}
+            </h2>
+            <p>
+                {introduce3-content}
+            </p>
+            <p>
+                <!--<a class="btn" href="#">View details »</a>-->
+            </p>
+        </div>
+    </div>
+</div>
+
+<!--footer-->
+<div class="footer navbar-default">
+    <div class="container">
+        <div class="row footer-top">
+            <div class="col-sm-9 col-lg-9">
+                <h4></h4>
+                <p>{greeting}</p>
+            </div>
+        </div>
+        <hr>
+        <div class="row footer-bottom">
+            <ul class="list-inline text-center">
+                <li>{Copyright}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--</div>-->
+<!--</div>-->
+<!--</nav>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+<script type="text/javascript">
+    setCookie("lang", "en", 365);
+    translateHtmlPage();
+</script>
+
+</body>
+</html>

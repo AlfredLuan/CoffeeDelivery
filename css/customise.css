@@ -1,0 +1,48 @@
+/* override the one in bootstrap */
+.navbar-default {
+    background-color:#FAA460;
+    border-left: 0px;
+    border-right: 0px;
+    border-top: 1px #ffffff solid;
+    border-bottom: 1px #ffffff solid;
+    border-radius:0px;
+    box-shadow:0px 0px 15px #000000;
+    z-index:99;
+
+}
+
+/* override the one in bootstrap */
+.navbar-default .navbar-nav > li > a {
+   color: #ffffff;
+}
+
+/* override the one in bootstrap */
+.navbar-default .navbar-nav > li > a:hover {
+   color: #ffffff;
+   text-decoration: underline;
+}
+
+
+.logo {
+    font-style: italic;
+    text-decoration: underline;
+    font-size: 30px;
+    color: #ffffff;
+    font-family: "Console";
+}
+
+/* override the one in bootstrap */
+.footer {
+    color: #ffffff;
+}
+
+.form-horizontal .content-display {
+    word-break: break-all;
+    text-align:left;
+}
+
+.order-row {
+    margin-bottom: 0px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid #eeeeee;
+}

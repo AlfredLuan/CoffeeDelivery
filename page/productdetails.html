@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/jquery-3.1.0.min.js" ></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/KiiSDK.min.js"></script>
+    <script type="text/javascript" src="../js/mqttws31.js"></script>
+    <script type="text/javascript" src="../js/common.js" ></script>
+    <script type="text/javascript" src="../js/auth.js" ></script>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/customise.css">
+
+    <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon"/>
+    <title>{title}}</title>
+
+</head>
+<body>
+
+
+<!--nav bar-->
+<nav class="navbar navbar-default" role="navigation" >
+
+    <div class="container-fluid">
+        <ul class="nav navbar-nav navbar-left">
+            <li><a href="/page/index.html">{Home}</a></li>
+            <li name="after_login"><a href="/page/dashboard.html">{DashBoard}</a></li>
+            <li name="after_login"><a href="/page/productlist.html">{ProductList}</a></li>
+            <li name="after_login"><a href="/page/orderlist.html">{OrderList}</a></li>
+            <li name="after_login"><a href="/page/drivermap.html">{DriverMap}</a></li>
+            <li name="after_login"><a href="/page/myprofile.html">{MyProfile}</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li><a style="color:red" id="navbar_error_message" > messages</a></li>
+            <li name="before_login">
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="login_name" placeholder="{placeholder-name}"/>
+                        <input type="password" class="form-control" id="password" placeholder="{placeholder-password}"/>
+                    </div>
+                </form>
+            </li>
+            <li name="before_login"><a href="#" onclick="login()">{Login}</a></li>
+            <li name="before_login"><a href="/page/register.html" >{Register}</a></li>
+
+            <li name="after_login"><a id="login_name_display" > messages</a></li>
+            <li name="after_login"><a href="#" onclick="logout()">{Logout}</a></li>
+
+            <!-- <li>
+                <form class="navbar-form" role="search">
+                    <select class="form-control" id="lang" onchange="changeLanguage()">
+                        <option value="en">English</option>
+                        <option value="cn">中文</option>
+                        <option value="jp">日本語</option>
+                    </select>
+                </form>
+            </li> -->
+        </ul>
+
+    </div>
+</nav>
+
+<script type="text/javascript">
+    checkLoginStatus(true);
+</script>
+
+
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+
+            <div class="panel-group" id="accordion">
+
+                <!--product info-->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse"
+                               href="#collapsePanelProductInfo">
+                                {ProductInfo}
+                            </a>
+
+                            <!--error message-->
+                            <span style="margin-left:20px; color:red; display:none" id="product_info_error_message">
+                                Errormessagesss</span>
+                        </h4>
+                    </div>
+                    <div id="collapsePanelProductInfo" class="panel-collapse collapse in">
+                        <div class="panel-body">
+
+                            <div class="center-block" style="width:80%">
+                                <div class="form-horizontal" role="form">
+
+                                    <div class="form-group">
+                                        <span for="name" class="col-sm-2 control-label">{Name}</span>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="name" >
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span for="description" class="col-sm-2 control-label">{Description}</span>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control" rows="3" id="description" ></textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    <!-- script -->
+    <script type="text/javascript">
+
+        translateHtmlPage();
+
+        showProductDetails();
+
+    </script>
+
+</body>
+</html>

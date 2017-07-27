@@ -1,0 +1,92 @@
+{
+    "common": {
+        "title": "My Coffee Shop",
+        "Home": "Home",
+        "DashBoard": "DashBoard",
+        "ProductList": "Product List",
+        "OrderList": "Order List",
+        "DriverMap": "Driver Map",
+        "MyProfile": "My Profile",
+        "placeholder-name": "user name",
+        "placeholder-password": "password",
+        "Login": "Login",
+        "Register": "Register",
+        "Logout": "Logout",
+        "error-Failed-to-subscribe-topic": "Failed to subscribe topic",
+        "error-Please-check-login-name-or-password": "Please check login name or password and try again",
+        "error-Failed-to-logout": "Failed to logout",
+        "error-Failed-to-load-shop-info-list": "Failed to load shop info"
+    },
+    "dashboard": {
+        "Product": "Product",
+        "Create": "Create",
+        "ID": "ID",
+        "Name": "Name",
+        "Description": "Description",
+        "CreateProduct": "Create Product",
+        "Save": "Save",
+        "error-Failed-to-load-the-product-list": "Failed to load the product list",
+        "error-Failed-to-create-product": "Failed to create product"
+    },
+    "orderlist": {
+        "OrderList": "Order List",
+        "MarkReady": "Coffee Ready",
+        "ConsumerLabel": "Consumer",
+        "DriverLabel": "Driver",
+        "CoffeeLabel": "Coffee",
+        "OrderStatus": "Status",
+        "DescriptionLabel": "Description",
+        "FeedbackLabel": "Feedback",
+        "OrderStatus-consumer_requested": "Customer Requested",
+        "OrderStatus-driver_accepted": "Driver Accepted",
+        "OrderStatus-maker_ready": "Coffee Ready",
+        "OrderStatus-driver_pick_up": "Driver Pick Up",
+        "OrderStatus-driver_pick_off": "Driver Pick Off",
+        "OrderStatus-consumer_confirmed": "Customer Confirmed"
+    },
+    "drivermap": {
+
+    },
+    "index": {
+        "greeting": "Have a nice day!",
+        "Copyright": "Copyright &copy;2017. Powered by Kii"
+    },
+    "myprofile": {
+        "RegisterInfo": "Register Info",
+        "LoginName": "Login Name",
+        "Phone": "Phone",
+        "Mail": "Mail",
+        "Name": "Company Name",
+        "Description": "Company Info",
+        "error-Failed-to-get-register-info": "Failed to get register info"
+    },
+    "productdetails": {
+        "ProductInfo": "Product Info",
+        "Name": "Name",
+        "Description": "Description",
+        "error-Failed-to-load-the-product-details": "Failed to load the product details"
+    },
+    "register": {
+        "please-input-user-info-below": "Please Input User Info Below",
+        "LoginName": "Login Name",
+        "Role": "Role",
+        "Password": "Password",
+        "ConfirmPassword": "Confirm Password",
+        "Phone": "Phone",
+        "Mail": "Mail",
+        "please-input-shop-info-below": "Please Input Shop Info Below",
+        "please-select-shop-below": "Please Select Shop Below",
+        "ShopName": "Shop Name",
+        "ShopAddress": "Shop Address",
+        "Register": "Register",
+        "error-Please-check-register-info": "Please check register info and try again",
+        "error-Register-info-existing-already": "Register info existing already, please try another login name"
+    },
+    "mobile-page-template": {
+        "ProductName": "Product",
+        "ProductDescription": "Product Info"
+    },
+    "errorpage": {
+        "return-to-home-page": "Please click here to return to home page"
+    }
+}

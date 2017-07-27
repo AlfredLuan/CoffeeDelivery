@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/KiiSDK.min.js"></script>
+    <script type="text/javascript" src="../js/mqttws31.js"></script>
+    <script type="text/javascript" src="../js/common.js"></script>
+    <script type="text/javascript" src="../js/auth.js"></script>
+    <script type="text/javascript" src="../js/map-integrate.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/customise.css">
+
+    <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon" />
+    <title>{title}</title>
+
+
+</head>
+
+<body>
+
+
+    <!--nav bar-->
+    <nav class="navbar navbar-default" role="navigation">
+
+        <div class="container-fluid">
+            <ul class="nav navbar-nav navbar-left">
+                <li><a href="/page/index.html">{Home}</a></li>
+                <li name="after_login"><a href="/page/dashboard.html">{DashBoard}</a></li>
+                <li name="after_login"><a href="/page/productlist.html">{ProductList}</a></li>
+                <li name="after_login"><a href="/page/orderlist.html">{OrderList}</a></li>
+                <li name="after_login"><a href="/page/drivermap.html">{DriverMap}</a></li>
+                <li name="after_login"><a href="/page/myprofile.html">{MyProfile}</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a style="color:red" id="navbar_error_message"> messages</a></li>
+                <li name="before_login">
+                    <form class="navbar-form navbar-right" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="login_name" placeholder="{placeholder-name}" />
+                            <input type="password" class="form-control" id="password" placeholder="{placeholder-password}" />
+                        </div>
+                    </form>
+                </li>
+                <li name="before_login"><a href="#" onclick="login()">{Login}</a></li>
+                <li name="before_login"><a href="/page/register.html">{Register}</a></li>
+
+                <li name="after_login"><a id="login_name_display"> messages</a></li>
+                <li name="after_login"><a href="#" onclick="logout()">{Logout}</a></li>
+
+                <!-- <li>
+                <form class="navbar-form" role="search">
+                    <select class="form-control" id="lang" onchange="changeLanguage()">
+                        <option value="en">English</option>
+                        <option value="cn">中文</option>
+                        <option value="jp">日本語</option>
+                    </select>
+                </form>
+            </li> -->
+            </ul>
+
+        </div>
+    </nav>
+
+    <script type="text/javascript">
+        var promise = checkLoginStatus(true);
+    </script>
+
+
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+
+                <div class="panel-group" id="accordion">
+
+                    <!--display order list-->
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion"
+                               href="#collapseOrderList">
+                                {Product}
+                            </a>
+                            <!--error message-->
+                            <span style="margin-left:20px; color:red; display:none" id="product_list_error_message">
+                                Errormessagesss</span>
+                        </h4>
+                        </div>
+                        <div id="collapseOrderList" class="panel-collapse collapse in">
+                            <div class="panel-body" style="padding:0px">
+
+                                <div id="map" style="height:500px;"></div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function initMap() {
+
+            // run after login status checked
+            promise.then(function() {
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: {
+                        lat: -34.397,
+                        lng: 150.644
+                    },
+                    zoom: 15,
+                    minZoom: 11
+                });
+
+                var infoWindow = new google.maps.InfoWindow;
+
+                // refresh location display
+                refreshLocationDisplay(map, infoWindow);
+            });
+        }
+
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGJuotfOlzXBw7rOyVYtrLnPfeX_VblLs&callback=initMap">
+    </script>
+
+    <!-- please ensure below script at the end of html page,
+    as the translation may have impact on map drawing -->
+    <!-- script -->
+    <script type="text/javascript">
+        translateHtmlPage();
+        // loadOrderListForDisplay();
+    </script>
+
+</body>
+
+</html>
