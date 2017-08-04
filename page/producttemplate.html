@@ -1,20 +1,29 @@
 
 <tr id="{ProductID}_display">
     <td>{Name}</td>
+    <!-- <td>{Price}</td>
     <td>{Ice}</td>
     <td>{Milk}</td>
-    <td>{Sugar}</td>
-    <td>{Description}</td>
-    <td><a href="#" onclick="changeProductDisplayMode('{ProductID}', 'display')">{Edit}</a></td>
-</tr>
-<tr id="{ProductID}_edit" style="display:none">
-    <td>{Name}</td>
-    <td>{Ice}</td>
-    <td>{Milk}</td>
-    <td>{Sugar}</td>
+    <td>{Sugar}</td> -->
+    <td>{Price}</td>
     <td>{Description}</td>
     <td>
-        <a href="#" onclick="saveProductTemplate('{ProductID}')">{Save}</a> &nbsp;&nbsp;
-        <a href="#" onclick="changeProductDisplayMode('{ProductID}', 'edit')">{Cancel}</a>
-    <</td>
+        <a href="#" onclick="changeProductDisplayMode('{ProductID}', 'edit')">{Edit}</a>&nbsp;
+        <a href="{ProductDetailsLink}" target="_blank">{Details}</a>
+    </td>
+</tr>
+<tr id="{ProductID}_edit" style="display:none">
+    <td><input type="text" class="form-control" id="{ProductID}_product_name" value="{Name}" /></td>
+    <!-- <td>{Price}</td>
+    <td>{Ice}</td>
+    <td>{Milk}</td>
+    <td>{Sugar}</td> -->
+    <td><input type="number" class="form-control" id="{ProductID}_product_price" value="{Price}" /></td>
+    <td><textarea class="form-control" rows="1" id="{ProductID}_product_description">{Description}</textarea></td>
+    <td>
+        <div style="padding-top:7px">
+            <a href="#" onclick="updateProductTemplate(this, '{ProductID}')">{Save}</a> &nbsp;&nbsp;
+            <a href="#" onclick="changeProductDisplayMode('{ProductID}', 'display')">{Cancel}</a>
+        </div>
+    </td>
 </tr>

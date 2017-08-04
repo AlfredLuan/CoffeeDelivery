@@ -1,82 +1,163 @@
 function changeProductDisplayMode(productID, mode) {
 
-    if(mode == 'display') {
-        
-    } else if(mode == 'edit') {
-
+    if (mode == 'display') {
+        showElement(productID + "_display");
+        hideElement(productID + "_edit");
+    } else if (mode == 'edit') {
+        hideElement(productID + "_display");
+        showElement(productID + "_edit");
     }
 
 }
 
-function parseOwnedShopForDisplay(data, displayTemplate, htmlName) {
+function createProductTemplate(eventSource) {
+
+    // block button
+    eventSource.disabled = true;
+
+    var name = getElementValue("new_product_name");
+    var price = getElementValue("new_product_price");
+    var description = getElementValue("new_product_description");
+
+    var productInfo = {
+        "shop_id": null,
+        "name": name,
+        "on_stock": true,
+        "avatar_url": null, // TODO
+        "monthly_sold": 0,
+        "likes": 0,
+        "price": price,
+        "options": null, // TODO
+        "description": description
+    };
+
+    var currentUser = KiiUser.getCurrentUser();
+
+    // get head shop and store product template info into head shop
+    getHeadShop(currentUser, function(headShop) {
+
+        // Save product template into head shop scope bucket
+        saveProductTemplateInfo(headShop, null, productInfo,
+            function() {
+                // unblock button
+                eventSource.disabled = false;
+
+                // jump to dashboard
+                window.location.reload(true);
+            },
+            function() {
+                // Handle the error.
+                showErrorMessage("navbar_error_message", "{error-Failed-to-create-product}");
+                // unblock button
+                eventSource.disabled = false;
+            }
+        );
+
+    });
+}
+
+function updateProductTemplate(eventSource, productID) {
+
+    // block button
+    eventSource.disabled = true;
+
+    var name = getElementValue(productID + "_product_name");
+    var price = getElementValue(productID + "_product_price");
+    var description = getElementValue(productID + "_product_description");
+
+    var productInfo = {
+        "name": name,
+        "price": price,
+        "description": description
+    };
+
+    var currentUser = KiiUser.getCurrentUser();
+
+    // get head shop and store product template info into head shop
+    getHeadShop(currentUser, function(headShop) {
+
+        // Save product template into head shop scope bucket
+        saveProductTemplateInfo(headShop, productID, productInfo,
+            function() {
+                // unblock button
+                eventSource.disabled = false;
+
+                // jump to dashboard
+                window.location.reload(true);
+            },
+            function() {
+                // Handle the error.
+                showErrorMessage("navbar_error_message", "{error-Failed-to-update-product}");
+                // unblock button
+                eventSource.disabled = false;
+            }
+        );
+
+    });
+}
+
+function parseOwnedProductTemplateForDisplay(data, displayTemplate, htmlName) {
 
     var htmlContent = displayTemplate;
 
     htmlContent = htmlContent.replaceAll("{CollapsePanelID}", data.getID());
 
-    htmlContent = htmlContent.replaceAll("{ShopID}", data.getID());
+    htmlContent = htmlContent.replaceAll("{ProductID}", data.getID());
 
-    htmlContent = replaceContent(htmlContent, "{NameLabel}", null, htmlName);
-    htmlContent = htmlContent.replaceAll("{Name}", data.get("shop_name"));
+    var productDetailsLink = "/page/productdetails.html?product_id=" + data.getID();
+    htmlContent = htmlContent.replaceAll("{ProductDetailsLink}", productDetailsLink);
 
-    htmlContent = replaceContent(htmlContent, "{AddressLabel}", null, htmlName);
-    var address = toSafeString(data.get("address"));
-    address = description.replaceAll("\r\n", "<br/>");
-    address = description.replaceAll("\n", "<br/>");
-    htmlContent = htmlContent.replaceAll("{Address}", description);
+    htmlContent = replaceTemplateContent(htmlContent, "{NameLabel}", null, htmlName);
+    htmlContent = htmlContent.replaceAll("{Name}", toSafeString(data.get("name")));
 
-    return "<tr>" + htmlContent + "<br/></tr>";
+    htmlContent = replaceTemplateContent(htmlContent, "{PriceLabel}", null, htmlName);
+    htmlContent = htmlContent.replaceAll("{Price}", toSafeString(data.get("price")));
+
+    htmlContent = replaceTemplateContent(htmlContent, "{DescriptionLabel}", null, htmlName);
+    var description = toSafeString(data.get("description"));
+    description = description.replaceAll("\r\n", "<br/>");
+    description = description.replaceAll("\n", "<br/>");
+    htmlContent = htmlContent.replaceAll("{Description}", description);
+
+    htmlContent = replaceTemplateContent(htmlContent, "{Edit}", null, htmlName);
+    htmlContent = replaceTemplateContent(htmlContent, "{Details}", null, htmlName);
+    htmlContent = replaceTemplateContent(htmlContent, "{Save}", null, htmlName);
+    htmlContent = replaceTemplateContent(htmlContent, "{Cancel}", null, htmlName);
+
+    return htmlContent;
 };
 
-function loadOwnedShopList(onSuccess, onFailure) {
+// kiiUser is expected to be operator or product manager
+function loadOwnedProductTemplateList(kiiUser, onSuccess, onFailure) {
 
-    // load all owned groups
-    loadOwnedGroups(KiiUser.getCurrentUser(), function(groupList) {
+    // get head shop
+    getHeadShop(kiiUser, function(headShop) {
 
-            var ownedShopList = [];
-            var count = 0;
+        // get product template list
+        var bucket = headShop.bucketWithName(Bucket.GroupScope.ProductList);
 
-            // load shop info from group
-            var loadShopInfoFromGroup = function(group, done) {
+        loadAllObjects(bucket, null, function(productList) {
 
-                var bucket = group.bucketWithName(Bucket.GroupScope.ShopInfo);
-                var kiiObject = bucket.createObjectWithID("basic_info");
-                kiiObject.refresh({
-                    success: function(theObject) {
-                        ownedShopList.push(theObject);
-                        count++;
+            // sort basic info list
+            productList.sort(function(a, b) {
+                return a.getCreated() < b.getCreated();
+            })
 
-                        // once all groups looped, callback
-                        if(count == groupList.length) {
-                            done(ownedShopList);
-                        }
-                    },
-                    failure: function(theObject, errorString) {
-                        console.log("failed to load object:", objectUri);
-                        count++;
+            // callback
+            onSuccess(productList);
 
-                        // once all groups looped, callback
-                        if(count == groupList.length) {
-                            done(ownedShopList);
-                        }
-                    }
-                });
-            };
-
-            // load shop info from each group
-            for (var i = 0; i < groupList.length; i++) {
-                loadShopInfoFromGroup(onSuccess);
-            }
-        }
-    });
+        }, onFailure);
+    }, onFailure);
 }
 
-function loadOwnedShopListForDisplay() {
+function loadOwnedProductTemplateListForDisplay() {
 
-    loadListForDisplay("shop_list", "/page/shoptemplate.html", function(onSuccess, onFailure) {
-        loadOwnedShopList(onSuccess, onFailure);
+    var currentUser = KiiUser.getCurrentUser();
+
+    loadListForDisplay("product_list", "/page/producttemplate.html", function(onSuccess, onFailure) {
+        loadOwnedProductTemplateList(currentUser, onSuccess, onFailure);
     }, function(data, displayTemplate, htmlName) {
-        parseOwnedShopForDisplay(data, displayTemplate, htmlName);
+        return parseOwnedProductTemplateForDisplay(data, displayTemplate, htmlName);
     });
 
 }

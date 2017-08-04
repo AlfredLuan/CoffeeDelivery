@@ -1,3 +1,27 @@
+function getRedirectUrlAfterLogin(kiiUser) {
+
+    var role = kiiUser.get("role");
+
+    var url;
+    switch (role) {
+        case UserRole.CoffeeMaker:
+            url = "/page/orderlist.html";
+            break;
+        case UserRole.Operator:
+            url = "/page/drivermap.html";
+            break;
+        case UserRole.ProductManager:
+            url = "/page/producttemplatelist.html";
+            break;
+        default:
+            url = "/page/errorpage.html";
+            break;
+    }
+
+    console.log("getRedirectUrlAfterLogin", role, url);
+    return url;
+}
+
 //
 function login() {
 
@@ -6,27 +30,38 @@ function login() {
 
     // Authenticate a user.
     KiiUser.authenticate(username, password, {
-      success: function(theUser) {
-        // Do something.
+        success: function(theUser) {
+            console.log(theUser);
 
-        // subscribe shop topic
-        subscribeShopTopic(theUser, function(){
+            // subscribe shop topic
+            subscribeShopTopic(theUser, function() {
 
-            clearErrorMessage("navbar_error_message");
-            // set login info into cookie
-            saveLoginInfo(theUser);
+                theUser.refresh({
+                    success: function(theUser) {
+                        console.log(theUser);
 
-            window.location.href="/page/orderlist.html";
-        }, function() {
+                        clearErrorMessage("navbar_error_message");
+                        // set login info into cookie
+                        saveLoginInfo(theUser);
+
+                        window.location.href = getRedirectUrlAfterLogin(theUser);
+                    },
+                    failure: function(theUser, errorString) {
+                        // Handle the error.
+                        showErrorMessage("navbar_error_message", "{error-Failed-to-subscribe-topic}");
+                    }
+                })
+
+            }, function() {
+                // Handle the error.
+                showErrorMessage("navbar_error_message", "{error-Failed-to-subscribe-topic}");
+            });
+
+        },
+        failure: function(theUser, errorString) {
             // Handle the error.
-            showErrorMessage("navbar_error_message", "{error-Failed-to-subscribe-topic}");
-        });
-
-      },
-      failure: function(theUser, errorString) {
-        // Handle the error.
-        showErrorMessage("navbar_error_message", "{error-Please-check-login-name-or-password}");
-      }
+            showErrorMessage("navbar_error_message", "{error-Please-check-login-name-or-password}");
+        }
     })
 
 }
@@ -38,7 +73,7 @@ function logout() {
     // clear login info from cookie
     clearLoginInfo();
 
-    window.location.href="/page/index.html";
+    window.location.href = "/page/index.html";
 
 }
 
@@ -49,19 +84,31 @@ function registerUser(eventSoure) {
     // block button
     eventSoure.disabled = true;
 
-    var username = getValueFromElement("register_login_name");
-    var password = getValueFromElement("register_password");
-    var email = getValueFromElement("register_mail");
-    var phone = "+" + getValueFromElement("register_phone");
+    var username = getElementValue("register_login_name");
+    var password = getElementValue("register_password");
+    var confirmPassword = getElementValue("register_confirm_password");
+    var displayName = getElementValue("register_display_name");
+    var email = getElementValue("register_mail");
+    var phone = "+" + getElementValue("register_phone");
 
-    var role = getValueFromElement("register_role");
+    var role = getElementValue("register_role");
+
+    // check password input
+    if(confirmPassword != password) {
+        // Handle the error.
+        showErrorMessage("navbar_error_message", "{error-Confirm-password-wrong}");
+        // unblock button
+        eventSoure.disabled = false;
+        return;
+    }
 
     // Create a user.
     var user;
 
-    try{
+    try {
         user = KiiUser.userWithCredentials(email, phone, username, password);
-    } catch(err) {
+        user.setDisplayName(displayName);
+    } catch (err) {
         // Handle the error.
         showErrorMessage("navbar_error_message", "{error-Failed-to-register-user}");
         // unblock button
@@ -73,105 +120,73 @@ function registerUser(eventSoure) {
 
     // Register the user.
     user.register({
-      success: function(theUser) {
-        console.log(theUser);
+        success: function(theUser) {
+            console.log(theUser);
 
-        clearErrorMessage("navbar_error_message");
-        saveLoginInfo(theUser);
-
-        // load shop info list
-        loadShopInfoListForRegister(function() {
-
-            // show shop form
-            if(role == Role.Operator) {
-                showRegisterForm("register_shop_info_form");
-            } else if(role == Role.CoffeeMaker) {
-                showRegisterForm("select_shop_info_form");
-            }
-
-            // unblock button
-            eventSoure.disabled = false;
-        }, function() {
-            // unblock button
-            eventSoure.disabled = false;
-        })
-      },
-      failure: function(theUser, errorString) {
-        // Handle the error.
-        showErrorMessage("navbar_error_message", "{error-Failed-to-register-user}");
-        // unblock button
-        eventSoure.disabled = false;
-      }
-    });
-}
-
-function registerShopForOperator(eventSoure) {
-
-    // block button
-    eventSoure.disabled = true;
-
-    var shopName = getValueFromElement("register_shop_name");
-    var address = getValueFromElement("register_shop_address");
-
-    // Create a group.
-    var group = KiiGroup.groupWithName(shopName);
-
-    // Save the group on the server.
-    group.save({
-      success: function(theGroup) {
-        // Get the reference URI and ID of the group.
-        var groupUri = theGroup.objectURI();
-        var groupID = theGroup.getID();
-
-        // save shop info into shop info list
-        saveShopInfo(groupID, shopName, address, function(){
+            clearErrorMessage("navbar_error_message");
+            saveLoginInfo(theUser);
 
             // unblock button
             eventSoure.disabled = false;
 
-            // jump to dashboard
-            window.location.href="/page/dashboard.html";
-
-        });
-      },
-      failure: function(theGroup, errorString) {
-        // Handle the error.
-        showErrorMessage("navbar_error_message", "{error-Failed-to-create-shop}");
-        // unblock button
-        eventSoure.disabled = false;
-      }
+            // redirect
+            window.location.href = getRedirectUrlAfterLogin(theUser);
+        },
+        failure: function(theUser, errorString) {
+            // Handle the error.
+            showErrorMessage("navbar_error_message", "{error-Failed-to-register-user}");
+            // unblock button
+            eventSoure.disabled = false;
+        }
     });
 }
+//
+// function registerShopForOperator(eventSoure) {
+//
+//     // block button
+//     eventSoure.disabled = true;
+//
+//     var shopName = getElementValue("register_shop_name");
+//     var address = getElementValue("register_shop_address");
+//
+//     // Create a group.
+//     var group = KiiGroup.groupWithName(shopName);
+//
+//     // Save the group on the server.
+//     group.save({
+//       success: function(theGroup) {
+//         // Get the reference URI and ID of the group.
+//         var groupUri = theGroup.objectURI();
+//         var groupID = theGroup.getID();
+//
+//         // save shop info into shop info list
+//         saveShopInfo(groupID, shopName, address, function(){
+//
+//             // unblock button
+//             eventSoure.disabled = false;
+//
+//             // jump to dashboard
+//             window.location.href="/page/dashboard.html";
+//
+//         });
+//       },
+//       failure: function(theGroup, errorString) {
+//         // Handle the error.
+//         showErrorMessage("navbar_error_message", "{error-Failed-to-create-shop}");
+//         // unblock button
+//         eventSoure.disabled = false;
+//       }
+//     });
+// }
 
-function saveShopInfo(shopID, shopName, address, onSuccess) {
-
-    var group = KiiGroup.groupWithID(shopID);
-    var bucket = group.bucketWithName("shop_info");
-    var object = bucket.createObjectWithID("basic_info");
-
-    object.set("shop_id", shopID);
-    object.set("shop_name", shopName);
-    object.set("address", address);
-
-    object.saveAllFields({
-      success: function(theUser) {
-        onSuccess();
-      },
-      failure: function(theUser, errorString) {
-        // Handle the error.
-        showErrorMessage("navbar_error_message", "{error-Failed-to-save-shop-info}");
-      }
-    });
-
-}
 
 function onSelectShopChange() {
 
     var shopID = getValueFromSelectElement("register_shop_name_select");
 
     for (var i = 0; i < shopInfoList.length; i++) {
-        if(shopInfoList[i].get("shop_id") == shopID) {
-            setValueInElement("register_shop_address_select", shopInfoList[i].get("address"));
+        if (shopInfoList[i].get("shop_id") == shopID) {
+            setElementValue("register_shop_address_select", shopInfoList[i].get("address"));
         }
     };
 
@@ -185,12 +200,12 @@ function loadShopInfoListForRegister(onSuccess) {
 
         var temp = "";
         for (var i = 0; i < shopInfoList.length; i++) {
-            temp += "<option value='"+  shopInfoList[i].get("shop_id") +"'>" + shopInfoList[i].get("shop_name") + "</option>"
+            temp += "<option value='" + shopInfoList[i].get("shop_id") + "'>" + shopInfoList[i].get("shop_name") + "</option>"
         };
 
         document.getElementById("register_shop_name_select").innerHTML = temp;
         if (shopInfoList !== undefined && shopInfoList.length > 0) {
-            setValueInElement("register_shop_address_select", shopInfoList[0].get("address"));
+            setElementValue("register_shop_address_select", shopInfoList[0].get("address"));
         };
 
         // callback
@@ -247,8 +262,18 @@ function loadCurrentUserInfo(onSuccess, onFailure) {
     // Authenticate a user with the access token.
     KiiUser.authenticateWithToken(accessToken, {
         success: function(theUser) {
-            saveLoginInfo(theUser);
-            onSuccess(theUser);
+            // call refresh to get user attribute
+            theUser.refresh({
+                success: function(kiiUser) {
+                    saveLoginInfo(kiiUser);
+                    onSuccess(kiiUser);
+                },
+                failure: function(kiiUser, errorString1) {
+                    // Handle the error.
+                    console.log(errorString1);
+                    onFailure();
+                }
+            })
         },
         failure: function(theUser, errorString) {
             // Handle the error.
@@ -256,6 +281,60 @@ function loadCurrentUserInfo(onSuccess, onFailure) {
             onFailure();
         }
     })
+}
+
+function getAvailableLinksForUserRole(role) {
+
+    console.log("user role", role);
+
+    var links = [];
+
+    switch (role) {
+        case UserRole.CoffeeMaker:
+            links = [
+                "link_orderlist",
+                "link_drivermap",
+                "link_myprofile",
+                "link_displayname",
+                "link_logout"
+            ];
+            break;
+        case UserRole.Operator:
+            links = [
+                "link_dashboard",
+                "link_shoplist",
+                "link_producttemplatelist",
+                "link_orderlist",
+                "link_drivermap",
+                "link_myprofile",
+                "link_displayname",
+                "link_logout"
+            ];
+            break;
+        case UserRole.ProductManager:
+            links = [
+                "link_dashboard",
+                "link_producttemplatelist",
+                "link_myprofile",
+                "link_displayname",
+                "link_logout"
+            ];
+            break;
+        case UserRole.Driver:
+            links = [
+                "link_myprofile"
+            ];
+            break;
+        case UserRole.Consumer:
+            links = [
+                "link_myprofile",
+                "link_displayname",
+                "link_logout"
+            ];
+            break;
+    }
+
+    return links;
 }
 
 // check login status
@@ -269,22 +348,35 @@ function checkLoginStatus(isBackToHomePage) {
     var elementsAfterLogin = document.getElementsByName("after_login");
 
     if (loginName !== undefined && loginName != null && loginName != "") {
-        // show login info
-        for (var i = 0; i < elementsBeforeLogin.length; i++) {
-            elementsBeforeLogin[i].style.display = "none";
-        }
-
-        for (var i = 0; i < elementsAfterLogin.length; i++) {
-            elementsAfterLogin[i].style.display = "block";
-        }
-
-        clearErrorMessage("navbar_error_message");
-
-        // display login name
-        document.getElementById("login_name_display").innerHTML = loginName;
 
         // refresh Kii user info
-        loadCurrentUserInfo(function(theUser){
+        loadCurrentUserInfo(function(theUser) {
+
+            var availableLinks = getAvailableLinksForUserRole(theUser.get("role"));
+
+            // show login info
+            for (var i = 0; i < elementsBeforeLogin.length; i++) {
+                elementsBeforeLogin[i].style.display = "none";
+            }
+
+            for (var i = 0; i < elementsAfterLogin.length; i++) {
+
+                elementsAfterLogin[i].style.display = "none";
+
+                // only display the corresponding links for the role
+                for (var j = 0; j < availableLinks.length; j++) {
+                    if(availableLinks[j] == elementsAfterLogin[i].id) {
+                        elementsAfterLogin[i].style.display = "block";
+                        break;
+                    }
+                }
+            }
+
+            clearErrorMessage("navbar_error_message");
+
+            // display login name
+            document.getElementById("login_name_display").innerHTML = loginName;
+
             d.resolve();
         }, function(errorString) {
             d.reject();

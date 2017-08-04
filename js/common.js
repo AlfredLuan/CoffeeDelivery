@@ -12,33 +12,41 @@ Kii.initializeWithSite(KII_APP_ID, KII_APP_KEY, KII_SITE);
 
 var GOOGLE_MAP_KEY = "AIzaSyBGJuotfOlzXBw7rOyVYtrLnPfeX_VblLs";
 
-var Role = {
+var UserRole = {
     CoffeeMaker: "coffee_maker",
     Operator: "operator",
+    ProductManager: "product_manager",
     Driver: "driver",
     Consumer: "consumer"
 };
 
+var ShopRole = {
+    Head : "head",
+    Branch : "branch"
+}
+
 var OrderStatus = {
-    ConsumerRequested: "consumer_requested", // 客户生成订单（选定商品以及数量，可预先支付）
-    DriverAccepted: "driver_accepted", // 骑手接单
-    CoffeeMakerReady: "maker_ready", // 商家就绪（咖啡煮好）
-    DriverPickUp: "driver_pick_up", // 骑手拿到咖啡
-    DriverPickOff: "driver_pick_off", // 骑手送好咖啡
-    ConsumerConfirmed: "consumer_confirmed" // 客户标注订单完成
+    OrderPlaced: 0, // order placed by customer
+    OrderAccepted: 1, // order accepted by driver
+    OrderStartMaking: 2, // start making coffee by coffee maker
+    OrderReady: 3, // coffee ready by coffee maker
+    OrderPickUp: 4, // coffee picked up by driver
+    OrderDelivered: 5 // coffee delivered by driver
 };
 
 var Bucket = {
     AppScope: {
-        ShopInfoList: "shop_info_list",
-        Order: "order",
-        Coffee: "coffee",
-        Coupons: "coupons"
+        ShopInfoList: "shops",
+        OrderList: "orders",
+        ProductList: "stock_items_consumer",
+        CouponList: "coupons",
+        ThingStates: "_states",
+        UserList: "user_list"
     },
     GroupScope: {
-        ShopInfo: "shop_info"
+        ShopInfo: "shop_info",
+        ProductList: "product_list"
     }
-
 };
 
 var Topic = {
@@ -46,8 +54,6 @@ var Topic = {
         DefaultTopic: "default_topic"
     }
 };
-
-
 
 /////////////////////////////////////////////////////
 // global variables
@@ -220,11 +226,16 @@ function clearErrorMessage(id) {
 
 
 /////////////////////////////////////////////////////
-// others
+// html functions
 /////////////////////////////////////////////////////
 
 function showElement(elementID) {
-    document.getElementById(elementID).style.display = "block";
+    var element = document.getElementById(elementID);
+    if(element.tagName.toLowerCase() == "tr") {
+        element.style.display = "table-row";
+    } else {
+        element.style.display = "block";
+    }
 }
 
 function hideElement(elementID) {
@@ -243,12 +254,12 @@ function setInnerHtml(id, message, needTranslate) {
     document.getElementById(id).innerHTML = content;
 }
 
-function getValueFromElement(elementId) {
+function getElementValue(elementId) {
     return document.getElementById(elementId).value;
 }
 
-function setValueInElement(elementId, value) {
-    document.getElementById(elementId).value = value;
+function setElementValue(elementId, value) {
+    document.getElementById(elementId).value = toSafeString(value);
 }
 
 function getValueFromSelectElement(id) {
@@ -330,6 +341,14 @@ function getBrowserLang() {
     return currentLang;
 }
 
+function reloadPage(){
+    window.location.reload(true);
+}
+
+/////////////////////////////////////////////////////
+// javascript functions
+/////////////////////////////////////////////////////
+
 function toSafeString(str) {
     if (str === undefined || str == null) {
         return "";
@@ -353,4 +372,82 @@ function isAvailable(value) {
 
 function isUnavailable(value) {
     return value === undefined || value == null;
+}
+
+function copyValues(srcObject, destObject, keys) {
+	for (var i = 0; i < keys.length; i++) {
+        destObject.set(keys[i], srcObject.get(keys[i]));
+	}
+}
+
+// compare oldArray and newArray with function isSame,
+// and return the differ in format {"remove": [...], "add": [...]}
+function differArray(oldArray, newArray, isSame){
+
+    var compare = null;
+    if(isAvailable(isSame)) {
+        compare = isSame;
+    } else {
+        compare = function(a, b) {
+            return a==b;
+        }
+    };
+
+    if(isUnavailable(oldArray)) {
+        oldArray = [];
+    }
+    if(isUnavailable(newArray)) {
+        newArray = [];
+    }
+
+    var foundNonExistingElementList = function(array1, array2) {
+        var nonExistingElementList = [];
+
+        for (var i = 0; i < array1.length; i++) {
+            var element = array1[i];
+            var found = false;
+
+            for (var j = 0; j < array2.length; j++) {
+                if(compare(element, array2[j]) == true) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if(found == false) {
+                nonExistingElementList.push(element);
+            }
+        }
+
+        return nonExistingElementList;
+    };
+
+    var result = {};
+    result.remove = foundNonExistingElementList(oldArray, newArray);
+    result.add = foundNonExistingElementList(newArray, oldArray);
+
+    return result;
+}
+
+function convertArray(array, convert) {
+
+    if(isUnavailable(array)) {
+        return array;
+    }
+
+    var method = null;
+    if(isAvailable(convert)) {
+        method = convert;
+    } else {
+        method = function(element) {
+            return element;
+        }
+    }
+
+    var result = [];
+    for (var i = 0; i < array.length; i++) {
+        result.push(method(array[i]));
+    }
+
+    return result;
 }

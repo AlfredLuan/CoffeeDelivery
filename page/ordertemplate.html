@@ -4,10 +4,14 @@
         <h4 class="panel-title">
             <a data-toggle="collapse"
                href="#collapsePanel-{CollapsePanelID}">
-                Order ID: {OrderID} &nbsp;|&nbsp; {OrderStatus}
+                Order ID: {OrderID} | {OrderStatus}
             </a>
 
-            <a class="btn btn-default pull-right" style="display:{display}" onclick="markOrderReady('{OrderID}')">{MarkReady}</a>
+            <!-- mark start making -->
+            <a class="btn btn-default pull-right" style="margin-left:5px; display:{display-order-status-2}" onclick="updateOrderStatus(this, '{OrderID}', 2)">{UpdateOrderStatus1}</a>
+            <!-- mark ready -->
+            <a class="btn btn-default pull-right" style="margin-left:5px; display:{display-order-status-3}" onclick="updateOrderStatus(this, '{OrderID}', 3)">{UpdateOrderStatus2}</a>
+
         </h4>
     </div>
     <div id="collapsePanel-{CollapsePanelID}" class="panel-collapse collapse in">
@@ -15,6 +19,14 @@
 
             <div class="center-block" style="width:75%">
                 <div class="form-horizontal" role="form" id="product_form">
+
+                    <div class="form-group order-row">
+                        <label class="col-sm-2 control-label">{MakerLabel}</label>
+                        <div class="col-sm-9">
+                            <span class="col-sm-12 control-label content-display">{Maker}
+                            </span>
+                        </div>
+                    </div>
 
                     <div class="form-group order-row">
                         <label class="col-sm-2 control-label">{CoffeeLabel}</label>
@@ -49,10 +61,10 @@
                     </div>
 
                     <div class="form-group order-row">
-                        <label class="col-sm-2 control-label">{FeedbackLabel}</label>
+                        <label class="col-sm-2 control-label">{ShopLabel}</label>
                         <div class="col-sm-9">
                             <span class="col-sm-12 control-label content-display">
-                                {Feedback}</span>
+                                {Shop}</span>
                         </div>
                     </div>
 

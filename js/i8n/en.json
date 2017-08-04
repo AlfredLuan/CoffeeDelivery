@@ -3,6 +3,7 @@
         "title": "My Coffee Shop",
         "Home": "Home",
         "DashBoard": "DashBoard",
+        "ShopList": "Shop List",
         "ProductList": "Product List",
         "OrderList": "Order List",
         "DriverMap": "Driver Map",
@@ -12,6 +13,17 @@
         "Login": "Login",
         "Register": "Register",
         "Logout": "Logout",
+        "UserRole-coffee_maker": "Coffee Maker",
+        "UserRole-operator": "Operator",
+        "UserRole-product_manager": "Product Manager",
+        "UserRole-driver": "Driver",
+        "UserRole-consumer": "Consumer",
+        "OrderStatus-0": "Order Placed",
+        "OrderStatus-1": "Order Accepted",
+        "OrderStatus-2": "Order Start Making",
+        "OrderStatus-3": "Order Ready",
+        "OrderStatus-4": "Order Pick Up",
+        "OrderStatus-5": "Order Delivered",
         "error-Failed-to-subscribe-topic": "Failed to subscribe topic",
         "error-Please-check-login-name-or-password": "Please check login name or password and try again",
         "error-Failed-to-logout": "Failed to logout",
@@ -28,24 +40,48 @@
         "error-Failed-to-load-the-product-list": "Failed to load the product list",
         "error-Failed-to-create-product": "Failed to create product"
     },
+    "shoplist": {
+        "ShopList": "Shop List",
+        "NameLabel": "Name",
+        "DeliveryFeeLabel": "Delivery Fee",
+        "ServiceTimeStartLabel": "Service Time Start",
+        "ServiceTimeEndLabel": "Service Time End",
+        "AddressLabel": "Address",
+        "Details": "Details",
+        "CreateShop": "New Shop",
+        "error-Failed-to-create-shop": "Failed to create shop"
+    },
+    "producttemplatelist": {
+        "ProductList": "Product List",
+        "NameLabel": "Name",
+        "IceLabel": "Ice",
+        "MilkLabel": "Milk",
+        "SugarLabel": "Sugar",
+        "PriceLabel": "Price",
+        "DescriptionLabel": "Description",
+        "OperateLabel": "Operate",
+        "Edit": "Edit",
+        "Details": "Details",
+        "Save": "Save",
+        "Cancel": "Cancel"
+    },
     "orderlist": {
         "OrderList": "Order List",
-        "MarkReady": "Coffee Ready",
+        "UpdateOrderStatus1": "Start Making",
+        "UpdateOrderStatus2": "Ready",
+        "MakerLabel": "Maker",
         "ConsumerLabel": "Consumer",
         "DriverLabel": "Driver",
         "CoffeeLabel": "Coffee",
+        "AmountLabel": "Amount",
+        "ProductNameLabel": "Name",
+        "OptionsLabel": "Options",
         "OrderStatus": "Status",
         "DescriptionLabel": "Description",
-        "FeedbackLabel": "Feedback",
-        "OrderStatus-consumer_requested": "Customer Requested",
-        "OrderStatus-driver_accepted": "Driver Accepted",
-        "OrderStatus-maker_ready": "Coffee Ready",
-        "OrderStatus-driver_pick_up": "Driver Pick Up",
-        "OrderStatus-driver_pick_off": "Driver Pick Off",
-        "OrderStatus-consumer_confirmed": "Customer Confirmed"
+        "ShopLabel": "Shop"
     },
     "drivermap": {
-
+        "DriverMap": "Driver Map"
     },
     "index": {
         "greeting": "Have a nice day!",
@@ -53,18 +89,32 @@
     },
     "myprofile": {
         "RegisterInfo": "Register Info",
+        "DisplayName": "Display Name",
+        "Role": "Role",
         "LoginName": "Login Name",
         "Phone": "Phone",
         "Mail": "Mail",
-        "Name": "Company Name",
-        "Description": "Company Info",
         "error-Failed-to-get-register-info": "Failed to get register info"
     },
     "productdetails": {
+        "ShopAssignment": "Shop Assignment",
         "ProductInfo": "Product Info",
         "Name": "Name",
         "Description": "Description",
+        "ShopNameLabel": "Name",
+        "ShopAddressLabel": "Address",
         "error-Failed-to-load-the-product-details": "Failed to load the product details"
+    },
+    "shopdetails": {
+        "UserAssignment": "User Assignment",
+        "ShopInfo": "Shop Info",
+        "Name": "Name",
+        "Addess": "Address",
+        "UserDisplayNameLabel": "Display Name",
+        "UserRoleLabel": "Role",
+        "UserEmailLabel": "Email",
+        "UserPhoneLabel": "Phone",
+        "error-Failed-to-load-the-shop-details": "Failed to load the shop details"
     },
     "register": {
         "please-input-user-info-below": "Please Input User Info Below",
@@ -80,7 +130,8 @@
         "ShopAddress": "Shop Address",
         "Register": "Register",
         "error-Please-check-register-info": "Please check register info and try again",
-        "error-Register-info-existing-already": "Register info existing already, please try another login name"
+        "error-Register-info-existing-already": "Register info existing already, please try another login name",
+        "error-Confirm-password-wrong": "the passwords input twice are different, plese confirm the password"
     },
     "mobile-page-template": {
         "ProductName": "Product",

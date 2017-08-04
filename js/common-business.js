@@ -77,6 +77,11 @@ function subscribeShopTopic(kiiUser, onSuccess, onFailure) {
     // load groups
     loadGroups(kiiUser, function(groupList) {
 
+        if(groupList.length == 0) {
+            onSuccess();
+            return;
+        }
+
         // load topics in each group
         for (var i = 0; i < groupList.length; i++) {
             loadGroupTopics(groupList[i], function(topicList) {
@@ -94,6 +99,7 @@ function subscribeShopTopic(kiiUser, onSuccess, onFailure) {
                             console.log("all topics subscribed");
 
                             onSuccess();
+                            return;
                         }
 
                     }, onFailure);
@@ -153,7 +159,7 @@ function loadOwnedGroups(kiiUser, onSuccess, onFailure) {
     onFailure = toSafeCallback(onFailure);
 
     // example to use callbacks directly
-    kiiUser.memberOfOwnedGroups({
+    kiiUser.ownerOfGroups({
         success: function(theUser, groupList) {
             console.log("load group list", groupList);
 
@@ -228,21 +234,18 @@ function loadGroupTopics(kiiGroup, onSuccess, onFailure) {
 // business functions
 /////////////////////////////////////////////////////
 
-function loadAllObjects(bucketName, clause, onSuccess, onFailure) {
+function loadAllObjects(bucket, clause, onSuccess, onFailure) {
 
-    console.log("bucket name", bucketName);
+    console.log("bucket", bucket);
     console.log("clause", clause);
 
     onSuccess = toSafeCallback(onSuccess);
     onFailure = toSafeCallback(onFailure);
 
-    // Prepare the target bucket to be queried.
-    var bucket = Kii.bucketWithName(bucketName);
-
     // Construct query
     var allQuery;
 
-    if(clause !== undefined && clause != null) {
+    if (clause !== undefined && clause != null) {
         allQuery = KiiQuery.queryWithClause(clause);
     } else {
         allQuery = KiiQuery.queryWithClause();
@@ -283,7 +286,8 @@ function loadShopInfoList(onSuccess, onFailure) {
     onSuccess = toSafeCallback(onSuccess);
     onFailure = toSafeCallback(onFailure);
 
-    loadAllObjects(Bucket.AppScope.ShopInfoList, null, function(resultSet) {
+    var bucket = Kii.bucketWithName(Bucket.AppScope.ShopInfoList);
+    loadAllObjects(bucket, null, function(resultSet) {
 
         Global.shopInfoList = resultSet;
 
@@ -293,18 +297,186 @@ function loadShopInfoList(onSuccess, onFailure) {
     }, onFailure);
 }
 
-function loadOrderList(onSuccess, onFailure) {
+function loadOrderList(kiiUser, onSuccess, onFailure) {
 
     onSuccess = toSafeCallback(onSuccess);
     onFailure = toSafeCallback(onFailure);
 
-    loadAllObjects(Bucket.AppScope.Order, null, function(resultSet) {
+    // load the shops which kii user is member of
+    loadGroups(kiiUser, function(shopList){
 
-        Global.orderList = resultSet;
+        if(isUnavailable(shopList) || shopList.length == 0) {
+            
+            var emptyList = [];
+            Global.orderList = emptyList;
+            // callback
+            onSuccess(emptyList);
+            return;
+        }
 
-        // callback
-        onSuccess(resultSet);
+        var shopIDList = convertArray(shopList, function(e){
+            return e.getID();
+        });
+
+        // load the orders on the shops which the user is member of
+        var clause = KiiClause.inClause("shop.shop_id", shopIDList);
+
+        var bucket = Kii.bucketWithName(Bucket.AppScope.OrderList);
+        loadAllObjects(bucket, clause, function(resultSet) {
+
+            Global.orderList = resultSet;
+            // callback
+            onSuccess(resultSet);
+
+        }, onFailure);
 
     }, onFailure);
+
+}
+
+// kiiUser is expected to be operator or product manager
+function getHeadShop(kiiUser, onSuccess, onFailure) {
+
+    kiiUser.memberOfGroups({
+        success: function(theUser, groupList) {
+            console.log("load group list", groupList);
+
+            var count = 0;
+
+            var checkHeadShop = function(group) {
+                var bucket = group.bucketWithName(Bucket.GroupScope.ShopInfo);
+                var basicInfo = bucket.createObjectWithID("basic_info");
+
+                basicInfo.refresh({
+                    success: function(theObject) {
+                        // only return the head shop
+                        if(theObject.get("role") == ShopRole.Head) {
+                            onSuccess(group);
+                        } else {
+                            // if all shops are checked but no head shop is found, call onFailure
+                            count++;
+                            if(count == groupList.length) {
+                                onFailure();
+                            }
+                        }
+                    },
+                    failure: function(theObject, errorString) {
+                        console.log("failed to load basic info:", basicInfo)
+                        // if all shops are checked but no head shop is found, call onFailure
+                        count++;
+                        if(count == groupList.length) {
+                            onFailure();
+                        }
+                    }
+                })
+            };
+
+            for (var i = 0; i < groupList.length; i++) {
+                checkHeadShop(groupList[i]);
+            }
+        },
+        failure: function(theUser, errorString) {
+            // do something with the error response
+            console.log(errorString);
+
+            onFailure(errorString)
+        }
+    });
+
+}
+
+// shop is expected to be group
+function loadShopBasicInfo(shop, onSuccess, onFailure) {
+
+    var bucket = shop.bucketWithName(Bucket.GroupScope.ShopInfo);
+    var kiiObject = bucket.createObjectWithID("basic_info");
+
+    kiiObject.refresh({
+        success: function(theObject) {
+            onSuccess(theObject);
+        },
+        failure: function(theObject, errorString) {
+            onFailure(errorString);
+        }
+    });
+};
+
+
+// shopList is expected to be group list
+function loadShopBasicInfoList(shopList, onSuccess, onFailure) {
+
+    var basicInfoList = [];
+    var count = 0;
+
+    // load basic info from each shop
+    for (var i = 0; i < shopList.length; i++) {
+
+        loadShopBasicInfo(shopList[i],
+            // on success
+            function(theObject) {
+
+                console.log("shop basic info", theObject);
+
+                basicInfoList.push(theObject);
+                count++;
+
+                // once all shops looped, callback
+                if(count == shopList.length) {
+                    // callback
+                    onSuccess(basicInfoList);
+                }
+            },
+            // on failure
+            function() {
+                console.log("failed to load basic info:", shopList[i]);
+                count++;
+
+                // once all shops looped, callback
+                if(count == shopList.length) {
+                    // callback
+                    onSuccess(basicInfoList);
+                }
+            }
+        );
+    }
+}
+
+function saveShopBasicInfo(shopID, shopInfo, onSuccess, onFailure) {
+
+    var group = KiiGroup.groupWithID(shopID);
+    var bucket = group.bucketWithName(Bucket.GroupScope.ShopInfo);
+    var object = bucket.createObjectWithID("basic_info");
+
+    object.set("shop_id", shopID);
+
+    for (var key in shopInfo) {
+        object.set(key, shopInfo[key]);
+    }
+
+    object.saveAllFields({
+      success: onSuccess,
+      failure: onFailure
+    });
+
+}
+
+function saveProductTemplateInfo(group, productID, productInfo, onSuccess, onFailure) {
+
+    var bucket = group.bucketWithName(Bucket.GroupScope.ProductList);
+    var object = null;
+    if(isAvailable(productID)) {
+        object = bucket.createObjectWithID(productID);
+    } else {
+        object = bucket.createObject();
+    }
+
+    for (var key in productInfo) {
+        object.set(key, productInfo[key]);
+    }
+
+    object.saveAllFields({
+      success: onSuccess,
+      failure: onFailure
+    });
 
 }

@@ -4,10 +4,12 @@
         <h4 class="panel-title">
             <a data-toggle="collapse"
                href="#collapsePanel-{CollapsePanelID}">
-                Shop ID: {ShopID}
+                {Name}
             </a>
 
-            <!-- <a class="btn btn-default pull-right" style="display:{display}" onclick="markOrderReady('{OrderID}')">{MarkReady}</a> -->
+            <!-- save -->
+            <a class="btn btn-default pull-right" href="{ShopDetailsLink}" target="_blank">
+                {Details}</a>
         </h4>
     </div>
     <div id="collapsePanel-{CollapsePanelID}" class="panel-collapse collapse in">
@@ -17,7 +19,7 @@
                 <div class="form-horizontal" role="form" id="shop_form">
 
                     <div class="form-group order-row">
-                        <label class="col-sm-2 control-label">{NameLabel}</label>
+                        <label class="col-sm-3 control-label">{NameLabel}</label>
                         <div class="col-sm-9">
                             <span class="col-sm-12 control-label content-display">
                                 {Name}</span>
@@ -25,7 +27,31 @@
                     </div>
 
                     <div class="form-group order-row">
-                        <label class="col-sm-2 control-label">{AddressLabel}</label>
+                        <label class="col-sm-3 control-label">{DeliveryFeeLabel}</label>
+                        <div class="col-sm-9">
+                            <span class="col-sm-12 control-label content-display">
+                                {DeliveryFee}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group order-row">
+                        <label class="col-sm-3 control-label">{ServiceTimeStartLabel}</label>
+                        <div class="col-sm-9">
+                            <span class="col-sm-12 control-label content-display">
+                                {ServiceTimeStart}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group order-row">
+                        <label class="col-sm-3 control-label">{ServiceTimeEndLabel}</label>
+                        <div class="col-sm-9">
+                            <span class="col-sm-12 control-label content-display">
+                                {ServiceTimeEnd}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group order-row">
+                        <label class="col-sm-3 control-label">{AddressLabel}</label>
                         <div class="col-sm-9">
                             <span class="col-sm-12 control-label content-display">{Address}
                             </span>

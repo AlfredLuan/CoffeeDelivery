@@ -39,9 +39,12 @@ function replaceTemplateContent(displayTemplate, key, content, htmlName) {
 // loadDataList: callback function, is expected to hava param onSuccess and
 //  pass the loaded data list to it
 //
-// parseDataForDisplay: callback function, is expected to parse data for display
+// parseDataForDisplay: callback function, is expected to return the parsed data for display
 //  based on the displayTemplate
-function loadListForDisplay(listElementID, templateUrl, loadDataList, parseDataForDisplay) {
+function loadListForDisplay(listElementID, templateUrl, loadDataList, parseDataForDisplay, onSuccess, onFailure) {
+
+    var onSuccess = toSafeCallback(onSuccess);
+    var onFailure = toSafeCallback(onFailure);
 
     // load data list
     loadDataList(function(dataList) {
@@ -60,8 +63,11 @@ function loadListForDisplay(listElementID, templateUrl, loadDataList, parseDataF
 
             setInnerHtml(listElementID, htmlContent, false);
 
-        });
+            // callback
+            onSuccess();
 
-    });
+        }, onFailure);
+
+    }, onFailure);
 
 }

@@ -1,68 +1,22 @@
 
-/*
-* reference:
-*   https://developers.google.com/maps/documentation/javascript/geolocation
-*/
-function refreshLocationDisplay(map, infoWindow) {
+function showDriverMap(map, infoWindow) {
 
     var markerMapOfDrivers = {};
 
-    setInterval(function() {
+    loadMap(map, infoWindow, function(myPosition){
 
-        // display my location
-        showMyLocation(map, infoWindow, function(myPosition){
+        // flush drivers' location by certain interval
+        setInterval(function() {
 
             // display driver's location
             showDriverLocation(myPosition, map, markerMapOfDrivers, function() {
                 console.log("location refreshed");
             });
 
-        })
+        },5000);
 
-    }, 5000);
+    });
 
-}
-
-// Note: This example requires that you consent to location sharing when
-// prompted by your browser. If you see the error "The Geolocation service
-// failed.", it means you probably did not give permission for the browser to
-// locate you.
-function showMyLocation(map, infoWindow, onSuccess, onFailure) {
-
-    onSuccess = toSafeCallback(onSuccess);
-    onFailure = toSafeCallback(onFailure);
-
-    // get current location and display
-    // Try HTML5 geolocation.
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
-
-            map.setCenter(pos);
-
-            // showInfoWindow(infoWindow, map, 'Location found.');
-
-            console.log("my location", pos);
-
-            onSuccess(pos);
-        }, function() {
-            // showInfoWindow(infoWindow, map, "Error: The Geolocation service failed.");
-            onFailure();
-        });
-    } else {
-        // Browser doesn't support Geolocation
-        // showInfoWindow(infoWindow, map, "Error: Your browser doesn\'t support geolocation.");
-        onFailure();
-    }
-}
-
-function showInfoWindow(infoWindow, map, content) {
-    infoWindow.setPosition(map.getCenter());
-    infoWindow.setContent(content);
-    infoWindow.open(map);
 }
 
 function showDriverLocation(myPosition, map, markerMapOfDrivers) {
@@ -128,22 +82,7 @@ function loadDriverLocationList(myPosition, map, onSuccess, onFailure) {
 
     // var clause = KiiClause.equals("state.location._type", "point");
 
-    loadAllObjects("_states", clause, onSuccess, onFailure);
+    var bucket = Kii.bucketWithName(Bucket.AppScope.ThingStates);
+    loadAllObjects(bucket, clause, onSuccess, onFailure);
 
-}
-
-function convertGoogleLocationToKiiLocation(googleLocation) {
-    if(googleLocation === undefined || googleLocation == null) {
-        return null;
-    }
-
-    return {lat: googleLocation.lat(), lon: googleLocation.lng()}
-}
-
-function convertKiiLocationToGoogleLocation(kiiLocation) {
-    if(kiiLocation === undefined || kiiLocation == null) {
-        return null;
-    }
-
-    return new google.maps.LatLng(kiiLocation.lat, kiiLocation.lon);
 }
