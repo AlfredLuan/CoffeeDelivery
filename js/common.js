@@ -55,14 +55,21 @@ var Topic = {
     }
 };
 
+var PushMessageEvent = {
+    OrderUpdated: "order_updated",
+    OrderDeleted: "order_deleted"
+}
+
 /////////////////////////////////////////////////////
 // global variables
 /////////////////////////////////////////////////////
 
 var Global = {
-    currentUser: undefined,
-    shopInfoList: undefined,
-    orderList: undefined
+    currentUser: null,
+    // all the shops info, from AppScope.ShopInfoList
+    shopInfoList: null,
+    // all the orders, from AppScope.OrderList
+    orderList: null
 };
 
 
@@ -74,92 +81,31 @@ String.prototype.replaceAll = function(s1, s2) {　　
     return this.replace(new RegExp(s1, "gm"), s2);
 }
 
+// 对Date的扩展，将 Date 转化为指定格式的String
+// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+// 例子：
+// (new Date()).format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
+// (new Date()).format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18
+Date.prototype.format = function (fmt) { //author: meizz
+    var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+
 /////////////////////////////////////////////////////
 // http call management
 /////////////////////////////////////////////////////
-
-Global_RemoteRequest = (function() {
-
-    function Global_RemoteRequest(method, endpoint, headers) {
-
-
-        this.path = endpoint;
-
-        this.method = method;
-        this.headers = headers;
-
-        var _this = this;
-
-        this.onSuccess = function(anything, textStatus, jqXHR) {
-            console.log("request success");
-
-            if ((200 <= (_ref1 = jqXHR.status) && _ref1 < 400)) {
-                if (jqXHR.status == 204) {
-                    return _this._success(null, textStatus);
-                } else {
-                    if (anything.errorCode != null) {
-                        var errString = anything.errorCode + anything.message;
-                        return _this._failure(errString, jqXHR.status, anything.errorCode);
-                    } else {
-                        return _this._success(anything, textStatus);
-                    }
-                }
-            } else {
-                var errString = xhr.status + " : " + _this._path;
-                var json = decodeURIComponent(jqXHR.responseText);
-
-                return _this._failure(errString, jqXHR.status, resp);
-            }
-        };
-
-        this.onError = function(jqXHR, textStatus, errorThrown) {
-            console.log("request fail:" + textStatus + " " + jqXHR.responseText);
-
-            var errString = textStatus + " : " + _this._path;
-            var resp = decodeURIComponent(jqXHR.responseText);
-
-            return _this._failure(errString, jqXHR.status, resp);
-        };
-
-    }
-
-    Global_RemoteRequest.prototype.executeToRemote = function(param, callback) {
-
-        console.log("do remote post:" + JSON.stringify(param));
-
-        if (callback["success"] != null) {
-            this._success = callback["success"];
-        }
-        if ((callback["failure"] != null)) {
-            this._failure = callback["failure"];
-        }
-
-        var ajaxParam = {};
-        ajaxParam["success"] = this.onSuccess;
-        ajaxParam["error"] = this.onError;
-
-        ajaxParam["type"] = this.method;
-        ajaxParam["headers"] = this.headers;
-
-        if (this.method != "GET" && this.method != "DELETE") {
-            ajaxParam["data"] = JSON.stringify(param);
-        }
-
-        console.log("header:" + JSON.stringify(this.headers));
-        console.log("url:" + this.path);
-
-        $.ajax(this.path, ajaxParam);
-
-    }
-
-    Global_RemoteRequest.prototype.execute = function(param, callback) {
-
-        this.executeToRemote(param, callback);
-    }
-
-
-    return Global_RemoteRequest;
-})();
 
 function checkHttpCode(httpCode) {
 

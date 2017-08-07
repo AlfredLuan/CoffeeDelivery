@@ -5,7 +5,8 @@ function parseOrderForDisplay(data, displayTemplate, htmlName) {
     htmlContent = htmlContent.replaceAll("{CollapsePanelID}", data.getID());
 
     htmlContent = htmlContent.replaceAll("{OrderID}", data.getID());
-    htmlContent = replaceTemplateContent(htmlContent, "{OrderStatus}", "{OrderStatus-" + data.get("order_status") + "}", htmlName);
+    var orderStatus = data.get("order_status");
+    htmlContent = replaceTemplateContent(htmlContent, "{OrderStatus}", "{OrderStatus-" + orderStatus + "}", htmlName);
 
     htmlContent = replaceTemplateContent(htmlContent, "{MakerLabel}", null, htmlName);
     var maker = data.get("coffee_maker");
@@ -78,8 +79,89 @@ function parseOrderForDisplay(data, displayTemplate, htmlName) {
         htmlContent = htmlContent.replaceAll("{display-order-status-3}", "none");
     }
 
+    // display each timestamp
+    htmlContent = replaceTemplateContent(htmlContent, "{Timestamp-Label}",  null, htmlName);
+
+    var timestampFieldMap = {
+        "0": "timestamp_order_placed",
+        "1": "timestamp_order_accepted",
+        "2": "timestamp_order_start_making",
+        "3": "timestamp_order_ready",
+        "4": "timestamp_order_pick_up",
+        "5": "timestamp_order_deliveryed"
+    };
+
+    for (var status in timestampFieldMap) {
+        if(orderStatus >= Number(status)) {
+            // display timestamp
+            htmlContent = htmlContent.replaceAll("{display-Timestamp-OrderStatus-" + status + "}", "display");
+            // display the label and value
+            var timestampField = timestampFieldMap[status];
+            var dateTime = data.get(timestampField);
+            if(isAvailable(dateTime)) {
+                dateTime = new Date(dateTime).format("yyyy-MM-dd hh:mm:ss");
+            }
+            htmlContent = htmlContent.replaceAll("{Timestamp-OrderStatus-" + status + "}", toSafeString(dateTime));
+            htmlContent = replaceTemplateContent(htmlContent, "{Timestamp-OrderStatus-" + status + "-Label}",  null, htmlName);
+        } else {
+            // hide timestamp
+            htmlContent = htmlContent.replaceAll("{display-Timestamp-OrderStatus-" + status + "}", "none");
+        }
+    }
+
     return "<tr>" + htmlContent + "<br/></tr>";
 };
+
+function loadOrderListPage() {
+
+    var kiiUser = KiiUser.getCurrentUser();
+
+    console.log("KiiUser.getCurrentUser()", kiiUser);
+
+    connectMqttWS(KiiUser.getCurrentUser(), function(payload) {
+
+        if(payload["event"] = PushMessageEvent.OrderUpdated) {
+            var orderID = payload["order_id"];
+            var bucket = Kii.bucketWithName(Bucket.AppScope.OrderList);
+            var object = bucket.createObjectWithID(orderID);
+
+            object.refresh({
+                success: function(order) {
+
+                    // load display template
+                    loadDisplayTemplate("/page/ordertemplate.html", function(displayTemplate) {
+
+                        var htmlName = getHtmlName();
+                        // parse each data for display
+                        var htmlContent = parseOrderForDisplay(order, displayTemplate, htmlName);
+
+                        var div = document.createElement("div");
+                        div.innerHTML = htmlContent;
+
+                        for (var i = 0; i < div.childNodes.length; i++) {
+                            var temp = div.childNodes[i];
+                            // check whether element node type
+                            if(temp.nodeType == 1) {
+                                htmlContent = div.innerHTML;
+                                setInnerHtml("element_" + orderID, htmlContent, false);
+                                break;
+                            }
+                        }
+                    });
+
+                },
+                failure: function(order, errorString) {
+                    // Handle the error.
+                    console.log("failed to load order", order, errorString);
+                }
+            });
+        }
+
+    });
+
+    // load order list for display
+    loadOrderListForDisplay();
+}
 
 function loadOrderListForDisplay() {
 
@@ -105,7 +187,7 @@ function updateOrderStatus(eventSource, orderID, orderStatus) {
     object.refresh({
         success: function(order) {
 
-            // update order status, maker info and save
+            // update maker info
             var user = KiiUser.getCurrentUser();
             var userID = user.getID();
             var displayName = user.getDisplayName();
@@ -116,8 +198,21 @@ function updateOrderStatus(eventSource, orderID, orderStatus) {
                 user_id: userID,
                 name: displayName
             });
+            // update order status
             order.set("order_status", orderStatus);
+            // update order timestamp
+            var timestampField = "";
+            switch (orderStatus) {
+                case OrderStatus.OrderStartMaking:
+                    timestampField = "timestamp_order_start_making";
+                    break;
+                case OrderStatus.OrderReady:
+                    timestampField = "timestamp_order_ready";
+                    break;
+            }
+            order.set(timestampField, new Date().getTime());
 
+            // save order
             order.save({
                 success: function() {
                     // unblock the button
@@ -142,10 +237,3 @@ function updateOrderStatus(eventSource, orderID, orderStatus) {
     })
 
 }
-
-loadCurrentUserInfo(function() {
-
-    console.log("KiiUser.getCurrentUser()", KiiUser.getCurrentUser());
-
-    connectMqttWS(KiiUser.getCurrentUser());
-})

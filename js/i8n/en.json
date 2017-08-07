@@ -18,6 +18,8 @@
         "UserRole-product_manager": "Product Manager",
         "UserRole-driver": "Driver",
         "UserRole-consumer": "Consumer",
+        "ShopRole-head": "Head",
+        "ShopRole-branch": "Branch",
         "OrderStatus-0": "Order Placed",
         "OrderStatus-1": "Order Accepted",
         "OrderStatus-2": "Order Start Making",
@@ -29,6 +31,9 @@
         "error-Failed-to-logout": "Failed to logout",
         "error-Failed-to-load-shop-info-list": "Failed to load shop info"
     },
+    "errorpage": {
+        "return-to-home-page": "Please click here to return to home page"
+    },
     "dashboard": {
         "Product": "Product",
         "Create": "Create",
@@ -39,46 +44,6 @@
         "Save": "Save",
         "error-Failed-to-load-the-product-list": "Failed to load the product list",
         "error-Failed-to-create-product": "Failed to create product"
-    },
-    "shoplist": {
-        "ShopList": "Shop List",
-        "NameLabel": "Name",
-        "DeliveryFeeLabel": "Delivery Fee",
-        "ServiceTimeStartLabel": "Service Time Start",
-        "ServiceTimeEndLabel": "Service Time End",
-        "AddressLabel": "Address",
-        "Details": "Details",
-        "CreateShop": "New Shop",
-        "error-Failed-to-create-shop": "Failed to create shop"
-    },
-    "producttemplatelist": {
-        "ProductList": "Product List",
-        "NameLabel": "Name",
-        "IceLabel": "Ice",
-        "MilkLabel": "Milk",
-        "SugarLabel": "Sugar",
-        "PriceLabel": "Price",
-        "DescriptionLabel": "Description",
-        "OperateLabel": "Operate",
-        "Edit": "Edit",
-        "Details": "Details",
-        "Save": "Save",
-        "Cancel": "Cancel"
-    },
-    "orderlist": {
-        "OrderList": "Order List",
-        "UpdateOrderStatus1": "Start Making",
-        "UpdateOrderStatus2": "Ready",
-        "MakerLabel": "Maker",
-        "ConsumerLabel": "Consumer",
-        "DriverLabel": "Driver",
-        "CoffeeLabel": "Coffee",
-        "AmountLabel": "Amount",
-        "ProductNameLabel": "Name",
-        "OptionsLabel": "Options",
-        "OrderStatus": "Status",
-        "DescriptionLabel": "Description",
-        "ShopLabel": "Shop"
     },
     "drivermap": {
         "DriverMap": "Driver Map"
@@ -96,6 +61,32 @@
         "Mail": "Mail",
         "error-Failed-to-get-register-info": "Failed to get register info"
     },
+    "mobile-page-template": {
+        "ProductName": "Product",
+        "ProductDescription": "Product Info"
+    },
+    "orderlist": {
+        "OrderList": "Order List",
+        "UpdateOrderStatus1": "Start Making",
+        "UpdateOrderStatus2": "Ready",
+        "MakerLabel": "Maker",
+        "ConsumerLabel": "Consumer",
+        "DriverLabel": "Driver",
+        "CoffeeLabel": "Coffee",
+        "AmountLabel": "Amount",
+        "ProductNameLabel": "Name",
+        "OptionsLabel": "Options",
+        "OrderStatus": "Status",
+        "DescriptionLabel": "Description",
+        "ShopLabel": "Shop",
+        "Timestamp-Label": "TimeStamp",
+        "Timestamp-OrderStatus-0-Label": "Order Placed At",
+        "Timestamp-OrderStatus-1-Label": "Order Accepted At",
+        "Timestamp-OrderStatus-2-Label": "Start Making At",
+        "Timestamp-OrderStatus-3-Label": "Ready At",
+        "Timestamp-OrderStatus-4-Label": "Pick Up At",
+        "Timestamp-OrderStatus-5-Label": "Delivered At"
+    },
     "productdetails": {
         "ShopAssignment": "Shop Assignment",
         "ProductInfo": "Product Info",
@@ -105,16 +96,20 @@
         "ShopAddressLabel": "Address",
         "error-Failed-to-load-the-product-details": "Failed to load the product details"
     },
-    "shopdetails": {
-        "UserAssignment": "User Assignment",
-        "ShopInfo": "Shop Info",
-        "Name": "Name",
-        "Addess": "Address",
-        "UserDisplayNameLabel": "Display Name",
-        "UserRoleLabel": "Role",
-        "UserEmailLabel": "Email",
-        "UserPhoneLabel": "Phone",
-        "error-Failed-to-load-the-shop-details": "Failed to load the shop details"
+    "producttemplatelist": {
+        "ProductList": "Product List",
+        "NameLabel": "Name",
+        "IceLabel": "Ice",
+        "MilkLabel": "Milk",
+        "SugarLabel": "Sugar",
+        "PriceLabel": "Price",
+        "DescriptionLabel": "Description",
+        "OperateLabel": "Operate",
+        "Edit": "Edit",
+        "Details": "Details",
+        "Save": "Save",
+        "Cancel": "Cancel",
+        "error-Please-join-in-head-shop": "Please join in head shop first"
     },
     "register": {
         "please-input-user-info-below": "Please Input User Info Below",
@@ -133,11 +128,28 @@
         "error-Register-info-existing-already": "Register info existing already, please try another login name",
         "error-Confirm-password-wrong": "the passwords input twice are different, plese confirm the password"
     },
-    "mobile-page-template": {
-        "ProductName": "Product",
-        "ProductDescription": "Product Info"
+    "shopdetails": {
+        "UserAssignment": "User Assignment",
+        "ShopInfo": "Shop Info",
+        "Name": "Name",
+        "Addess": "Address",
+        "UserDisplayNameLabel": "Display Name",
+        "UserRoleLabel": "Role",
+        "UserEmailLabel": "Email",
+        "UserPhoneLabel": "Phone",
+        "error-Failed-to-load-the-shop-details": "Failed to load the shop details"
     },
-    "errorpage": {
-        "return-to-home-page": "Please click here to return to home page"
+    "shoplist": {
+        "ShopList": "Shop List",
+        "ShopRole-head": "(Head)",
+        "NameLabel": "Name",
+        "DeliveryFeeLabel": "Delivery Fee",
+        "ServiceTimeStartLabel": "Service Time Start",
+        "ServiceTimeEndLabel": "Service Time End",
+        "AddressLabel": "Address",
+        "MapIntroductionLabel": "* Right click mouse in below map to choose address",
+        "Details": "Details",
+        "CreateShop": "New Shop",
+        "error-Failed-to-create-shop": "Failed to create shop"
     }
 }

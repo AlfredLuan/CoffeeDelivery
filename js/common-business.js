@@ -3,11 +3,7 @@
 // push service
 /////////////////////////////////////////////////////
 
-function onMqttWSMessageArrived(message) {
-
-}
-
-function connectMqttWS(kiiUser) {
+function connectMqttWS(kiiUser, callbackOnMessageArrive) {
 
     var development = false;
     kiiUser.pushInstallation().installMqtt(development).then(
@@ -49,12 +45,12 @@ function connectMqttWS(kiiUser) {
             function onMessageArrived(message) {
                 console.log("Message Arrived", message);
 
-                if (message.destinationName === mqttTopic) {
+                // if (message.destinationName === mqttTopic) {
                     var payload = JSON.parse(message.payloadString);
                     console.log("payload Arrived", payload);
 
-                    onMqttWSMessageArrived(payload);
-                }
+                    callbackOnMessageArrive(payload);
+                // }
             }
         }
     ).catch(
@@ -306,7 +302,7 @@ function loadOrderList(kiiUser, onSuccess, onFailure) {
     loadGroups(kiiUser, function(shopList){
 
         if(isUnavailable(shopList) || shopList.length == 0) {
-            
+
             var emptyList = [];
             Global.orderList = emptyList;
             // callback

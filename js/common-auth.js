@@ -23,7 +23,10 @@ function getRedirectUrlAfterLogin(kiiUser) {
 }
 
 //
-function login() {
+function login(eventSource) {
+
+    // block button
+    eventSource.disabled = true;
 
     var username = document.getElementById('login_name').value;
     var password = document.getElementById('password').value;
@@ -33,8 +36,9 @@ function login() {
         success: function(theUser) {
             console.log(theUser);
 
-            // subscribe shop topic
+            // subscribe shop topic, to listen to new order or order change
             subscribeShopTopic(theUser, function() {
+                console.log("success to subscribe order");
 
                 theUser.refresh({
                     success: function(theUser) {
@@ -49,18 +53,23 @@ function login() {
                     failure: function(theUser, errorString) {
                         // Handle the error.
                         showErrorMessage("navbar_error_message", "{error-Failed-to-subscribe-topic}");
+                        // unblock button
+                        eventSource.disabled = false;
                     }
-                })
-
+                });
             }, function() {
                 // Handle the error.
                 showErrorMessage("navbar_error_message", "{error-Failed-to-subscribe-topic}");
+                // unblock button
+                eventSource.disabled = false;
             });
 
         },
         failure: function(theUser, errorString) {
             // Handle the error.
             showErrorMessage("navbar_error_message", "{error-Please-check-login-name-or-password}");
+            // unblock button
+            eventSource.disabled = false;
         }
     })
 
@@ -79,10 +88,10 @@ function logout() {
 
 
 // register an user
-function registerUser(eventSoure) {
+function registerUser(eventSource) {
 
     // block button
-    eventSoure.disabled = true;
+    eventSource.disabled = true;
 
     var username = getElementValue("register_login_name");
     var password = getElementValue("register_password");
@@ -98,7 +107,7 @@ function registerUser(eventSoure) {
         // Handle the error.
         showErrorMessage("navbar_error_message", "{error-Confirm-password-wrong}");
         // unblock button
-        eventSoure.disabled = false;
+        eventSource.disabled = false;
         return;
     }
 
@@ -112,7 +121,7 @@ function registerUser(eventSoure) {
         // Handle the error.
         showErrorMessage("navbar_error_message", "{error-Failed-to-register-user}");
         // unblock button
-        eventSoure.disabled = false;
+        eventSource.disabled = false;
         return;
     }
 
@@ -127,7 +136,7 @@ function registerUser(eventSoure) {
             saveLoginInfo(theUser);
 
             // unblock button
-            eventSoure.disabled = false;
+            eventSource.disabled = false;
 
             // redirect
             window.location.href = getRedirectUrlAfterLogin(theUser);
@@ -136,49 +145,10 @@ function registerUser(eventSoure) {
             // Handle the error.
             showErrorMessage("navbar_error_message", "{error-Failed-to-register-user}");
             // unblock button
-            eventSoure.disabled = false;
+            eventSource.disabled = false;
         }
     });
 }
-//
-// function registerShopForOperator(eventSoure) {
-//
-//     // block button
-//     eventSoure.disabled = true;
-//
-//     var shopName = getElementValue("register_shop_name");
-//     var address = getElementValue("register_shop_address");
-//
-//     // Create a group.
-//     var group = KiiGroup.groupWithName(shopName);
-//
-//     // Save the group on the server.
-//     group.save({
-//       success: function(theGroup) {
-//         // Get the reference URI and ID of the group.
-//         var groupUri = theGroup.objectURI();
-//         var groupID = theGroup.getID();
-//
-//         // save shop info into shop info list
-//         saveShopInfo(groupID, shopName, address, function(){
-//
-//             // unblock button
-//             eventSoure.disabled = false;
-//
-//             // jump to dashboard
-//             window.location.href="/page/dashboard.html";
-//
-//         });
-//       },
-//       failure: function(theGroup, errorString) {
-//         // Handle the error.
-//         showErrorMessage("navbar_error_message", "{error-Failed-to-create-shop}");
-//         // unblock button
-//         eventSoure.disabled = false;
-//       }
-//     });
-// }
-
 
 function onSelectShopChange() {
 
@@ -189,32 +159,6 @@ function onSelectShopChange() {
             setElementValue("register_shop_address_select", shopInfoList[i].get("address"));
         }
     };
-
-}
-
-function loadShopInfoListForRegister(onSuccess) {
-
-    loadShopInfoList(function(resultSet) {
-
-        shopInfoList = resultSet;
-
-        var temp = "";
-        for (var i = 0; i < shopInfoList.length; i++) {
-            temp += "<option value='" + shopInfoList[i].get("shop_id") + "'>" + shopInfoList[i].get("shop_name") + "</option>"
-        };
-
-        document.getElementById("register_shop_name_select").innerHTML = temp;
-        if (shopInfoList !== undefined && shopInfoList.length > 0) {
-            setElementValue("register_shop_address_select", shopInfoList[0].get("address"));
-        };
-
-        // callback
-        onSuccess();
-    })
-}
-
-
-function registerShopForCoffeeMaker() {
 
 }
 
@@ -301,7 +245,6 @@ function getAvailableLinksForUserRole(role) {
             break;
         case UserRole.Operator:
             links = [
-                "link_dashboard",
                 "link_shoplist",
                 "link_producttemplatelist",
                 "link_orderlist",
@@ -313,7 +256,6 @@ function getAvailableLinksForUserRole(role) {
             break;
         case UserRole.ProductManager:
             links = [
-                "link_dashboard",
                 "link_producttemplatelist",
                 "link_myprofile",
                 "link_displayname",
@@ -322,7 +264,9 @@ function getAvailableLinksForUserRole(role) {
             break;
         case UserRole.Driver:
             links = [
-                "link_myprofile"
+                "link_myprofile",
+                "link_displayname",
+                "link_logout"
             ];
             break;
         case UserRole.Consumer:
@@ -337,8 +281,39 @@ function getAvailableLinksForUserRole(role) {
     return links;
 }
 
+function loadTopNavBar(isBackToHomePage) {
+    return loadTopNavBarHtml().then(function() {
+        return checkLoginStatus(isBackToHomePage);
+    })
+}
+
+// load top nav bar html content
+function loadTopNavBarHtml() {
+
+    console.log("loadTopNavBarHtml");
+
+    var d = $.Deferred();
+
+    loadDisplayTemplate("/page/topnavbar.html", function(headerHtml){
+
+        var header = document.createElement("div");
+        header.innerHTML = headerHtml;
+        document.body.appendChild(header);
+
+        // getElementsByClassName
+        d.resolve();
+    }, function(){
+        d.reject();
+    });
+
+    return d.promise();
+}
+
 // check login status
+// based on login status, change the display of top nav bar
 function checkLoginStatus(isBackToHomePage) {
+
+    console.log("checkLoginStatus");
 
     var d = $.Deferred();
 
@@ -374,8 +349,12 @@ function checkLoginStatus(isBackToHomePage) {
 
             clearErrorMessage("navbar_error_message");
 
-            // display login name
-            document.getElementById("login_name_display").innerHTML = loginName;
+            // display login name and role
+            var displayName = theUser.getDisplayName();
+            if(isUnavailable(displayName)) {
+                displayName = loginName;
+            }
+            document.getElementById("navbar_display_name").innerHTML = displayName;
 
             d.resolve();
         }, function(errorString) {
@@ -397,10 +376,10 @@ function checkLoginStatus(isBackToHomePage) {
 
         if (isBackToHomePage == true) {
             // go back to home page
-            window.location.href = "/";
+            window.location.href = "/page/index.html";
         }
 
-        d.reject();
+        d.resolve();
     }
 
     return d.promise();

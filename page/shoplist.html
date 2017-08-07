@@ -23,54 +23,10 @@
 </head>
 <body>
 
-
-<!--nav bar-->
-<nav class="navbar navbar-default" role="navigation" >
-
-        <div class="container-fluid">
-            <ul class="nav navbar-nav navbar-left">
-                <li><a href="/page/index.html">{Home}</a></li>
-                <li name="after_login" id="link_dashboard"><a href="/page/dashboard.html">{DashBoard}</a></li>
-                <li name="after_login" id="link_shoplist"><a href="/page/shoplist.html">{ShopList}</a></li>
-                <li name="after_login" id="link_producttemplatelist"><a href="/page/producttemplatelist.html">{ProductList}</a></li>
-                <li name="after_login" id="link_orderlist"><a href="/page/orderlist.html">{OrderList}</a></li>
-                <li name="after_login" id="link_drivermap"><a href="/page/drivermap.html">{DriverMap}</a></li>
-                <li name="after_login" id="link_myprofile"><a href="/page/myprofile.html">{MyProfile}</a></li>
-            </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li><a style="color:red" id="navbar_error_message" > messages</a></li>
-                <li name="before_login">
-                    <form class="navbar-form navbar-right" role="search">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="login_name" placeholder="{placeholder-name}"/>
-                            <input type="password" class="form-control" id="password" placeholder="{placeholder-password}"/>
-                        </div>
-                    </form>
-                </li>
-                <li name="before_login"><a href="#" onclick="login()">{Login}</a></li>
-                <li name="before_login"><a href="/page/register.html" >{Register}</a></li>
-
-                <li name="after_login" id="link_displayname"><a id="login_name_display" > messages</a></li>
-                <li name="after_login" id="link_logout"><a href="#" onclick="logout()">{Logout}</a></li>
-
-                <!-- <li>
-                    <form class="navbar-form" role="search">
-                        <select class="form-control" id="lang" onchange="changeLanguage()">
-                            <option value="en">English</option>
-                            <option value="cn">中文</option>
-                            <option value="jp">日本語</option>
-                        </select>
-                    </form>
-                </li> -->
-            </ul>
-
-        </div>
-    </nav>
-
-<script type="text/javascript">
-    var promise = checkLoginStatus(true);
-</script>
+    <!--nav bar-->
+    <script type="text/javascript">
+        var promise = loadTopNavBar(true);
+    </script>
 
 <div class="container">
     <div class="row clearfix">
@@ -178,12 +134,13 @@
                         <div class="col-sm-8">
                             <textarea type="text" class="form-control" id="new_shop_address" rows="2" disabled="true"/>
                             </textarea>
+                            <span for="description">{MapIntroductionLabel}</span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <div id="map" style="height:300px"></div>
+                            <div id="map" style="margin:0px 20px 0px 20px;height:300px"></div>
                         </div>
                     </div>
 
@@ -217,6 +174,7 @@
             var infoWindow = new google.maps.InfoWindow;
 
             showNewShopMap(map, infoWindow);
+
         }
 
         promise.then(function(){
@@ -232,7 +190,10 @@
     as the translation may have impact on map drawing -->
     <!-- script -->
     <script type="text/javascript">
-        translateHtmlPage();
+
+        promise.then(function(){
+            translateHtmlPage();    
+        });
     </script>
 
 </body>

@@ -1,0 +1,104 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Bucket.AppScope	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^var Bucket = {$/;"	property
+GOOGLE_MAP_KEY	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^var GOOGLE_MAP_KEY = "AIzaSyBGJuotfOlzXBw7rOyVYtrLnPfeX_VblLs";$/;"	variable
+Global.currentUser	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^var Global = {$/;"	property
+Global.memberOfGroups	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    currentUser: null,$/;"	property
+Global.orderList	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    shopInfoList: null,$/;"	property
+Global.shopInfoList	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    currentUser: null,$/;"	property
+Global.shopInfoList	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    memberOfGroups: null,$/;"	property
+Global_RemoteRequest	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    function Global_RemoteRequest(method, endpoint, headers) {$/;"	function
+KII_APP_ID	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^var KII_APP_ID = "dru5stobbkcu";$/;"	variable
+KII_APP_KEY	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^var KII_APP_KEY = "0ae3eeee80474f0ca55781659865caf9";$/;"	variable
+KII_SITE	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^var KII_SITE = KiiSite.CN3;$/;"	variable
+OrderStatus.OrderAccepted	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    OrderPlaced: 0, \/\/ order placed by customer$/;"	property
+OrderStatus.OrderDelivered	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    OrderPickUp: 4, \/\/ coffee picked up by driver$/;"	property
+OrderStatus.OrderPickUp	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    OrderReady: 3, \/\/ coffee ready by coffee maker$/;"	property
+OrderStatus.OrderPlaced	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^var OrderStatus = {$/;"	property
+OrderStatus.OrderReady	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    OrderStartMaking: 2, \/\/ start making coffee by coffee maker$/;"	property
+OrderStatus.OrderStartMaking	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    OrderAccepted: 1, \/\/ order accepted by driver$/;"	property
+ShopRole.Branch	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    Head : "head",$/;"	property
+ShopRole.Head	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^var ShopRole = {$/;"	property
+String	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^};$/;"	class
+String.replaceAll	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^String.prototype.replaceAll = function(s1, s2) {　　$/;"	method
+Topic.GroupScope	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^var Topic = {$/;"	property
+UserRole.CoffeeMaker	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^var UserRole = {$/;"	property
+UserRole.Consumer	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    Driver: "driver",$/;"	property
+UserRole.Driver	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    ProductManager: "product_manager",$/;"	property
+UserRole.Operator	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    CoffeeMaker: "coffee_maker",$/;"	property
+UserRole.ProductManager	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    Operator: "operator",$/;"	property
+checkHttpCode	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function checkHttpCode(httpCode) {$/;"	function
+checkLoginStatus	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^function checkLoginStatus(isBackToHomePage) {$/;"	function
+clearCookie	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function clearCookie(name) {$/;"	function
+clearErrorMessage	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function clearErrorMessage(id) {$/;"	function
+clearLoginInfo	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^function clearLoginInfo() {$/;"	function
+compare	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^        compare = function(a, b) {$/;"	function
+compare	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    } else {$/;"	function
+convertArray	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function convertArray(array, convert) {$/;"	function
+copyValues	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function copyValues(srcObject, destObject, keys) {$/;"	function
+differArray	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function differArray(oldArray, newArray, isSame){$/;"	function
+differArray.foundNonExistingElementList	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    var foundNonExistingElementList = function(array1, array2) {$/;"	function
+execute	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    Global_RemoteRequest.prototype.execute = function(param, callback) {$/;"	function
+executeToRemote	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    Global_RemoteRequest.prototype.executeToRemote = function(param, callback) {$/;"	function
+failure	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^                    failure: function(theUser, errorString) {$/;"	function
+failure	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^                failure: function(kiiUser, errorString1) {$/;"	function
+failure	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^        failure: function(theUser, errorString) {$/;"	function
+foundNonExistingElementList	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    var foundNonExistingElementList = function(array1, array2) {$/;"	function
+getAvailableLinksForUserRole	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^function getAvailableLinksForUserRole(role) {$/;"	function
+getBrowserLang	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function getBrowserLang() {$/;"	function
+getCookie	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function getCookie(cname) {$/;"	function
+getCookie.clearCookie	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function clearCookie(name) {$/;"	function
+getCookie.clearErrorMessage	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function clearErrorMessage(id) {$/;"	function
+getCookie.getBrowserLang	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function getBrowserLang() {$/;"	function
+getCookie.getElementValue	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function getElementValue(elementId) {$/;"	function
+getCookie.getHtmlName	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function getHtmlName() {$/;"	function
+getCookie.getQueryString	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function getQueryString(name) {$/;"	function
+getCookie.getValueFromSelectElement	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function getValueFromSelectElement(id) {$/;"	function
+getCookie.hideElement	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function hideElement(elementID) {$/;"	function
+getCookie.reloadPage	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function reloadPage(){$/;"	function
+getCookie.setElementValue	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function setElementValue(elementId, value) {$/;"	function
+getCookie.setInnerHtml	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function setInnerHtml(id, message, needTranslate) {$/;"	function
+getCookie.setValueInSelectElement	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function setValueInSelectElement(id, value) {$/;"	function
+getCookie.showElement	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function showElement(elementID) {$/;"	function
+getCookie.showErrorMessage	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function showErrorMessage(id, message) {$/;"	function
+getCookie.toSafeCallback	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function toSafeCallback(callback) {$/;"	function
+getCookie.toSafeString	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function toSafeString(str) {$/;"	function
+getElementValue	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function getElementValue(elementId) {$/;"	function
+getHtmlName	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function getHtmlName() {$/;"	function
+getQueryString	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function getQueryString(name) {$/;"	function
+getRedirectUrlAfterLogin	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^function getRedirectUrlAfterLogin(kiiUser) {$/;"	function
+getValueFromSelectElement	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function getValueFromSelectElement(id) {$/;"	function
+hideElement	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function hideElement(elementID) {$/;"	function
+isAvailable	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function isAvailable(value) {$/;"	function
+isUnavailable	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function isUnavailable(value) {$/;"	function
+loadCurrentUserInfo	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^        loadCurrentUserInfo(function(theUser) {$/;"	function
+loadCurrentUserInfo	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^function loadCurrentUserInfo(onSuccess, onFailure) {$/;"	function
+login	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^function login() {$/;"	function
+logout	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^function logout() {$/;"	function
+method	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^        method = function(element) {$/;"	function
+method	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^    } else {$/;"	function
+onError	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^        this.onError = function(jqXHR, textStatus, errorThrown) {$/;"	function
+onSelectShopChange	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^function onSelectShopChange() {$/;"	function
+onSuccess	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^        this.onSuccess = function(anything, textStatus, jqXHR) {$/;"	function
+registerShopForOperator	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^\/\/ function registerShopForOperator(eventSoure) {$/;"	function
+registerUser	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^function registerUser(eventSoure) {$/;"	function
+reloadPage	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function reloadPage(){$/;"	function
+replaceAll	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^String.prototype.replaceAll = function(s1, s2) {　　$/;"	function
+saveLoginInfo	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^function saveLoginInfo(kiiUser) {$/;"	function
+setCookie	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function setCookie(cname, cvalue, exdays) {$/;"	function
+setElementValue	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function setElementValue(elementId, value) {$/;"	function
+setInnerHtml	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function setInnerHtml(id, message, needTranslate) {$/;"	function
+setValueInSelectElement	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function setValueInSelectElement(id, value) {$/;"	function
+showElement	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function showElement(elementID) {$/;"	function
+showErrorMessage	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function showErrorMessage(id, message) {$/;"	function
+showRegisterForm	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^function showRegisterForm(elementId) {$/;"	function
+subscribeShopTopic	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^            subscribeShopTopic(theUser, function() {$/;"	function
+success	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^                    success: function(theUser) {$/;"	function
+success	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^                success: function(kiiUser) {$/;"	function
+success	/Users/USER/Documents/Git/CoffeeDelivery/js/common-auth.js	/^        success: function(theUser) {$/;"	function
+toSafeCallback	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function toSafeCallback(callback) {$/;"	function
+toSafeString	/Users/USER/Documents/Git/CoffeeDelivery/js/common.js	/^function toSafeString(str) {$/;"	function

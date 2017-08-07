@@ -13,10 +13,21 @@ var Bucket = {
     }
 };
 
+var Topic = {
+    GroupScope: {
+        DefaultTopic: "default_topic"
+    }
+};
+
+var PushMessageEvent = {
+    OrderUpdated: "order_updated",
+    OrderDeleted: "order_deleted"
+}
+
 /**
  * server code endpoint
  */
-function registerShopTopic(params, context, done) {
+function onGroupCreated(params, context, done) {
 
     var adminContext = context.getAppAdminContext();
     // {"uri":"kiicloud://groups/ijhplpz1t1po81o2kk9h766he"}
@@ -25,8 +36,8 @@ function registerShopTopic(params, context, done) {
     group.refresh({
         success: function(theGroup) {
 
-            // Create a topic in the user scope.
-            var topicName = "default_topic";
+            // Create a topic in the group scope.
+            var topicName = Topic.GroupScope.DefaultTopic;
             var topic = theGroup.topicWithName(topicName);
 
             // Save the topic to Kii Cloud.
@@ -60,7 +71,7 @@ function registerShopTopic(params, context, done) {
 /**
  * server code endpoint
  */
-function updateShopInfo(params, context, done) {
+function onShopInfoUpdated(params, context, done) {
 
     var adminContext = context.getAppAdminContext();
 
@@ -106,7 +117,7 @@ function updateShopInfo(params, context, done) {
 /**
  * server code endpoint
  */
-function deleteShopInfo(params, context, done) {
+function onShopInfoDeleted(params, context, done) {
 
     var adminContext = context.getAppAdminContext();
 
@@ -150,7 +161,7 @@ function deleteShopInfo(params, context, done) {
 /**
  * server code endpoint
  */
-function updateUserInfo(params, context, done) {
+function onUserInfoUpdated(params, context, done) {
 
     var adminContext = context.getAppAdminContext();
 
@@ -202,7 +213,7 @@ function updateUserInfo(params, context, done) {
 /**
  * server code endpoint
  */
-function deleteUserInfo(params, context, done) {
+function onUserInfoDeleted(params, context, done) {
 
     var adminContext = context.getAppAdminContext();
 
@@ -219,6 +230,64 @@ function deleteUserInfo(params, context, done) {
         },
         failure: function(theObject, errorString) {
             console.log("failed to delete from bucket users", userID, errorString);
+            done(errorString);
+            return;
+        }
+    });
+
+}
+
+/**
+ * server code endpoint
+ */
+function onOrderUpdated(params, context, done) {
+
+    var adminContext = context.getAppAdminContext();
+
+    var bucketID = params.bucketID;
+    var objectID = params.objectID;
+
+    var bucket = adminContext.bucketWithName(bucketID);
+    var object = bucket.createObjectWithID(objectID);
+
+    object.refresh({
+        success: function(theObject) {
+
+            var order = theObject;
+            var shopID = order.get("shop")["shop_id"];
+
+            console.log("shopID", shopID);
+
+            var shop = adminContext.groupWithID(shopID);
+            var topic = shop.topicWithName(Topic.GroupScope.DefaultTopic);
+
+            // Create a push message.
+            var content = {
+                "order_id": order.getID(),
+                "event": PushMessageEvent.OrderUpdated
+            };
+            var message = new KiiPushMessageBuilder(content).build();
+
+            // Send the push message.
+            topic.sendMessage(message, {
+                success: function(theTopic, theMessage) {
+                    // Do something.
+                    console.log("success to send message", theMessage);
+                    done("OK");
+                    return;
+                },
+                failure: function(theTopic) {
+                    // Handle the error.
+                    console.log("failed to send message", theTopic);
+                    done(theTopic);
+                    return;
+                }
+            });
+
+
+        },
+        failure: function(theObject, errorString) {
+            console.log("failed to load object", theObject, errorString);
             done(errorString);
             return;
         }

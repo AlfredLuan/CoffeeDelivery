@@ -1,5 +1,5 @@
 function loadShopListPage() {
-    // 
+    //
     // setElementValue("new_shop_delivery_fee", 0);
     // setElementValue("new_shop_service_time_start", "09:00");
     // setElementValue("new_shop_service_time_end", "18:00");
@@ -11,6 +11,12 @@ var shopMarker = null;
 var shopAddress = null;
 
 function showNewShopMap(map, infoWindow) {
+
+
+    $('#modalNewItem').on('shown.bs.modal', function() {
+        console.log("modalNewItem shown");
+        google.maps.event.trigger(map, "resize");
+    })
 
     var setShopAddress = function(googlePosition) {
         getAddress(googlePosition, function(address){
@@ -101,9 +107,9 @@ function createShop(eventSoure) {
 
         // set shop role
         if (groupList.length == 0) {
-            shopInfo.role = ShopRole.Head;
+            shopInfo["role"] = ShopRole.Head;
         } else {
-            shopInfo.role = ShopRole.Branch;
+            shopInfo["role"] = ShopRole.Branch;
         }
 
         // Create a group.
@@ -164,6 +170,14 @@ function parseOwnedShopForDisplay(data, displayTemplate, htmlName) {
 
     htmlContent = replaceTemplateContent(htmlContent, "{NameLabel}", null, htmlName);
     htmlContent = htmlContent.replaceAll("{Name}", toSafeString(data.get("name")));
+
+    var role = toSafeString(data.get("role"));
+    if(role == ShopRole.Head) {
+        role = "{ShopRole-" + role + "}";
+    } else {
+        role = "";
+    }
+    htmlContent = replaceTemplateContent(htmlContent, "{Role}", role, htmlName);
 
     htmlContent = replaceTemplateContent(htmlContent, "{DeliveryFeeLabel}", null, htmlName);
     htmlContent = htmlContent.replaceAll("{DeliveryFee}", toSafeString(data.get("delivery_fee")));

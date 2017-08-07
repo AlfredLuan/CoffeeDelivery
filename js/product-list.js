@@ -53,6 +53,12 @@ function createProductTemplate(eventSource) {
             }
         );
 
+    }, function(){
+        console.log("not in any head shop");
+        // Handle the error.
+        showErrorMessage("navbar_error_message", "{error-Please-join-in-head-shop}");
+        // unblock button
+        eventSource.disabled = false;
     });
 }
 
