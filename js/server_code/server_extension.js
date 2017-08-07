@@ -1,15 +1,15 @@
 var Bucket = {
     AppScope: {
-        ShopInfoList: "shops",
-        OrderList: "orders",
-        ProductList: "stock_items_consumer",
-        CouponList: "coupons",
+        ShopInfoList: "SHOPS",
+        OrderList: "ORDERS",
+        ProductList: "STOCK_ITEMS_CONSUMER",
+        CouponList: "COUPONS",
         ThingStates: "_states",
-        UserList: "user_list"
+        UserList: "USER_LIST"
     },
     GroupScope: {
-        ShopInfo: "shop_info",
-        ProductList: "product_list"
+        ShopInfo: "SHOP_INFO",
+        ProductList: "PRODUCTS"
     }
 };
 
