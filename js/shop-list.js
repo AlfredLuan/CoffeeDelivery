@@ -88,7 +88,7 @@ function createShop(eventSoure) {
 
     var shopInfo = {
         "name": shopName,
-        "avatar_url": null, // TODO
+        "avatar_url": "https://2c1pzz9jg5dd.jp.kiiapps.com/api/x/s.fa00faa00022-31db-7e11-9637-05ff7df3", // TODO
         "place": address, // TODO
         "stars": 0,
         "monthly_sold": 0,
