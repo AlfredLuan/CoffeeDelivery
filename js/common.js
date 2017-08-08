@@ -2,11 +2,23 @@
 // constants
 /////////////////////////////////////////////////////
 
-var KII_APP_ID = "dru5stobbkcu";
+/*
+* for unit testing
+*/
+// var KII_APP_ID = "dru5stobbkcu";
+//
+// var KII_APP_KEY = "0ae3eeee80474f0ca55781659865caf9";
+//
+// var KII_SITE = KiiSite.CN3;
 
-var KII_APP_KEY = "0ae3eeee80474f0ca55781659865caf9";
+/*
+* for integration testing
+*/
+var KII_APP_ID = "2c1pzz9jg5dd";
 
-var KII_SITE = KiiSite.CN3;
+var KII_APP_KEY = "5863d5a986e34b279b820fbf0cad2de8";
+
+var KII_SITE = KiiSite.JP;
 
 Kii.initializeWithSite(KII_APP_ID, KII_APP_KEY, KII_SITE);
 

@@ -162,18 +162,6 @@ function onSelectShopChange() {
 
 }
 
-function showRegisterForm(elementId) {
-
-    var formList = ["register_user_info_form", "register_shop_info_form", "select_shop_info_form"];
-
-    for (var i = 0; i < formList.length; i++) {
-        document.getElementById(formList[i]).style.display = "none";
-    };
-
-    document.getElementById(elementId).style.display = "block";
-
-}
-
 
 /////////////////////////////////////////////////////
 // login status management

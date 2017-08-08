@@ -48,7 +48,12 @@ function parseOrderForDisplay(data, displayTemplate, htmlName) {
     htmlContent = htmlContent.replaceAll("{Consumer}", consumerInfo);
 
     htmlContent = replaceTemplateContent(htmlContent, "{DriverLabel}", null, htmlName);
-    htmlContent = htmlContent.replaceAll("{Driver}", toSafeString(data.get("driver").name));
+    var driver = data.get("driver");
+    var driverName = "";
+    if(isAvailable(driver) == true) {
+        driver = driver.name;
+    }
+    htmlContent = htmlContent.replaceAll("{Driver}", toSafeString(driverName));
 
     htmlContent = replaceTemplateContent(htmlContent, "{DescriptionLabel}", null, htmlName);
     var description = toSafeString(data.get("desc"));
@@ -135,17 +140,26 @@ function loadOrderListPage() {
                         // parse each data for display
                         var htmlContent = parseOrderForDisplay(order, displayTemplate, htmlName);
 
-                        var div = document.createElement("div");
-                        div.innerHTML = htmlContent;
+                        var existingOrderElement = document.getElementById("element_" + orderID);
 
-                        for (var i = 0; i < div.childNodes.length; i++) {
-                            var temp = div.childNodes[i];
-                            // check whether element node type
-                            if(temp.nodeType == 1) {
-                                htmlContent = div.innerHTML;
-                                setInnerHtml("element_" + orderID, htmlContent, false);
-                                break;
+                        if(isAvailable(existingOrderElement) == true) {
+                            // update order element
+                            var div = document.createElement("div");
+                            div.innerHTML = htmlContent;
+
+                            for (var i = 0; i < div.childNodes.length; i++) {
+                                var temp = div.childNodes[i];
+                                // check whether element node type
+                                if(temp.nodeType == 1) {
+                                    htmlContent = temp.innerHTML;
+                                    setInnerHtml("element_" + orderID, htmlContent, false);
+                                    break;
+                                }
                             }
+                        } else {
+                            // create new order element
+                            htmlContent += document.getElementById("order_list").innerHTML;
+                            document.getElementById("order_list").innerHTML = htmlContent;
                         }
                     });
 
@@ -168,7 +182,14 @@ function loadOrderListForDisplay() {
     var kiiUser = KiiUser.getCurrentUser();
 
     loadListForDisplay("order_list", "/page/ordertemplate.html", function(onSuccess, onFailure) {
-        loadOrderList(kiiUser, onSuccess, onFailure);
+        loadOrderList(kiiUser, function(orderList){
+            if(isAvailable(orderList)) {
+                orderList.sort(function(a, b) {
+                    return a.getCreated() < b.getCreated();
+                });
+            }
+            onSuccess(orderList);
+        }, onFailure);
     }, function(data, displayTemplate, htmlName) {
         return parseOrderForDisplay(data, displayTemplate, htmlName);
     });

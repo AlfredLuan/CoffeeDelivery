@@ -23,10 +23,10 @@ function createProductTemplate(eventSource) {
         "shop_id": null,
         "name": name,
         "on_stock": true,
-        "avatar_url": null, // TODO
+        "avatar_url": "https://2c1pzz9jg5dd.jp.kiiapps.com/api/x/s.d009f7a00022-68b8-7e11-9667-00647846", // TODO
         "monthly_sold": 0,
         "likes": 0,
-        "price": price,
+        "price": Number(price),
         "options": null, // TODO
         "description": description
     };
@@ -47,7 +47,7 @@ function createProductTemplate(eventSource) {
             },
             function() {
                 // Handle the error.
-                showErrorMessage("navbar_error_message", "{error-Failed-to-create-product}");
+                showErrorMessage("modal_error_message", "{error-Failed-to-create-product}");
                 // unblock button
                 eventSource.disabled = false;
             }
@@ -56,7 +56,7 @@ function createProductTemplate(eventSource) {
     }, function(){
         console.log("not in any head shop");
         // Handle the error.
-        showErrorMessage("navbar_error_message", "{error-Please-join-in-head-shop}");
+        showErrorMessage("modal_error_message", "{error-Please-join-in-head-shop}");
         // unblock button
         eventSource.disabled = false;
     });
@@ -73,7 +73,7 @@ function updateProductTemplate(eventSource, productID) {
 
     var productInfo = {
         "name": name,
-        "price": price,
+        "price": Number(price),
         "description": description
     };
 

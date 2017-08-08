@@ -44,14 +44,20 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion"
-                               href="#collapseOrderList">
-                                {DriverMap}
-                            </a>
-                            <!--error message-->
-                            <span style="margin-left:20px; color:red; display:none" id="product_list_error_message">
-                                Errormessagesss</span>
-                        </h4>
+                                <a data-toggle="collapse" data-parent="#accordion"
+                                   href="#collapseOrderList">
+                                    {DriverMap}
+                                </a> | 
+
+                                <img src="http://maps.google.com/mapfiles/ms/icons/green-dot.png"/>
+                                <span>{DriverWithoutOrder}</span>
+                                <img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"/>
+                                <span>{DriverWithOrder}</span>
+
+                                <!--error message-->
+                                <span style="margin-left:20px; color:red; display:none" id="product_list_error_message">
+                                    Errormessagesss</span>
+                            </h4>
                         </div>
                         <div id="collapseOrderList" class="panel-collapse collapse in">
                             <div class="panel-body" style="padding:0px">

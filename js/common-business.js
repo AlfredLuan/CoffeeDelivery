@@ -70,6 +70,13 @@ function subscribeShopTopic(kiiUser, onSuccess, onFailure) {
     var totalTopicCount = 0;
     var subscribedTopicCount = 0;
 
+    var checkAllTopicsSubscribed = function(done){
+        if (subscribedTopicCount == totalTopicCount) {
+            console.log("all topics subscribed");
+            done();
+        }
+    }
+
     // load groups
     loadGroups(kiiUser, function(groupList) {
 
@@ -84,6 +91,9 @@ function subscribeShopTopic(kiiUser, onSuccess, onFailure) {
 
                 totalTopicCount += topicList.length;
 
+                // check here, in case of topic list length is 0
+                checkAllTopicsSubscribed(onSuccess);
+
                 // subscript each topic
                 for (var j = 0; j < topicList.length; j++) {
                     subscribeTopic(kiiUser, topicList[j], function(topic) {
@@ -91,12 +101,7 @@ function subscribeShopTopic(kiiUser, onSuccess, onFailure) {
                         console.log("subscribed to topic", topic);
 
                         subscribedTopicCount++;
-                        if (subscribedTopicCount == totalTopicCount) {
-                            console.log("all topics subscribed");
-
-                            onSuccess();
-                            return;
-                        }
+                        checkAllTopicsSubscribed(onSuccess);
 
                     }, onFailure);
                 }
@@ -337,6 +342,11 @@ function getHeadShop(kiiUser, onSuccess, onFailure) {
         success: function(theUser, groupList) {
             console.log("load group list", groupList);
 
+            // if not in any group, call onFailure
+            if(groupList.length == 0) {
+                onFailure();
+            }
+
             var count = 0;
 
             var checkHeadShop = function(group) {
@@ -470,9 +480,18 @@ function saveProductTemplateInfo(group, productID, productInfo, onSuccess, onFai
         object.set(key, productInfo[key]);
     }
 
-    object.saveAllFields({
-      success: onSuccess,
-      failure: onFailure
-    });
+    if(isAvailable(productID)) {
+        object.save({
+          success: onSuccess,
+          failure: onFailure
+        });
+    } else {
+        object.saveAllFields({
+          success: onSuccess,
+          failure: onFailure
+        });
+    }
+
+
 
 }

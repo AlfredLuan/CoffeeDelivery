@@ -95,6 +95,9 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="modalNewItemLabel">{CreateProduct}</h4>
+
+                <!-- error message -->
+                <a style="color:red; display:none" id="modal_error_message" > messages</a>
             </div>
 
             <div class="modal-body">
@@ -141,7 +144,7 @@
 
     <!-- script -->
     <script type="text/javascript">
-        
+
         promise.then(function(){
             translateHtmlPage();
             loadOwnedProductTemplateListForDisplay();

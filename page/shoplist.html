@@ -160,26 +160,23 @@
     <!-- script -->
     <script type="text/javascript">
 
+
         function initMap() {
+            promise.then(function(){
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: {
+                        lat: -34.397,
+                        lng: 150.644
+                    },
+                    zoom: 15,
+                    minZoom: 11
+                });
 
-            var map = new google.maps.Map(document.getElementById('map'), {
-                center: {
-                    lat: -34.397,
-                    lng: 150.644
-                },
-                zoom: 15,
-                minZoom: 11
+                var infoWindow = new google.maps.InfoWindow;
+
+                showNewShopMap(map, infoWindow);
             });
-
-            var infoWindow = new google.maps.InfoWindow;
-
-            showNewShopMap(map, infoWindow);
-
         }
-
-        promise.then(function(){
-            loadShopListPage();
-        });
 
     </script>
 
@@ -192,7 +189,8 @@
     <script type="text/javascript">
 
         promise.then(function(){
-            translateHtmlPage();    
+            translateHtmlPage();
+            loadShopListPage();
         });
     </script>
 

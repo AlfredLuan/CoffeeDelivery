@@ -116,8 +116,9 @@ function showMyLocation(map, infoWindow, onSuccess, onFailure) {
     var currentLocation = getCurrentLocationFromLocal();
 
     if(isAvailable(currentLocation)) {
-
+        console.log("my location", currentLocation);
         onLocationAvailable(currentLocation);
+        return;
 
     } else if (navigator.geolocation) {
         // Try HTML5 geolocation.
@@ -128,17 +129,21 @@ function showMyLocation(map, infoWindow, onSuccess, onFailure) {
             };
 
             // showInfoWindow(infoWindow, map, 'Location found.');
+            console.log("my location", pos);
             onLocationAvailable(pos);
+            return;
 
         }, function() {
             // showInfoWindow(infoWindow, map, "Error: The Geolocation service failed.");
             console.log(arguments);
             onFailure();
+            return;
         });
     } else {
         // Browser doesn't support Geolocation
         // showInfoWindow(infoWindow, map, "Error: Your browser doesn\'t support geolocation.");
         onFailure();
+        return;
     }
 }
 
@@ -198,6 +203,10 @@ function getCurrentLocationFromLocal() {
     console.log("location from cookie", lat, lng);
 
     if(isNaN(lat) || isNaN(lng)) {
+        return null;
+    }
+
+    if(lat == "" || lng == "" || lat == 0 || lng ==0) {
         return null;
     }
 

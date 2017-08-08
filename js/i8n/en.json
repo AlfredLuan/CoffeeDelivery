@@ -7,6 +7,8 @@
         "ProductList": "Product List",
         "OrderList": "Order List",
         "DriverMap": "Driver Map",
+        "DriverWithoutOrder": "Driver Without Order",
+        "DriverWithOrder": "Driver With Order",
         "MyProfile": "My Profile",
         "placeholder-name": "user name",
         "placeholder-password": "password",
@@ -107,6 +109,7 @@
         "OperateLabel": "Operate",
         "Edit": "Edit",
         "Details": "Details",
+        "CreateProduct": "Create Product",
         "Save": "Save",
         "Cancel": "Cancel",
         "error-Please-join-in-head-shop": "Please join in head shop first"

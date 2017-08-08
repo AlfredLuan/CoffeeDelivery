@@ -12,11 +12,10 @@ var shopAddress = null;
 
 function showNewShopMap(map, infoWindow) {
 
-
     $('#modalNewItem').on('shown.bs.modal', function() {
         console.log("modalNewItem shown");
         google.maps.event.trigger(map, "resize");
-    })
+    });
 
     var setShopAddress = function(googlePosition) {
         getAddress(googlePosition, function(address){
@@ -97,7 +96,7 @@ function createShop(eventSoure) {
             "starts_at": serviceTimeStart, // TODO
             "ends_at": serviceTimeEnd // TODO
         },
-        "delivery_fee": deliveryFee
+        "delivery_fee": Number(deliveryFee)
     };
 
     var kiiUser = KiiUser.getCurrentUser();
