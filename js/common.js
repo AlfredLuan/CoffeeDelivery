@@ -189,6 +189,11 @@ function clearErrorMessage(id) {
 
 function showElement(elementID) {
     var element = document.getElementById(elementID);
+
+    if(isUnavailable(element)) {
+        return;
+    }
+
     if(element.tagName.toLowerCase() == "tr") {
         element.style.display = "table-row";
     } else {
@@ -197,7 +202,13 @@ function showElement(elementID) {
 }
 
 function hideElement(elementID) {
-    document.getElementById(elementID).style.display = "none";
+    var element = document.getElementById(elementID);
+
+    if(isUnavailable(element)) {
+        return;
+    }
+
+    element.style.display = "none";
 }
 
 function setInnerHtml(id, message, needTranslate) {

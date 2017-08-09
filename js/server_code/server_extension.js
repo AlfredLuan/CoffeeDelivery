@@ -90,8 +90,8 @@ function onShopInfoUpdated(params, context, done) {
         success: function(theObject) {
 
             var bucket = adminContext.bucketWithName(Bucket.AppScope.ShopInfoList);
-            var objectInAppScope = bucket.createObjectWithID(theObject.get("shop_id"));
-            copyValues(theObject, objectInAppScope, ["shop_id", "name", "avatar_url", "place", "stars", "monthly_sold", "comment_num", "service_time", "delivery_fee"]);
+            var objectInAppScope = bucket.createObjectWithID(theObject.get("id"));
+            copyValues(theObject, objectInAppScope, ["id", "name", "avatar_url", "place", "stars", "monthly_sold", "comment_num", "service_time", "delivery_fee"]);
             objectInAppScope.saveAllFields({
                 success: function(theObject) {
                     console.log("success to save to shop_info_list", objectInAppScope);
@@ -135,7 +135,7 @@ function onShopInfoDeleted(params, context, done) {
         success: function(theObject) {
 
             var bucket = adminContext.bucketWithName(Bucket.AppScope.ShopInfoList);
-            var objectInAppScope = bucket.createObjectWithID(theObject.get("shop_id"));
+            var objectInAppScope = bucket.createObjectWithID(theObject.get("id"));
             objectInAppScope.delete({
                 success: function(theObject) {
                     console.log("success to delete object from shop_info_list", objectInAppScope);
@@ -254,7 +254,7 @@ function onOrderUpdated(params, context, done) {
         success: function(theObject) {
 
             var order = theObject;
-            var shopID = order.get("shop")["shop_id"];
+            var shopID = order.get("shop")["id"];
 
             console.log("shopID", shopID);
 

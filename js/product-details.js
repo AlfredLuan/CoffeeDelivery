@@ -52,7 +52,7 @@ function parseSelectableShopInfoForDisplay(data, displayTemplate, htmlName) {
 
     var htmlContent = displayTemplate;
 
-    htmlContent = htmlContent.replaceAll("{ShopID}", data.get("shop_id"));
+    htmlContent = htmlContent.replaceAll("{ShopID}", data.get("id"));
 
     htmlContent = htmlContent.replaceAll("{ShopName}", data.get("name"));
 

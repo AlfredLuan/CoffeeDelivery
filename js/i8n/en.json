@@ -6,6 +6,7 @@
         "ShopList": "Shop List",
         "ProductList": "Product List",
         "OrderList": "Order List",
+        "OrderHistoryList": "Order History",
         "DriverMap": "Driver Map",
         "DriverWithoutOrder": "Driver Without Order",
         "DriverWithOrder": "Driver With Order",
@@ -66,6 +67,29 @@
     "mobile-page-template": {
         "ProductName": "Product",
         "ProductDescription": "Product Info"
+    },
+    "orderhistorylist": {
+        "OrderHistoryListLabel": "Order History List",
+        "OrderIDLabel": "Order ID",
+        "ConsumerLabel": "Consumer",
+        "DriverLabel": "Driver",
+        "ShopLabel": "Shop",
+        "CoffeeMakerLabel": "Maker",
+        "AmountLabel": "Amount",
+        "OrderDetailsLinkLabel": "Details",
+        "OrderDetailsHideLinkLabel": "Hide",
+        "CoffeeLabel": "Coffee",
+        "DescriptionLabel": "Description",
+        "MakerLabel": "Maker",
+        "Timestamp-Label": "Timestamp",
+        "Timestamp-OrderStatus-0-Table-Label": "Order Placed",
+        "Timestamp-OrderStatus-5-Table-Label": "Delivered",
+        "Timestamp-OrderStatus-0-Label": "Order Placed At",
+        "Timestamp-OrderStatus-1-Label": "Order Accepted At",
+        "Timestamp-OrderStatus-2-Label": "Start Making At",
+        "Timestamp-OrderStatus-3-Label": "Ready At",
+        "Timestamp-OrderStatus-4-Label": "Pick Up At",
+        "Timestamp-OrderStatus-5-Label": "Delivered At"
     },
     "orderlist": {
         "OrderList": "Order List",

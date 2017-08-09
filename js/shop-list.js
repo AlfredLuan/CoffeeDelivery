@@ -165,7 +165,7 @@ function parseOwnedShopForDisplay(data, displayTemplate, htmlName) {
 
     var htmlContent = displayTemplate;
 
-    htmlContent = htmlContent.replaceAll("{CollapsePanelID}", data.get("shop_id"));
+    htmlContent = htmlContent.replaceAll("{CollapsePanelID}", data.get("id"));
 
     htmlContent = replaceTemplateContent(htmlContent, "{NameLabel}", null, htmlName);
     htmlContent = htmlContent.replaceAll("{Name}", toSafeString(data.get("name")));
@@ -200,7 +200,7 @@ function parseOwnedShopForDisplay(data, displayTemplate, htmlName) {
     address = address.replaceAll("\n", "<br/>");
     htmlContent = htmlContent.replaceAll("{Address}", address);
 
-    var shopDetailsLink = "/page/shopdetails.html?shop_id=" + data.get("shop_id");
+    var shopDetailsLink = "/page/shopdetails.html?shop_id=" + data.get("id");
     htmlContent = htmlContent.replaceAll("{ShopDetailsLink}", shopDetailsLink);
     htmlContent = replaceTemplateContent(htmlContent, "{Details}", null, htmlName);
 

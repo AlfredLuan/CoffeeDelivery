@@ -1,0 +1,127 @@
+<tr id="{OrderID}_display">
+    <td>{OrderID}</td>
+    <td>{ConsumerName}</td>
+    <td>{ShopName}</td>
+    <td>{Timestamp-OrderStatus-0}</td>
+    <td>{Timestamp-OrderStatus-5}</td>
+    <td>
+        <a href="#" onclick="showOrderHistoryDetails('{OrderID}', true)">{OrderDetailsLinkLabel}</a>
+    </td>
+</tr>
+<tr id="{OrderID}_display_details" style="display:none">
+<td colspan="6">
+    <div class="panel panel-default" id="element_{OrderID}">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse"
+                   href="#collapsePanel-{CollapsePanelID}">
+                    Order ID: {OrderID} | {OrderStatus}
+                </a>
+
+                <a class="pull-right" href="#" onclick="showOrderHistoryDetails('{OrderID}', false)">{OrderDetailsHideLinkLabel}</a>
+            </h4>
+        </div>
+        <div id="collapsePanel-{CollapsePanelID}" class="panel-collapse collapse in">
+            <div class="panel-body">
+
+                <div class="center-block" style="width:75%">
+                    <div class="form-horizontal" role="form" id="product_form">
+
+                        <div class="form-group order-row">
+                            <label class="col-sm-2 control-label">{CoffeeLabel}</label>
+                            <div class="col-sm-9">
+                                <span class="col-sm-12 control-label content-display">
+                                    {Coffee}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group order-row">
+                            <label class="col-sm-2 control-label">{DescriptionLabel}</label>
+                            <div class="col-sm-9">
+                                <span class="col-sm-12 control-label content-display">
+                                    {Description}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group order-row">
+                            <label class="col-sm-2 control-label">{ConsumerLabel}</label>
+                            <div class="col-sm-9">
+                                <span class="col-sm-12 control-label content-display">{Consumer}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group order-row">
+                            <label class="col-sm-2 control-label">{DriverLabel}</label>
+                            <div class="col-sm-9">
+                                <span class="col-sm-12 control-label content-display">{Driver}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group order-row">
+                            <label class="col-sm-2 control-label">{MakerLabel}</label>
+                            <div class="col-sm-9">
+                                <span class="col-sm-12 control-label content-display">{Maker}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group order-row">
+                            <label class="col-sm-2 control-label">{ShopLabel}</label>
+                            <div class="col-sm-9">
+                                <span class="col-sm-12 control-label content-display">
+                                    {Shop}</span>
+                            </div>
+                        </div>
+
+                        <!-- all timestamps -->
+                        <div class="form-group order-row">
+                            <label class="col-sm-2 control-label">{Timestamp-Label}</label>
+                            <div class="col-sm-9">
+                                <div class="col-sm-12" style="display:{display-Timestamp-OrderStatus-0}">
+                                    <span class="col-sm-5 control-label">{Timestamp-OrderStatus-0-Label} :</span>
+                                    <span class="col-sm-5 control-label content-display">
+                                        {Timestamp-OrderStatus-0}</span>
+                                </div>
+
+                                <div class="col-sm-12" style="display:{display-Timestamp-OrderStatus-1}">
+                                    <span class="col-sm-5 control-label">{Timestamp-OrderStatus-1-Label} :</span>
+                                    <span class="col-sm-5 control-label content-display">
+                                        {Timestamp-OrderStatus-1}</span>
+                                </div>
+
+                                <div class="col-sm-12" style="display:{display-Timestamp-OrderStatus-2}">
+                                    <span class="col-sm-5 control-label">{Timestamp-OrderStatus-2-Label} :</span>
+                                    <span class="col-sm-5 control-label content-display">
+                                        {Timestamp-OrderStatus-2}</span>
+                                </div>
+
+                                <div class="col-sm-12" style="display:{display-Timestamp-OrderStatus-3}">
+                                    <span class="col-sm-5 control-label">{Timestamp-OrderStatus-3-Label} :</span>
+                                    <span class="col-sm-5 control-label content-display">
+                                        {Timestamp-OrderStatus-3}</span>
+                                </div>
+
+                                <div class="col-sm-12" style="display:{display-Timestamp-OrderStatus-4}">
+                                    <span class="col-sm-5 control-label">{Timestamp-OrderStatus-4-Label} :</span>
+                                    <span class="col-sm-5 control-label content-display">
+                                        {Timestamp-OrderStatus-4}</span>
+                                </div>
+
+                                <div class="col-sm-12" style="display:{display-Timestamp-OrderStatus-5}">
+                                    <span class="col-sm-5 control-label">{Timestamp-OrderStatus-5-Label} :</span>
+                                    <span class="col-sm-5 control-label content-display">
+                                        {Timestamp-OrderStatus-5}</span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>

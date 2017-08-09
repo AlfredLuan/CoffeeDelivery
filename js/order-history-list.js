@@ -1,6 +1,9 @@
-function parseOrderForDisplay(data, displayTemplate, htmlName) {
+function parseOrderHistoryForDisplay(data, displayTemplate, htmlName) {
 
     var htmlContent = displayTemplate;
+
+    htmlContent = replaceTemplateContent(htmlContent, "{OrderDetailsLinkLabel}", null, htmlName);
+    htmlContent = replaceTemplateContent(htmlContent, "{OrderDetailsHideLinkLabel}", null, htmlName);
 
     htmlContent = htmlContent.replaceAll("{CollapsePanelID}", data.getID());
 
@@ -52,6 +55,7 @@ function parseOrderForDisplay(data, displayTemplate, htmlName) {
     var receiverAddress = toSafeString(data.get("customer").recipient.place.formatted_address);
     var consumerInfo = receiver + "<br/>" + receiverAddress;
     htmlContent = htmlContent.replaceAll("{Consumer}", consumerInfo);
+    htmlContent = htmlContent.replaceAll("{ConsumerName}", receiver);
 
     htmlContent = replaceTemplateContent(htmlContent, "{DriverLabel}", null, htmlName);
     var driver = data.get("driver");
@@ -69,11 +73,13 @@ function parseOrderForDisplay(data, displayTemplate, htmlName) {
 
     htmlContent = replaceTemplateContent(htmlContent, "{ShopLabel}", null, htmlName);
     var shop = data.get("shop");
-    var shopInfo = toSafeString(shop["name"])
+    var shopName = toSafeString(shop["name"])
+    var shopInfo = shopName;
     if(isAvailable(shop["place"])) {
         shopInfo += "<br/>" + toSafeString(shop["place"]["formatted_address"]);
     }
     htmlContent = htmlContent.replaceAll("{Shop}", shopInfo);
+    htmlContent = htmlContent.replaceAll("{ShopName}", shopName);
 
     htmlContent = replaceTemplateContent(htmlContent, "{UpdateOrderStatus1}",  null, htmlName);
     htmlContent = replaceTemplateContent(htmlContent, "{UpdateOrderStatus2}",  null, htmlName);
@@ -120,157 +126,44 @@ function parseOrderForDisplay(data, displayTemplate, htmlName) {
         }
     }
 
-    return "<tr>" + htmlContent + "<br/></tr>";
+    return htmlContent;
 };
 
-function loadOrderListPage() {
+function loadOrderHistoryListPage() {
 
-    var kiiUser = KiiUser.getCurrentUser();
-
-    console.log("KiiUser.getCurrentUser()", kiiUser);
-
-    connectMqttWS(KiiUser.getCurrentUser(), function(payload) {
-
-        if(payload["event"] = PushMessageEvent.OrderUpdated) {
-            var orderID = payload["order_id"];
-            var bucket = Kii.bucketWithName(Bucket.AppScope.OrderList);
-            var object = bucket.createObjectWithID(orderID);
-
-            object.refresh({
-                success: function(order) {
-
-                    // load display template
-                    loadDisplayTemplate("/page/ordertemplate.html", function(displayTemplate) {
-
-                        var htmlName = getHtmlName();
-                        // parse each data for display
-                        var htmlContent = parseOrderForDisplay(order, displayTemplate, htmlName);
-
-                        var existingOrderElement = document.getElementById("element_" + orderID);
-
-                        if(isAvailable(existingOrderElement) == true) {
-                            // update order element
-                            var div = document.createElement("div");
-                            div.innerHTML = htmlContent;
-
-                            for (var i = 0; i < div.childNodes.length; i++) {
-                                var temp = div.childNodes[i];
-                                // check whether element node type
-                                if(temp.nodeType == 1) {
-                                    htmlContent = temp.innerHTML;
-                                    setInnerHtml("element_" + orderID, htmlContent, false);
-                                    break;
-                                }
-                            }
-                        } else {
-                            // create new order element
-                            htmlContent += document.getElementById("order_list").innerHTML;
-                            document.getElementById("order_list").innerHTML = htmlContent;
-                        }
-                    });
-
-                },
-                failure: function(order, errorString) {
-                    // Handle the error.
-                    console.log("failed to load order", order, errorString);
-                }
-            });
-        }
-
-    });
-
-    // load order list for display
-    loadOrderListForDisplay();
+    // load order history list for display
+    loadOrderHistoryListForDisplay();
 }
 
-function loadOrderListForDisplay() {
+function loadOrderHistoryListForDisplay() {
 
     var kiiUser = KiiUser.getCurrentUser();
 
-    loadListForDisplay("order_list", "/page/ordertemplate.html", function(onSuccess, onFailure) {
+    loadListForDisplay("order_history_list", "/page/orderhistorytemplate.html", function(onSuccess, onFailure) {
 
-        // query all the orders which are not delivered
-        var targetOrderStatusList = [
-            OrderStatus.OrderPlaced,
-            OrderStatus.OrderAccepted,
-            OrderStatus.OrderStartMaking,
-            OrderStatus.OrderReady,
-            OrderStatus.OrderPickUp
-        ];
-
-        loadOrderList(kiiUser, targetOrderStatusList, function(orderList){
-            if(isAvailable(orderList)) {
-                orderList.sort(function(a, b) {
+        // query all the orders which are delivered
+        loadOrderList(kiiUser, [ OrderStatus.OrderDelivered ], function(orderHistoryList){
+            if(isAvailable(orderHistoryList)) {
+                orderHistoryList.sort(function(a, b) {
                     return a.getCreated() < b.getCreated();
                 });
             }
-            onSuccess(orderList);
+            onSuccess(orderHistoryList);
         }, onFailure);
     }, function(data, displayTemplate, htmlName) {
-        return parseOrderForDisplay(data, displayTemplate, htmlName);
+        return parseOrderHistoryForDisplay(data, displayTemplate, htmlName);
     });
 
 }
 
-function updateOrderStatus(eventSource, orderID, orderStatus) {
+function showOrderHistoryDetails(orderID, showDetails) {
 
-    // block the button
-    eventSource.disabled = true;
-
-    var bucket = Kii.bucketWithName(Bucket.AppScope.OrderList);
-    var object = bucket.createObjectWithID(orderID);
-
-    // refresh order object
-    object.refresh({
-        success: function(order) {
-
-            // update maker info
-            var user = KiiUser.getCurrentUser();
-            var userID = user.getID();
-            var displayName = user.getDisplayName();
-            if(isUnavailable(displayName)) {
-                displayName = user.getUsername();
-            }
-            order.set("coffee_maker", {
-                user_id: userID,
-                name: displayName
-            });
-            // update order status
-            order.set("order_status", orderStatus);
-            // update order timestamp
-            var timestampField = "";
-            switch (orderStatus) {
-                case OrderStatus.OrderStartMaking:
-                    timestampField = "timestamp_order_start_making";
-                    break;
-                case OrderStatus.OrderReady:
-                    timestampField = "timestamp_order_ready";
-                    break;
-            }
-            order.set(timestampField, new Date().getTime());
-
-            // save order
-            order.save({
-                success: function() {
-                    // unblock the button
-                    eventSource.disabled = false;
-                    // reload the page
-                    window.location.reload(true);
-                },
-                failure: function() {
-                    // Handle the error.
-                    showErrorMessage("navbar_error_message", "{error-Failed-to-mark-order-ready}");
-                    // unblock the button
-                    eventSource.disabled = false;
-                }
-            })
-        },
-        failure: function(order, errorString) {
-            // Handle the error.
-            showErrorMessage("navbar_error_message", "{error-Failed-to-mark-order-ready}");
-            // unblock the button
-            eventSource.disabled = false;
-        }
-    })
+    if(showDetails == true) {
+        showElement(orderID + "_display_details");
+        hideElement(orderID + "_display");
+    } else {
+        showElement(orderID + "_display");
+        hideElement(orderID + "_display_details");
+    }
 
 }

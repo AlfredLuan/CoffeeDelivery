@@ -298,7 +298,7 @@ function loadShopInfoList(onSuccess, onFailure) {
     }, onFailure);
 }
 
-function loadOrderList(kiiUser, onSuccess, onFailure) {
+function loadOrderList(kiiUser, orderStatusList, onSuccess, onFailure) {
 
     onSuccess = toSafeCallback(onSuccess);
     onFailure = toSafeCallback(onFailure);
@@ -320,7 +320,13 @@ function loadOrderList(kiiUser, onSuccess, onFailure) {
         });
 
         // load the orders on the shops which the user is member of
-        var clause = KiiClause.inClause("shop.shop_id", shopIDList);
+        var clause = KiiClause.inClause("shop.id", shopIDList);
+
+        // if order status list is specified, add it to search condition
+        if(isAvailable(orderStatusList) && orderStatusList.length > 0) {
+            var orderStatusClause = KiiClause.inClause("order_status", orderStatusList);
+            clause = KiiClause.and(clause, orderStatusClause);
+        }
 
         var bucket = Kii.bucketWithName(Bucket.AppScope.OrderList);
         loadAllObjects(bucket, clause, function(resultSet) {
@@ -453,7 +459,7 @@ function saveShopBasicInfo(shopID, shopInfo, onSuccess, onFailure) {
     var bucket = group.bucketWithName(Bucket.GroupScope.ShopInfo);
     var object = bucket.createObjectWithID("basic_info");
 
-    object.set("shop_id", shopID);
+    object.set("id", shopID);
 
     for (var key in shopInfo) {
         object.set(key, shopInfo[key]);

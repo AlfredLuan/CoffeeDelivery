@@ -150,18 +150,6 @@ function registerUser(eventSource) {
     });
 }
 
-function onSelectShopChange() {
-
-    var shopID = getValueFromSelectElement("register_shop_name_select");
-
-    for (var i = 0; i < shopInfoList.length; i++) {
-        if (shopInfoList[i].get("shop_id") == shopID) {
-            setElementValue("register_shop_address_select", shopInfoList[i].get("address"));
-        }
-    };
-
-}
-
 
 /////////////////////////////////////////////////////
 // login status management
@@ -225,6 +213,7 @@ function getAvailableLinksForUserRole(role) {
         case UserRole.CoffeeMaker:
             links = [
                 "link_orderlist",
+                "link_orderhistorylist",
                 "link_drivermap",
                 "link_myprofile",
                 "link_displayname",
@@ -236,6 +225,7 @@ function getAvailableLinksForUserRole(role) {
                 "link_shoplist",
                 "link_producttemplatelist",
                 "link_orderlist",
+                "link_orderhistorylist",
                 "link_drivermap",
                 "link_myprofile",
                 "link_displayname",
