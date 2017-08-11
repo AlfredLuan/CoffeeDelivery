@@ -61,7 +61,7 @@ function parseOrderHistoryForDisplay(data, displayTemplate, htmlName) {
     var driver = data.get("driver");
     var driverName = "";
     if(isAvailable(driver) == true) {
-        driver = driver.name;
+        driverName = driver.name;
     }
     htmlContent = htmlContent.replaceAll("{Driver}", toSafeString(driverName));
 

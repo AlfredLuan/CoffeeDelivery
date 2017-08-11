@@ -156,7 +156,7 @@
         "error-Confirm-password-wrong": "the passwords input twice are different, plese confirm the password"
     },
     "shopdetails": {
-        "UserAssignment": "User Assignment",
+        "UserAssignment": "Staff Assignment",
         "ShopInfo": "Shop Info",
         "Name": "Name",
         "Addess": "Address",
