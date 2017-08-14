@@ -50,7 +50,7 @@ function parseSelectableUserForDisplay(data, displayTemplate, htmlName) {
 
     htmlContent = htmlContent.replaceAll("{UserID}", data.get("user_id"));
     htmlContent = htmlContent.replaceAll("{UserDisplayName}", toSafeString(displayName));
-    var userRole = "{UserRole-" + data.get("role") + "}";
+    var userRole = "{UserRole-" + data.get(UserAttribute.Role) + "}";
     htmlContent = replaceTemplateContent(htmlContent, "{UserRole}", userRole, htmlName);
     htmlContent = htmlContent.replaceAll("{UserEmail}", toSafeString(data.get("email")));
     htmlContent = htmlContent.replaceAll("{UserPhone}", toSafeString(data.get("phone")));
@@ -61,8 +61,8 @@ function parseSelectableUserForDisplay(data, displayTemplate, htmlName) {
 // kiiUser is expected to be operator
 function loadSelectableUserList(kiiUser, onSuccess, onFailure) {
 
-    var clause1 = KiiClause.equals("role", UserRole.CoffeeMaker);
-    var clause2 = KiiClause.equals("role", UserRole.ProductManager);
+    var clause1 = KiiClause.equals(UserAttribute.Role, UserRole.CoffeeMaker);
+    var clause2 = KiiClause.equals(UserAttribute.Role, UserRole.ProductManager);
     var clause = KiiClause.or(clause1, clause2);
 
     var bucket = Kii.bucketWithName(Bucket.AppScope.UserList);
@@ -123,7 +123,7 @@ function loadUserIDListByShopID(shopID, onSuccess, onFailure) {
             });
 
             var clause1 = KiiClause.inClause("user_id", userIDList);
-            var clause2 = KiiClause.inClause("role", [UserRole.CoffeeMaker, UserRole.ProductManager]);
+            var clause2 = KiiClause.inClause(UserAttribute.Role, [UserRole.CoffeeMaker, UserRole.ProductManager]);
             var clause = KiiClause.and(clause1, clause2);
 
             var bucket = Kii.bucketWithName(Bucket.AppScope.UserList);

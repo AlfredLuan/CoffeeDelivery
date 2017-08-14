@@ -1,3 +1,18 @@
+
+var UserRole = {
+    CoffeeMaker: "coffee_maker",
+    Operator: "operator",
+    ProductManager: "product_manager",
+    Driver: "driver",
+    Consumer: "consumer"
+};
+
+var UserAttribute = {
+    Role: "role",
+    Online: "online",
+    Approved: "approved",
+};
+
 var Bucket = {
     AppScope: {
         ShopInfoList: "SHOPS",
@@ -171,7 +186,6 @@ function onUserInfoUpdated(params, context, done) {
     user.refresh({
         success: function(kiiUser) {
 
-            var role = kiiUser.get("role");
             var displayName = kiiUser.getDisplayName();
             var userName = kiiUser.getUsername();
             var email = kiiUser.getEmailAddress();
@@ -181,11 +195,17 @@ function onUserInfoUpdated(params, context, done) {
             var object = bucket.createObjectWithID(userID);
 
             object.set("user_id", userID);
-            object.set("role", role);
             object.set("display_name", displayName);
             object.set("user_name", userName);
             object.set("email", email);
             object.set("phone", phone);
+
+            // copy user attributes
+            var attributes = [];
+            for (var key in UserAttribute) {
+                attributes.push(UserAttribute[key]);
+            }
+            copyValues(kiiUser, object, attributes);
 
             object.saveAllFields({
                 success: function(theObject) {
@@ -293,6 +313,109 @@ function onOrderUpdated(params, context, done) {
         }
     });
 
+}
+
+/**
+* load current Kii user who called the server code
+*/
+function loadCaller(context, onSuccess, onFailure) {
+    if (context.getAccessToken() == null) {
+        onFailure("no access token");
+        return;
+    }
+    KiiUser.authenticateWithToken(context.getAccessToken(), {
+        success: function(theUser) {
+
+            theUser.refresh({
+                success: function(kiiUser) {
+
+                    console.log("current kii user", kiiUser);
+                    onSuccess(kiiUser)
+                },
+                failure: function(kiiUser, errorString) {
+                    // Return a value to the caller.
+                    console.log("Error authenticating: " + errorString);
+                    onFailure(errorString);
+                }
+            });
+        },
+        failure: function(theUser, errorString) {
+            // Return a value to the caller.
+            console.log("Error authenticating: " + errorString);
+            onFailure(errorString);
+        }
+    });
+}
+
+/**
+ * server code endpoint
+ *
+ * only operator can call this
+ * expected params:
+ *  targetUserID: the target user ID
+ *  attributes: the attributes and values to be updated, such as {"role": "driver", "approved": true}
+ */
+function updateUserAttribute(params, context, done) {
+
+    // load caller
+    loadCaller(context, function(currentUser) {
+        // check caller role
+        var role = currentUser.get(UserAttribute.Role);
+        if(role != UserRole.Operator) {
+            done(failureResponse("permission denied"));
+            return;
+        }
+
+        var targetUserID = params.targetUserID;
+        var attributes = params.attributes;
+
+        var adminContext = context.getAppAdminContext();
+        var kiiUser = adminContext.userWithID(targetUserID);
+
+        kiiUser.refresh({
+            success: function(targetUser) {
+
+                // update the attributes of the target user
+                targetUser.update({ "username": targetUser.getUsername() }, {
+                    success: function(theUser) {
+                        console.log("success to save to bucket users", theUser);
+                        done(successResponse());
+                        return;
+                    },
+                    failure: function(theUser, errorString) {
+                        console.log("failed to save user attribute", theUser, errorString);
+                        done(failureResponse(errorString));
+                        return;
+                    }
+                }, attributes);
+            },
+            failure: function(targetUser, errorString) {
+                // Return a value to the caller.
+                console.log("Error authenticating: " + errorString);
+                done(failureResponse(errorString));
+            }
+        });
+
+    }, function(errorString) {
+        done(failureResponse(errorString));
+        return;
+    });
+
+}
+
+function successResponse(response) {
+    return {
+        "success": true,
+        "response": response
+    };
+}
+
+function failureResponse(errorString, response) {
+    return {
+        "success": false,
+        "error": errorString,
+        "response": response
+    };
 }
 
 function copyValues(srcObject, destObject, keys) {

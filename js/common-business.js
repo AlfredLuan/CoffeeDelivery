@@ -235,6 +235,36 @@ function loadGroupTopics(kiiGroup, onSuccess, onFailure) {
 // business functions
 /////////////////////////////////////////////////////
 
+function callServerCode(serverCodeEntry, args, onSuccess, onFailure) {
+    console.log("entry", entry);
+    console.log("args", args);
+
+    onSuccess = toSafeCallback(onSuccess);
+    onFailure = toSafeCallback(onFailure);
+
+    // Instantiate the endpoint.
+    var entry = Kii.serverCodeEntry(serverCodeEntry);
+
+    // Execute the server code.
+    entry.execute(args, {
+        success: function(entry, argument, execResult) {
+            console.log("success to call server code", serverCodeEntry, args, execResult);
+
+            // Parse the result.
+            var returned = execResult.getReturnedValue();
+            var returnedValue = returned["returnedValue"];
+
+            onSuccess(returnedValue);
+        },
+        failure: function(entry, argument, execResult, anErrorString) {
+            // Handle the error.
+            console.log("failed to call server code", serverCodeEntry, args, execResult, anErrorString);
+            onFailure(execResult);
+            return;
+        }
+    });
+}
+
 function loadAllObjects(bucket, clause, onSuccess, onFailure) {
 
     console.log("bucket", bucket);

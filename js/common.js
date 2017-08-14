@@ -121,6 +121,13 @@ Date.prototype.format = function (fmt) { //author: meizz
     return fmt;
 }
 
+Boolean.prototype.format = function(trueDisplay, falseDisplay) {
+    if(this == true) {
+        return trueDisplay;
+    }
+    return falseDisplay;
+}
+
 /////////////////////////////////////////////////////
 // http call management
 /////////////////////////////////////////////////////
@@ -323,6 +330,29 @@ function reloadPage(){
 /////////////////////////////////////////////////////
 // javascript functions
 /////////////////////////////////////////////////////
+
+/**
+* primaryCheck will be used for boolean comparing in the case that null or undefined is passed
+* for example,
+*   if primaryCheck is true, then only boolean value true will get true, null or undefined will get false;
+*   if primaryCheck is false, then only boolean value false will get false, null or undefined will get true;
+*/
+function toSafeBoolean(boolean, primaryCheck) {
+
+    if(isUnavailable(primaryCheck)) {
+        primaryCheck = true;
+    }
+
+    var result = null;
+
+    if (boolean == primaryCheck) {
+        result = primaryCheck;
+    } else {
+        result = !primaryCheck;
+    }
+
+    return result;
+}
 
 function toSafeString(str) {
     if (str === undefined || str == null) {

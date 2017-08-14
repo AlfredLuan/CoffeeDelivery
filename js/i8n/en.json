@@ -8,6 +8,7 @@
         "OrderList": "Order List",
         "OrderHistoryList": "Order History",
         "DriverMap": "Driver Map",
+        "DriverList": "Driver List",
         "DriverWithoutOrder": "Driver Without Order",
         "DriverWithOrder": "Driver With Order",
         "MyProfile": "My Profile",
@@ -37,16 +38,15 @@
     "errorpage": {
         "return-to-home-page": "Please click here to return to home page"
     },
-    "dashboard": {
-        "Product": "Product",
-        "Create": "Create",
-        "ID": "ID",
-        "Name": "Name",
-        "Description": "Description",
-        "CreateProduct": "Create Product",
-        "Save": "Save",
-        "error-Failed-to-load-the-product-list": "Failed to load the product list",
-        "error-Failed-to-create-product": "Failed to create product"
+    "driverlist": {
+        "DriverList": "Driver List",
+        "DisplayNameLabel": "Display Name",
+        "PhoneLabel": "Phone",
+        "MailLabel": "Mail",
+        "OnlineLabel": "Online",
+        "ApprovedLabel": "Approved",
+        "ApproveLabel": "Approve",
+        "error-Failed-to-approve-driver": "Failed to approve driver"
     },
     "drivermap": {
         "DriverMap": "Driver Map"

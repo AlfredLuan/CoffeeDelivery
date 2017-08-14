@@ -1,6 +1,6 @@
 function getRedirectUrlAfterLogin(kiiUser) {
 
-    var role = kiiUser.get("role");
+    var role = kiiUser.get(UserAttribute.Role);
 
     var url;
     switch (role) {
@@ -125,7 +125,7 @@ function registerUser(eventSource) {
         return;
     }
 
-    user.set("role", role);
+    user.set(UserAttribute.Role, role);
 
     // Register the user.
     user.register({
@@ -227,6 +227,7 @@ function getAvailableLinksForUserRole(role) {
                 "link_orderlist",
                 "link_orderhistorylist",
                 "link_drivermap",
+                "link_driverlist",
                 "link_myprofile",
                 "link_displayname",
                 "link_logout"
@@ -305,7 +306,7 @@ function checkLoginStatus(isBackToHomePage) {
         // refresh Kii user info
         loadCurrentUserInfo(function(theUser) {
 
-            var availableLinks = getAvailableLinksForUserRole(theUser.get("role"));
+            var availableLinks = getAvailableLinksForUserRole(theUser.get(UserAttribute.Role));
 
             // show login info
             for (var i = 0; i < elementsBeforeLogin.length; i++) {

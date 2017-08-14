@@ -4,7 +4,7 @@ function showMyProfile() {
     var user = KiiUser.getCurrentUser();
 
     var htmlName = getHtmlName();
-    var role = "{UserRole-" + user.get("role") + "}";
+    var role = "{UserRole-" + user.get(UserAttribute.Role) + "}";
     role = translateContent(langDict, htmlName, role);
 
     setElementValue("register_display_name", toSafeString(user.getDisplayName()));
