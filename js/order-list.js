@@ -82,7 +82,7 @@ function parseOrderForDisplay(data, displayTemplate, htmlName) {
     if (data.get("order_status") == OrderStatus.OrderAccepted) {
         htmlContent = htmlContent.replaceAll("{display-order-status-2}", "block");
         htmlContent = htmlContent.replaceAll("{display-order-status-3}", "none");
-    } else if(data.get("order_status") == OrderStatus.OrderStartMaking) {
+    } else if(data.get("order_status") == OrderStatus.CoffeePreparing) {
         htmlContent = htmlContent.replaceAll("{display-order-status-2}", "none");
         htmlContent = htmlContent.replaceAll("{display-order-status-3}", "block");
     } else {
@@ -93,22 +93,13 @@ function parseOrderForDisplay(data, displayTemplate, htmlName) {
     // display each timestamp
     htmlContent = replaceTemplateContent(htmlContent, "{Timestamp-Label}",  null, htmlName);
 
-    var timestampFieldMap = {
-        "0": "timestamp_order_placed",
-        "1": "timestamp_order_accepted",
-        "2": "timestamp_order_start_making",
-        "3": "timestamp_order_ready",
-        "4": "timestamp_order_pick_up",
-        "5": "timestamp_order_deliveryed"
-    };
-
-    for (var status in timestampFieldMap) {
+    for (var key in OrderStatus) {
+        var status = OrderStatus[key];
         if(orderStatus >= Number(status)) {
             // display timestamp
             htmlContent = htmlContent.replaceAll("{display-Timestamp-OrderStatus-" + status + "}", "display");
             // display the label and value
-            var timestampField = timestampFieldMap[status];
-            var dateTime = data.get(timestampField);
+            var dateTime = data.get("timestamp_order_status_" + status);
             if(isAvailable(dateTime)) {
                 dateTime = new Date(dateTime).format("yyyy-MM-dd hh:mm:ss");
             }
@@ -193,9 +184,9 @@ function loadOrderListForDisplay() {
         var targetOrderStatusList = [
             OrderStatus.OrderPlaced,
             OrderStatus.OrderAccepted,
-            OrderStatus.OrderStartMaking,
-            OrderStatus.OrderReady,
-            OrderStatus.OrderPickUp
+            OrderStatus.CoffeePreparing,
+            OrderStatus.CoffeeReady,
+            OrderStatus.InDelivery
         ];
 
         loadOrderList(kiiUser, targetOrderStatusList, function(orderList){
@@ -238,16 +229,7 @@ function updateOrderStatus(eventSource, orderID, orderStatus) {
             // update order status
             order.set("order_status", orderStatus);
             // update order timestamp
-            var timestampField = "";
-            switch (orderStatus) {
-                case OrderStatus.OrderStartMaking:
-                    timestampField = "timestamp_order_start_making";
-                    break;
-                case OrderStatus.OrderReady:
-                    timestampField = "timestamp_order_ready";
-                    break;
-            }
-            order.set(timestampField, new Date().getTime());
+            order.set("timestamp_order_status_" + orderStatus, new Date().getTime());
 
             // save order
             order.save({

@@ -40,10 +40,10 @@ var ShopRole = {
 var OrderStatus = {
     OrderPlaced: 0, // order placed by customer
     OrderAccepted: 1, // order accepted by driver
-    OrderStartMaking: 2, // start making coffee by coffee maker
-    OrderReady: 3, // coffee ready by coffee maker
-    OrderPickUp: 4, // coffee picked up by driver
-    OrderDelivered: 5 // coffee delivered by driver
+    CoffeePreparing: 2, // start making coffee by coffee maker
+    CoffeeReady: 3, // coffee ready by coffee maker
+    InDelivery: 4, // coffee picked up by driver
+    OrderCompleted: 5 // coffee delivered by driver
 };
 
 var Bucket = {

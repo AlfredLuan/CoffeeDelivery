@@ -88,7 +88,7 @@ function parseOrderHistoryForDisplay(data, displayTemplate, htmlName) {
     if (data.get("order_status") == OrderStatus.OrderAccepted) {
         htmlContent = htmlContent.replaceAll("{display-order-status-2}", "block");
         htmlContent = htmlContent.replaceAll("{display-order-status-3}", "none");
-    } else if(data.get("order_status") == OrderStatus.OrderStartMaking) {
+    } else if(data.get("order_status") == OrderStatus.CoffeePreparing) {
         htmlContent = htmlContent.replaceAll("{display-order-status-2}", "none");
         htmlContent = htmlContent.replaceAll("{display-order-status-3}", "block");
     } else {
@@ -99,22 +99,13 @@ function parseOrderHistoryForDisplay(data, displayTemplate, htmlName) {
     // display each timestamp
     htmlContent = replaceTemplateContent(htmlContent, "{Timestamp-Label}",  null, htmlName);
 
-    var timestampFieldMap = {
-        "0": "timestamp_order_placed",
-        "1": "timestamp_order_accepted",
-        "2": "timestamp_order_start_making",
-        "3": "timestamp_order_ready",
-        "4": "timestamp_order_pick_up",
-        "5": "timestamp_order_deliveryed"
-    };
-
-    for (var status in timestampFieldMap) {
-        if(orderStatus >= Number(status)) {
+    for (var key in OrderStatus) {
+        var status = OrderStatus[key];
+        if(orderStatus >= status) {
             // display timestamp
             htmlContent = htmlContent.replaceAll("{display-Timestamp-OrderStatus-" + status + "}", "display");
             // display the label and value
-            var timestampField = timestampFieldMap[status];
-            var dateTime = data.get(timestampField);
+            var dateTime = data.get("timestamp_order_status_" + status);
             if(isAvailable(dateTime)) {
                 dateTime = new Date(dateTime).format("yyyy-MM-dd hh:mm:ss");
             }
@@ -142,7 +133,7 @@ function loadOrderHistoryListForDisplay() {
     loadListForDisplay("order_history_list", "/page/orderhistorytemplate.html", function(onSuccess, onFailure) {
 
         // query all the orders which are delivered
-        loadOrderList(kiiUser, [ OrderStatus.OrderDelivered ], function(orderHistoryList){
+        loadOrderList(kiiUser, [ OrderStatus.OrderCompleted ], function(orderHistoryList){
             if(isAvailable(orderHistoryList)) {
                 orderHistoryList.sort(function(a, b) {
                     return a.getCreated() < b.getCreated();
