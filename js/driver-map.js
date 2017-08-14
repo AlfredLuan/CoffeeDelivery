@@ -1,3 +1,4 @@
+
 function showDriverMap(map, infoWindow) {
 
     var markerMapOfDrivers = {};
@@ -37,37 +38,55 @@ function showDriverLocation(myPosition, map, markerMapOfDrivers) {
             return e.get("state").driver_id;
         });
 
-        // load driver id and order list map
+        // load the map between driver id and order list
         loadDriverOrderMap(driverIDList, function(driverOrderMap) {
 
-            // clean up marker map
-            cleanMarkerMap(markerMapOfDrivers);
+            // load the map between driver id (of approved driver) and driver
+            loadApprovedDriverMap(driverIDList, function(approvedDriverMap) {
 
-            for (var i = 0; i < driverLocationList.length; i++) {
+                // clean up marker map
+                cleanMarkerMap(markerMapOfDrivers);
 
-                var driverLocation = driverLocationList[i];
-                var driverID = driverLocation.get("state").driver_id;
-                var location = driverLocation.get("state");
-                var markerID = driverLocation.getID();
-                // console.log("location", location);
+                for (var i = 0; i < driverLocationList.length; i++) {
+                    
+                    var driverLocation = driverLocationList[i];
+                    var driverID = driverLocation.get("state").driver_id;
+                    var location = driverLocation.get("state");
+                    var markerID = driverLocation.getID();
+                    var driver = approvedDriverMap[driverID];
+                    console.log("driver", driver);
+                    // console.log("location", location);
 
-                var markerIcon = null;
-                if(driverOrderMap[driverID].length == 0) {
-                    markerIcon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-                } else {
-                    markerIcon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+                    // if driver is not approved, don't show it
+                    // if driver is offline, mark gray
+                    // if driver is online and without order, mark green
+                    // if driver is online and with order, mark red
+                    var markerIcon = null;
+                    if(isUnavailable(driver)) {
+                        console.log("driver " + driverID + " is not approved");
+                        continue;
+                    } else if (toSafeBoolean(driver.get(UserAttribute.Online)) == false) {
+                        console.log("driver " + driverID + " is offline");
+                        markerIcon = "http://maps.google.com/mapfiles/marker_grey.png";
+                    } else if (driverOrderMap[driverID].length == 0) {
+                        console.log("driver " + driverID + " is without order");
+                        markerIcon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+                    } else {
+                        console.log("driver " + driverID + " is with order");
+                        markerIcon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+                    }
+
+                    // draw marker in google map
+                    var marker = new google.maps.Marker({
+                        position: convertKiiLocationToGoogleLocation(location),
+                        map: map,
+                        icon: markerIcon
+                    });
+
+                    // add marker to marker map
+                    markerMapOfDrivers[markerID] = marker;
                 }
-
-                // draw marker in google map
-                var marker = new google.maps.Marker({
-                    position: convertKiiLocationToGoogleLocation(location),
-                    map: map,
-                    icon: markerIcon
-                });
-
-                // add marker to marker map
-                markerMapOfDrivers[markerID] = marker;
-            }
+            });
 
         });
 
@@ -114,6 +133,9 @@ function loadDriverLocationList(myPosition, map, onSuccess, onFailure) {
 
 }
 
+/**
+* return the map between driver ID and the order list
+*/
 function loadDriverOrderMap(driverIDList, onSuccess, onFailure) {
 
     var resultSet = {};
@@ -138,6 +160,35 @@ function loadDriverOrderMap(driverIDList, onSuccess, onFailure) {
         for (var i = 0; i < orderList.length; i++) {
             var order = orderList[i];
             resultSet[order.get("driver")["user_id"]].push(order);
+        }
+
+        onSuccess(resultSet);
+    }, onFailure);
+
+}
+
+/**
+* return the map between driver ID and driver
+*/
+function loadApprovedDriverMap(driverIDList, onSuccess, onFailure) {
+
+    var resultSet = {};
+
+    if (driverIDList.length == 0) {
+        onSuccess(resultSet);
+        return;
+    }
+
+    var clause1 = KiiClause.inClause("user_id", driverIDList);
+    var clause2 = KiiClause.equals("approved", true);
+    var clause = KiiClause.and(clause1, clause2);
+
+    var bucket = Kii.bucketWithName(Bucket.AppScope.UserList);
+    loadAllObjects(bucket, clause, function(driverList) {
+
+        for (var i = 0; i < driverList.length; i++) {
+            var driver = driverList[i];
+            resultSet[driver.getID()] = driver;
         }
 
         onSuccess(resultSet);

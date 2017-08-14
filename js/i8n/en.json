@@ -9,8 +9,6 @@
         "OrderHistoryList": "Order History",
         "DriverMap": "Driver Map",
         "DriverList": "Driver List",
-        "DriverWithoutOrder": "Driver Without Order",
-        "DriverWithOrder": "Driver With Order",
         "MyProfile": "My Profile",
         "placeholder-name": "user name",
         "placeholder-password": "password",
@@ -49,7 +47,10 @@
         "error-Failed-to-approve-driver": "Failed to approve driver"
     },
     "drivermap": {
-        "DriverMap": "Driver Map"
+        "DriverMap": "Driver Map",
+        "DriverWithoutOrder": "Driver Without Order",
+        "DriverWithOrder": "Driver With Order",
+        "DriverOffline": "Driver Offline"
     },
     "index": {
         "greeting": "Have a nice day!",
