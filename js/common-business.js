@@ -528,6 +528,27 @@ function saveProductTemplateInfo(group, productID, productInfo, onSuccess, onFai
         });
     }
 
+}
 
+// kiiUser is expected to be operator or product manager
+function loadOwnedProductTemplateList(kiiUser, onSuccess, onFailure) {
 
+    // get head shop
+    getHeadShop(kiiUser, function(headShop) {
+
+        // get product template list
+        var bucket = headShop.bucketWithName(Bucket.GroupScope.ProductList);
+
+        loadAllObjects(bucket, null, function(productList) {
+
+            // sort basic info list
+            productList.sort(function(a, b) {
+                return a.getCreated() < b.getCreated();
+            })
+
+            // callback
+            onSuccess(productList);
+
+        }, onFailure);
+    }, onFailure);
 }

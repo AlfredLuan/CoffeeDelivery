@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/jquery-3.1.0.min.js" ></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/KiiSDK.min.js"></script>
+    <script type="text/javascript" src="../js/mqttws31.js"></script>
+    <script type="text/javascript" src="../js/common.js" ></script>
+    <script type="text/javascript" src="../js/common-auth.js" ></script>
+    <script type="text/javascript" src="../js/common-business.js" ></script>
+    <script type="text/javascript" src="../js/common-list-template.js" ></script>
+    <script type="text/javascript" src="../js/common-translate.js" ></script>
+    <script type="text/javascript" src="../js/common-chart.js" ></script>
+    <script type="text/javascript" src="../js/Chart.js"></script>
+    <script type="text/javascript" src="../js/product-analytics.js" ></script>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/customise.css">
+
+    <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon"/>
+    <title>{title}</title>
+
+</head>
+<body>
+
+    <!--nav bar-->
+    <script type="text/javascript">
+        var promise = loadTopNavBar(true);
+    </script>
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+
+            <div class="panel-group" id="accordion">
+
+                <!--search condition -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse"
+                               href="#collapseOne">
+                                {SearchConditionLabel}
+                            </a>
+
+                            <!--error message-->
+                            <span style="margin-left:20px; color:red; display:none" id="product_analytics_error_message">
+                                Errormessagesss</span>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+
+                            <div class="center-block" style="width:80%">
+                                <div class="form-horizontal" role="form">
+
+                                    <div class="form-group">
+                                        <span for="name" class="col-sm-2 control-label">{StartDateLabel}</span>
+                                        <div class="col-sm-3">
+                                            <input type="date" class="form-control" id="search_date_start">
+                                        </div>
+
+                                        <span for="name" class="col-sm-2 control-label">{EndDateLabel}</span>
+                                        <div class="col-sm-3">
+                                            <input type="date" class="form-control" id="search_date_end">
+                                        </div>
+
+                                        <div class="col-sm-2" style="padding-left:60px">
+                                            <button class="btn btn-default" onclick="analyzeProduct(this)">{AggregateLabel}</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <br/>
+
+                <!--product per day -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse"
+                               href="#collapseOne">
+                                {CoffeeSoldPerDayLabel}
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+
+                            <!-- <div style="margin-top:20px;width:900px;height:150px" id="product_per_day"> -->
+                            <div id="product_per_day">
+                            	<!-- <canvas id="chart" ></canvas> -->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <br/>
+
+                <!--product per shop -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse"
+                               href="#collapseOne">
+                                {CoffeeSoldPerShopLabel}
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="panel-body">
+
+                            <!-- <div style="margin-top:20px;width:900px;height:150px" id="product_per_day"> -->
+                            <div id="product_per_shop">
+                            	<!-- <canvas id="chart" ></canvas> -->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    <script type="text/javascript">
+
+        promise.then(function(){
+            translateHtmlPage();
+            onProductAnalyticsPageLoad();
+        });
+    </script>
+
+</body>
+</html>

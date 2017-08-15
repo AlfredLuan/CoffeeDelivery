@@ -9,6 +9,7 @@
         "OrderHistoryList": "Order History",
         "DriverMap": "Driver Map",
         "DriverList": "Driver List",
+        "ProductAnalytics": "Product Analytics",
         "MyProfile": "My Profile",
         "placeholder-name": "user name",
         "placeholder-password": "password",
@@ -113,6 +114,15 @@
         "Timestamp-OrderStatus-3-Label": "Coffee Ready At",
         "Timestamp-OrderStatus-4-Label": "In Delivery At",
         "Timestamp-OrderStatus-5-Label": "Order Completed At"
+    },
+    "productanalytics": {
+        "SearchConditionLabel": "Target Orders",
+        "StartDateLabel": "Start Date",
+        "EndDateLabel": "End Date",
+        "CoffeeSoldPerDayLabel": "Coffee Sold Per Day (Income is in unit of 10)",
+        "CoffeeSoldPerShopLabel": "Coffee Sold Per Shop (Income is in unit of 10)",
+        "AggregateLabel": "Analyze",
+        "error-Please-keep-date-range-within-one-month": "Please keep date range within 1 month"
     },
     "productdetails": {
         "ShopAssignment": "Shop Assignment",

@@ -228,6 +228,7 @@ function getAvailableLinksForUserRole(role) {
                 "link_orderhistorylist",
                 "link_drivermap",
                 "link_driverlist",
+                "link_productanalytics",
                 "link_myprofile",
                 "link_displayname",
                 "link_logout"

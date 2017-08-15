@@ -434,24 +434,35 @@ function differArray(oldArray, newArray, isSame){
     return result;
 }
 
-function convertArray(array, convert) {
+function isArray(obj) {
+    return Object.prototype.toString.call(obj) === '[object Array]';
+}
 
-    if(isUnavailable(array)) {
+function convertArray(object, converter) {
+
+    if(isUnavailable(object)) {
         return array;
     }
 
     var method = null;
-    if(isAvailable(convert)) {
-        method = convert;
+    if(isAvailable(converter)) {
+        method = converter;
     } else {
-        method = function(element) {
+        method = function(element, key) {
             return element;
         }
     }
 
     var result = [];
-    for (var i = 0; i < array.length; i++) {
-        result.push(method(array[i]));
+
+    if(isArray(object) == true) {
+        for (var i = 0; i < object.length; i++) {
+            result.push(method(object[i], i));
+        }
+    } else {
+        for (var key in object) {
+            result.push(method(object[key], key));
+        }
     }
 
     return result;
@@ -586,13 +597,13 @@ function group(recordSet, getGroupID) {
  *   [
  *     {
  *       groupID: "BBB",
- *       aggregationResult: { "score_sum" : 333, "number" : 333 }
+ *       aggregationResult: { "score_sum" : 333, "number_avg" : 333 }
  *     }, {
  *       groupID: "AAA",
- *       aggregationResult: { "score_sum" : 333, "number" : 111 }
+ *       aggregationResult: { "score_sum" : 333, "number_avg" : 111 }
  *     }, {
  *       groupID: "CCC",
- *       aggregationResult: { "score_sum" : 999, "number" : 999 }
+ *       aggregationResult: { "score_sum" : 999, "number_avg" : 999 }
  *     },
  *   ]
  *
@@ -611,7 +622,7 @@ function aggregate(recordSet, getGroupID, aggregateFieldAndFormula) {
      * the output will be in the format of
      *   {
      *     field1_formula1 : value1,
-     *     field2_formula2 : value2,
+ *     field2_formula2 : value2,
      *     ...
      *   }
      * objectArr: the object array with the same group id
