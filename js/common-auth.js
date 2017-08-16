@@ -228,6 +228,7 @@ function getAvailableLinksForUserRole(role) {
                 "link_orderhistorylist",
                 "link_drivermap",
                 "link_driverlist",
+                "link_analytics",
                 "link_shopanalytics",
                 "link_productanalytics",
                 "link_coffeemakeranalytics",
@@ -328,6 +329,17 @@ function checkLoginStatus(isBackToHomePage) {
                         break;
                     }
                 }
+
+            }
+
+            // mark underline for the link of current page
+            var link = "link_" + getHtmlName();
+            console.log("current link", link);
+            var currentLink = document.getElementById(link);
+            currentLink.style += ";text-decoration:underline";
+
+            if(link.lastIndexOf("analytics") > 0) {
+                document.getElementById("link_analytics").style += ";text-decoration:underline";
             }
 
             clearErrorMessage("navbar_error_message");
