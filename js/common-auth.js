@@ -230,6 +230,7 @@ function getAvailableLinksForUserRole(role) {
                 "link_driverlist",
                 "link_shopanalytics",
                 "link_productanalytics",
+                "link_coffeemakeranalytics",
                 "link_myprofile",
                 "link_displayname",
                 "link_logout"
