@@ -1,4 +1,4 @@
-function onProductAnalyticsPageLoad() {
+function onShopAnalyticsPageLoad() {
 
     var endDate = new Date();
     var startDate = new Date(endDate.getTime());
@@ -9,7 +9,7 @@ function onProductAnalyticsPageLoad() {
 
 }
 
-function analyzeProduct(eventSource) {
+function analyzeShop(eventSource) {
 
     // block the button
     eventSource.disabled = true;
@@ -22,7 +22,7 @@ function analyzeProduct(eventSource) {
 
     if(endDate.getTime() - startDate.getTime() > 31 * 24 * 60 * 60 * 1000) {
 
-        showErrorMessage("product_analytics_error_message", "{error-Please-keep-date-range-within-one-month}")
+        showErrorMessage("shop_analytics_error_message", "{error-Please-keep-date-range-within-one-month}")
 
         // unblock the button
         eventSource.disabled = false;
@@ -105,33 +105,16 @@ function analyzeProduct(eventSource) {
 
             console.log("rawDataList for aggregation", rawDataList);
 
-            // start to aggregate coffee sold per day
-            aggregateProductPerDay(rawDataList, expectedDateList);
             // start to aggregate coffee sold per shop
             aggregateProductPerShop(rawDataList, shopList);
 
-            clearErrorMessage("product_analytics_error_message");
+            clearErrorMessage("shop_analytics_error_message");
 
             // unblock the button
             eventSource.disabled = false;
         });
 
     });
-
-}
-
-function aggregateProductPerDay(rawDataList, expectedDateList) {
-
-    var getCategoryID = function(e) {
-        return e["date"];
-    };
-
-    // get MM-dd as category label
-    var getCategoryLabel = function(e) {
-        return e.substring(5);
-    };
-
-    aggregateProductAndDisplay("product_per_day", getCategoryID, rawDataList, expectedDateList, getCategoryLabel);
 
 }
 
@@ -224,19 +207,101 @@ function aggregateProductAndDisplay(chartElementId, getCategoryID, rawDataList, 
         dataListForDisplay.push({
             label: product + " Quantity",
             data: itemQuantityList,
-            backgroundColor: color
+            backgroundColor: color,
+            stack: "stack quantity"
         });
         dataListForDisplay.push({
             label: product + " Income",
             data: itemSubTotalList,
-            backgroundColor: color
+            backgroundColor: color,
+            stack: "stack income"
         });
 
     }
+
+    // the elements in dataListForDisplay must be sorted by "stack" field,
+    // otherwise the grouped stack bars may mess up in UI display by chart.js
+    dataListForDisplay.sort(function(a, b){
+        return a["stack"] > b["stack"];
+    });
+
+    // each element in dataListForDisplay is an array of quantity or income of each category
+    // sort it by income sum desc
+    sortDataListForDisplayByIncomeSum(dataListForDisplay);
 
     console.log("dataListForDisplay", dataListForDisplay);
 
     var categoryLabelList = convertArray(expectedCategoryIDList, getCategoryLabel);
 
-    showBarChart(chartElementId, categoryLabelList, dataListForDisplay);
+    var chartOptions = {
+        tooltips: {
+            mode: 'index',
+            intersect: false
+        },
+        scales: {
+            xAxes: [{
+                stacked: true
+            }],
+            yAxes: [{
+                stacked: true
+            }]
+        }
+    };
+    showBarChart(chartElementId, categoryLabelList, dataListForDisplay, chartOptions);
+}
+
+function sortDataListForDisplayByIncomeSum(dataListForDisplay) {
+
+    console.log("before sort", dataListForDisplay);
+
+    if(isUnavailable(dataListForDisplay) || dataListForDisplay.length == 0) {
+        return dataListForDisplay;
+    }
+
+    var categoryLength = dataListForDisplay[0]["data"].length;
+
+    var incomeSumList = [];
+    var expectedCategoryIDMap = {};
+    for (var i = 0; i < categoryLength; i++) {
+        var incomeSum = 0;
+
+        for (var j = 0; j < dataListForDisplay.length; j++) {
+            var dataForDisplay = dataListForDisplay[j];
+            if(dataForDisplay["stack"] != "stack income") {
+                continue;
+            }
+
+            incomeSum += dataForDisplay["data"][i];
+        }
+
+        incomeSumList.push(incomeSum);
+    }
+
+    var exchangeElementInDataListForDisplay = function(x, y) {
+        for (var i = 0; i < dataListForDisplay.length; i++) {
+            var data = dataListForDisplay[i]["data"];
+            var temp = data[x];
+            data[x] = data[y];
+            data[y] = temp;
+        }
+    }
+
+    for (var i = incomeSumList.length - 1; i >= 0; i--) {
+        for (var j = i - 1; j >= 0; j--) {
+            var temp1 = incomeSumList[j];
+            var temp2 = incomeSumList[j + 1];
+            if(temp1 < temp2) {
+                var temp = incomeSumList[j];
+                incomeSumList[j] = incomeSumList[j + 1];
+                incomeSumList[j + 1] = temp;
+
+                // exchange the elements in dataListForDisplay
+                exchangeElementInDataListForDisplay(j, j + 1);
+            }
+        }
+    }
+
+    console.log("after sort", dataListForDisplay);
+
+    return dataListForDisplay;
 }

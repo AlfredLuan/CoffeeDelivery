@@ -9,6 +9,7 @@
         "OrderHistoryList": "Order History",
         "DriverMap": "Driver Map",
         "DriverList": "Driver List",
+        "ShopAnalytics": "Shop Analytics",
         "ProductAnalytics": "Product Analytics",
         "MyProfile": "My Profile",
         "placeholder-name": "user name",
@@ -119,8 +120,8 @@
         "SearchConditionLabel": "Target Orders",
         "StartDateLabel": "Start Date",
         "EndDateLabel": "End Date",
-        "CoffeeSoldPerDayLabel": "Coffee Sold Per Day (Income is in unit of 10)",
-        "CoffeeSoldPerShopLabel": "Coffee Sold Per Shop (Income is in unit of 10)",
+        "ProductSoldPerDayLabel": "Coffee Sold Per Day (Income is in unit of 10)",
+        "ProductSoldPerShopLabel": "Coffee Sold Per Shop (Income is in unit of 10)",
         "AggregateLabel": "Analyze",
         "error-Please-keep-date-range-within-one-month": "Please keep date range within 1 month"
     },
@@ -165,6 +166,14 @@
         "error-Please-check-register-info": "Please check register info and try again",
         "error-Register-info-existing-already": "Register info existing already, please try another login name",
         "error-Confirm-password-wrong": "the passwords input twice are different, plese confirm the password"
+    },
+    "shopanalytics": {
+        "SearchConditionLabel": "Target Orders",
+        "StartDateLabel": "Start Date",
+        "EndDateLabel": "End Date",
+        "ProductSoldPerShopLabel": "Shop Performance (Income is in unit of 10)",
+        "AggregateLabel": "Analyze",
+        "error-Please-keep-date-range-within-one-month": "Please keep date range within 1 month"
     },
     "shopdetails": {
         "UserAssignment": "Staff Assignment",

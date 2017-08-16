@@ -492,7 +492,7 @@ function sum(arr, fieldName) {
             sumValue += Number(arr[i][fieldName]);
         }
     };
-    return sumValue.toFixed(2);
+    return Number(sumValue.toFixed(2));
 }
 
 function avg(arr, fieldName) {
@@ -506,7 +506,7 @@ function avg(arr, fieldName) {
             sumValue += Number(arr[i][fieldName]);
         }
     };
-    return (sumValue / length).toFixed(2);
+    return Number((sumValue / length).toFixed(2));
 }
 
 /**

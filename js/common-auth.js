@@ -228,6 +228,7 @@ function getAvailableLinksForUserRole(role) {
                 "link_orderhistorylist",
                 "link_drivermap",
                 "link_driverlist",
+                "link_shopanalytics",
                 "link_productanalytics",
                 "link_myprofile",
                 "link_displayname",
@@ -237,6 +238,7 @@ function getAvailableLinksForUserRole(role) {
         case UserRole.ProductManager:
             links = [
                 "link_producttemplatelist",
+                "link_productanalytics",
                 "link_myprofile",
                 "link_displayname",
                 "link_logout"

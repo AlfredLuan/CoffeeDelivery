@@ -14,7 +14,7 @@
     <script type="text/javascript" src="../js/common-translate.js" ></script>
     <script type="text/javascript" src="../js/common-chart.js" ></script>
     <script type="text/javascript" src="../js/Chart.js"></script>
-    <script type="text/javascript" src="../js/product-analytics.js" ></script>
+    <script type="text/javascript" src="../js/shop-analytics.js" ></script>
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/customise.css">
 
@@ -45,7 +45,7 @@
                             </a>
 
                             <!--error message-->
-                            <span style="margin-left:20px; color:red; display:none" id="product_analytics_error_message">
+                            <span style="margin-left:20px; color:red; display:none" id="shop_analytics_error_message">
                                 Errormessagesss</span>
                         </h4>
                     </div>
@@ -67,34 +67,11 @@
                                         </div>
 
                                         <div class="col-sm-2" style="padding-left:60px">
-                                            <button class="btn btn-default" onclick="analyzeProduct(this)">{AggregateLabel}</button>
+                                            <button class="btn btn-default" onclick="analyzeShop(this)">{AggregateLabel}</button>
                                         </div>
                                     </div>
 
                                 </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <br/>
-
-                <!--product per day -->
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse"
-                               href="#collapseOne">
-                                {ProductSoldPerDayLabel}
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseOne" class="panel-collapse collapse in">
-                        <div class="panel-body">
-
-                            <!-- <div style="margin-top:20px;width:900px;height:150px" id="product_per_day"> -->
-                            <div id="product_per_day">
-                            	<!-- <canvas id="chart" ></canvas> -->
                             </div>
 
                         </div>
@@ -134,7 +111,7 @@
 
         promise.then(function(){
             translateHtmlPage();
-            onProductAnalyticsPageLoad();
+            onShopAnalyticsPageLoad();
         });
     </script>
 

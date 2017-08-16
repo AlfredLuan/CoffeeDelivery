@@ -18,7 +18,7 @@ var ChartColors = {
 //
 // categoryLabels will be displayed for each element of dataList
 */
-function showBarChart(elementId, categoryLabels, dataList) {
+function showBarChart(elementId, categoryLabels, dataList, chartOptions) {
 
     if(isUnavailable(dataList)) {
         return;
@@ -33,7 +33,8 @@ function showBarChart(elementId, categoryLabels, dataList) {
         var dataForDisplay = {
             label: e["label"],
             data: e["data"],
-            backgroundColor: e["backgroundColor"]
+            backgroundColor: e["backgroundColor"],
+            stack: e["stack"]
         };
         // set default background color
         if(isUnavailable(dataForDisplay["backgroundColor"])) {
@@ -52,9 +53,13 @@ function showBarChart(elementId, categoryLabels, dataList) {
     var chartElementId = "chart_" + elementId;
     div.innerHTML = "<canvas id='" + chartElementId + "' ></canvas>";
 
+    console.log("chart data", data);
+    console.log("chart options", chartOptions);
+
     var ctx = document.getElementById(chartElementId).getContext("2d");
     var myLineChart = new Chart(ctx, {
         type: 'bar',
-        data: data
+        data: data,
+        options: chartOptions
     });
 }
