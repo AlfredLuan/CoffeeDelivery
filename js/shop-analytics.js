@@ -106,7 +106,11 @@ function analyzeShop(eventSource) {
             console.log("rawDataList for aggregation", rawDataList);
 
             // start to aggregate coffee sold per shop
-            aggregateProductPerShop(rawDataList, shopList);
+            var optionalData = {
+                startDate : startDate,
+                endDate : endDate
+            };
+            aggregateProductPerShop(rawDataList, shopList, optionalData);
 
             clearErrorMessage("shop_analytics_error_message");
 
@@ -118,7 +122,7 @@ function analyzeShop(eventSource) {
 
 }
 
-function aggregateProductPerShop(rawDataList, shopList) {
+function aggregateProductPerShop(rawDataList, shopList, optionalData) {
 
     shopList.sort(function(a, b) {
         return a.getName() > b.getName();
@@ -140,7 +144,7 @@ function aggregateProductPerShop(rawDataList, shopList) {
         return shopMap[e];
     };
 
-    aggregateProductAndDisplay("product_per_shop", getCategoryID, rawDataList, expectedShopIDList, getCategoryLabel);
+    aggregateProductAndDisplay("product_per_shop", getCategoryID, rawDataList, expectedShopIDList, getCategoryLabel, optionalData);
 
 }
 
@@ -152,7 +156,7 @@ function aggregateProductPerShop(rawDataList, shopList) {
 //     in the case that certain category is missing in aggregation result, it will be padded with value 0
 // getCategoryLabel: function that returns the label of category based on category ID, it will be displayed as the labels of x axes
 //
-function aggregateProductAndDisplay(chartElementId, getCategoryID, rawDataList, expectedCategoryIDList, getCategoryLabel) {
+function aggregateProductAndDisplay(chartElementId, getCategoryID, rawDataList, expectedCategoryIDList, getCategoryLabel, optionalData) {
 
     var groupResult =  group(rawDataList, function(e) {
         return e["item_name"];
@@ -231,8 +235,6 @@ function aggregateProductAndDisplay(chartElementId, getCategoryID, rawDataList, 
 
     console.log("dataListForDisplay", dataListForDisplay);
 
-    var categoryLabelList = convertArray(expectedCategoryIDList, getCategoryLabel);
-
     var chartOptions = {
         tooltips: {
             mode: 'index',
@@ -247,7 +249,29 @@ function aggregateProductAndDisplay(chartElementId, getCategoryID, rawDataList, 
             }]
         }
     };
-    showBarChart(chartElementId, categoryLabelList, dataListForDisplay, chartOptions);
+
+    // expectedCategoryIDList is expected to be shop list here
+    aggregateShopComment(optionalData["startDate"], optionalData["endDate"], expectedCategoryIDList, function(shopCommentMap) {
+
+        var categoryLabelList = convertArray(expectedCategoryIDList, function(e){
+            var label = getCategoryLabel(e);
+            var starAvg = shopCommentMap[e];
+            if(isAvailable(starAvg)) {
+                var starAvgLabel = ""
+                for (var i = 0; i < starAvg; i++) {
+                    starAvgLabel += "⭐️";
+                }
+                if(starAvg > 0) {
+                    starAvgLabel = " (Rated " + starAvgLabel + ")";
+                }
+                label += starAvgLabel;
+            }
+            return label;
+        });
+
+        showBarChart(chartElementId, categoryLabelList, dataListForDisplay, chartOptions);
+    });
+
 }
 
 function sortDataListForDisplayByIncomeSum(dataListForDisplay) {
@@ -304,4 +328,59 @@ function sortDataListForDisplayByIncomeSum(dataListForDisplay) {
     console.log("after sort", dataListForDisplay);
 
     return dataListForDisplay;
+}
+
+
+function aggregateShopComment(startDate, endDate, expectedShopIDList, onCompleted) {
+
+    console.log("startDate", startDate);
+    console.log("endDate", endDate);
+    console.log("expectedShopIDList", expectedShopIDList);
+
+    var bucket = Kii.bucketWithName(Bucket.AppScope.ShopComment);
+
+    var clause1 = KiiClause.inClause("shop.id", expectedShopIDList);
+    var clause2 = KiiClause.greaterThanOrEqual("_created", startDate.getTime());
+    var clause3 = KiiClause.lessThanOrEqual("_created", endDate.getTime());
+    var clause = KiiClause.and(clause1, clause2, clause3);
+
+    loadAllObjects(bucket, clause, function(shopCommentList) {
+
+        console.log("shopCommentList", shopCommentList);
+
+        // prepare raw data for aggregation
+        var rawDataList = convertArray(shopCommentList, function(e){
+            var rawData = {
+                shop_id : e.get("shop")["id"],
+                star: e.get("star")
+            };
+            return rawData;
+        });
+
+        var getCategoryID = function(e){
+            return e["shop_id"];
+        };
+
+        var aggregateFieldAndFormula = [
+            ["star", "avg"]
+        ];
+
+        // aggregate
+        var aggregationResult = aggregate(rawDataList, getCategoryID, aggregateFieldAndFormula);
+
+        // format aggregation result for return
+        var shopCommentMap = {};
+        convertArray(aggregationResult, function(e){
+            var starAvg = e["aggregationResult"]["star_avg"];
+            starAvg =  Number(starAvg.toFixed(0));
+            shopCommentMap[e["groupID"]] = starAvg;
+            return e;
+        });
+
+        console.log("shopCommentMap", shopCommentMap);
+
+        // callback
+        onCompleted(shopCommentMap);
+    })
+
 }

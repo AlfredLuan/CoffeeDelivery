@@ -59,7 +59,8 @@ var Bucket = {
         ProductList: "STOCK_ITEMS_CONSUMER",
         CouponList: "COUPONS",
         ThingStates: "_states",
-        UserList: "USER_LIST"
+        UserList: "USER_LIST",
+        ShopComment: "COMMENTS_SHOPS"
     },
     GroupScope: {
         ShopInfo: "SHOP_INFO",
@@ -662,5 +663,8 @@ function aggregate(recordSet, getGroupID, aggregateFieldAndFormula) {
         temp["aggregationResult"] = aggregateForSingleGroup(objectArr, aggregateFieldAndFormula);
         resultArr.push(temp);
     };
+
+    console.log("aggregation result", resultArr);
+
     return resultArr;
 }
