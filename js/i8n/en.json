@@ -50,7 +50,7 @@
         "CoffeeMakerNameLabel": "Name",
         "ShopNameLabel": "Shop",
         "CoffeeCupsLabel": "Cups",
-        "AverageTimeLabel": "Average Time",
+        "AverageTimeLabel": "Average Time(s)",
         "CoffeeSubTotalLabel": "Income",
         "error-Please-keep-date-range-within-one-month": "Please keep date range within 1 month"
     },
@@ -63,8 +63,8 @@
         "DriverNameLabel": "Name",
         "OrderDeliveredLabel": "Order Delivered",
         "ItemDeliveredLabel": "Item Delivered",
-        "AverageDeliveryTimeLabel": "Avg Delivery Time",
-        "AveragePickupTimeLabel": "Avg Pickup Time",
+        "AverageDeliveryTimeLabel": "Avg Delivery Time(m)",
+        "AveragePickupTimeLabel": "Avg Pickup Time(m)",
         "error-Please-keep-date-range-within-one-month": "Please keep date range within 1 month"
     },
     "driverlist": {
@@ -106,6 +106,7 @@
         "ConsumerLabel": "Consumer",
         "DriverLabel": "Driver",
         "ShopLabel": "Shop",
+        "OptionsLabel": "Options",
         "CoffeeMakerLabel": "Maker",
         "AmountLabel": "Amount",
         "OrderDetailsLinkLabel": "Details",

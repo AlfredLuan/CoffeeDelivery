@@ -197,7 +197,13 @@ function aggregate(recordSet, getGroupID, aggregateFieldAndFormula) {
     return resultArr;
 }
 
-
+// add field "aggregationResultForDisplay" for aggregation result
+// the response will be in format of below
+// {
+//     groupID: xxx, // from raw aggregation result list
+//     aggregationResult: { yyy_sum: aaa, zzz_avg: bbb, ...},  // from raw aggregation result list
+//     aggregationResultForDisplay: { yyy_sum: AAA, zzz_avg: BBB, ... }  // from calculation or render
+// }
 function convertAggregationResultForDisplay(aggregationResult, convertor) {
     if(isUnavailable(aggregationResult)) {
         return aggregationResult;

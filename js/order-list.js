@@ -34,7 +34,15 @@ function parseOrderForDisplay(data, displayTemplate, htmlName) {
                 if(j > 0) {
                     tempItemString += ",&nbsp;";
                 }
-                tempItemString += option.name + "&nbsp;-&nbsp;" + option.value;
+
+                var value = "";
+                convertArray(option["values"], function(e){
+                    if(e["selected"] == true) {
+                        value = e["name"];
+                    }
+                })
+
+                tempItemString += option["name"] + "&nbsp;-&nbsp;" + value;
             }
         }
         if(i < items.length - 1) {
@@ -57,7 +65,7 @@ function parseOrderForDisplay(data, displayTemplate, htmlName) {
     var driver = data.get("driver");
     var driverName = "";
     if(isAvailable(driver) == true) {
-        driverName = driver.name;
+        driverName = driver["display_name"];
     }
     htmlContent = htmlContent.replaceAll("{Driver}", toSafeString(driverName));
 
@@ -229,7 +237,7 @@ function updateOrderStatus(eventSource, orderID, orderStatus) {
             // update order status
             order.set("order_status", orderStatus);
             // update order timestamp
-            order.set("timestamp_order_status_" + orderStatus, new Date().getTime());
+            order.set("timestamp_order_status_" + orderStatus, new Date());
 
             // save order
             order.save({

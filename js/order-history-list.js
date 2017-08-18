@@ -25,19 +25,27 @@ function parseOrderHistoryForDisplay(data, displayTemplate, htmlName) {
     for (var i = 0; i < items.length; i++) {
         var item = items[i];
 
-        if(item.quantity == 0) {
+        if(item["quantity"] == 0) {
             continue;
         }
 
-        tempItemString += item.quantity + "&nbsp;&nbsp;x&nbsp;&nbsp;" + item.name;
-        if(isAvailable(item.options)) {
+        tempItemString += item["quantity"] + "&nbsp;&nbsp;x&nbsp;&nbsp;" + item["name"];
+        if(isAvailable(item["options"])) {
             tempItemString += "&nbsp;&nbsp;/&nbsp;&nbsp;{OptionsLabel}:&nbsp;";
-            for (var j = 0; j < item.options.length; j++) {
-                var option = item.options[j];
+            for (var j = 0; j < item["options"].length; j++) {
+                var option = item["options"][j];
                 if(j > 0) {
                     tempItemString += ",&nbsp;";
                 }
-                tempItemString += option.name + "&nbsp;-&nbsp;" + option.value;
+
+                var value = "";
+                convertArray(option["values"], function(e){
+                    if(e["selected"] == true) {
+                        value = e["name"];
+                    }
+                })
+
+                tempItemString += option["name"] + "&nbsp;-&nbsp;" + value;
             }
         }
         if(i < items.length - 1) {
@@ -61,7 +69,7 @@ function parseOrderHistoryForDisplay(data, displayTemplate, htmlName) {
     var driver = data.get("driver");
     var driverName = "";
     if(isAvailable(driver) == true) {
-        driverName = driver.name;
+        driverName = driver["display_name"];
     }
     htmlContent = htmlContent.replaceAll("{Driver}", toSafeString(driverName));
 

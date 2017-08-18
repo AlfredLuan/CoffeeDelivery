@@ -8,6 +8,12 @@ var ChartColors = {
 	grey: 'rgb(201, 203, 207)'
 };
 
+function setOpacity(chartColor, opacity) {
+    var start = chartColor.indexOf("(");
+    var end = chartColor.lastIndexOf(")");
+    return "rgba(" + chartColor.substring(start + 1, end) + ", " + opacity + ")";
+}
+
 /**
 // dataList is expected in format of
 // [

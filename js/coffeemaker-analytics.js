@@ -116,8 +116,8 @@ function analyzeCoffeeMaker(eventSource) {
 
                 // get working time
                 var workingTime = 0;
-                var timeStartPreparing = order.get("timestamp_order_status_2");
-                var timeCoffeeReady = order.get("timestamp_order_status_3");
+                var timeStartPreparing = toSafeTimestamp(order.get("timestamp_order_status_" + OrderStatus.CoffeePreparing));
+                var timeCoffeeReady = toSafeTimestamp(order.get("timestamp_order_status_" + OrderStatus.CoffeeReady));
                 if(isAvailable(timeCoffeeReady) && isAvailable(timeStartPreparing)) {
                     workingTime = timeCoffeeReady - timeStartPreparing;
                 }
@@ -175,49 +175,50 @@ function aggregateCoffeeMakerPerformanceAndDisplay(rawDataList, coffeeMakerMap) 
         return a["aggregationResult"]["item_quantity_sum"] < b["aggregationResult"]["item_quantity_sum"];
     });
 
-    // calculate the avergate working time of each coffee maker, and add stars
-    var minWorkingTimeAvg = 99999999999;
-    var minWorkingTimeAvgIndex = -1;
-    var maxItemQuantitySum = 0;
-    var maxItemQuantitySumIndex = -1;
-    var maxItemSubTotalSum = 0;
-    var maxItemSubTotalSumIndex = -1;
-
+    // calculate the avergate working time of each coffee maker
     for (var i = 0; i < aggregationResultList.length; i++) {
         var aggregationResult = aggregationResultList[i]["aggregationResult"];
-
-        var itemSubTotalSum = aggregationResult["item_sub_total_sum"];
-        if(maxItemSubTotalSum < itemSubTotalSum) {
-            maxItemSubTotalSum = itemSubTotalSum;
-            maxItemSubTotalSumIndex = i;
-        }
-
         var itemQuantitySum = aggregationResult["item_quantity_sum"];
-        if(maxItemQuantitySum < itemQuantitySum) {
-            maxItemQuantitySum = itemQuantitySum;
-            maxItemQuantitySumIndex = i;
-        }
-
-        // calculate the average working time
         var workingTimeSum = aggregationResult["working_time_sum"];
+
+        // calculate the average working time in second
         var workingTimeAvg = (workingTimeSum / itemQuantitySum) / 1000;
         workingTimeAvg = Number(workingTimeAvg.toFixed(0));
         aggregationResult["working_time_avg"] = workingTimeAvg;
-        if(minWorkingTimeAvg > workingTimeAvg) {
-            minWorkingTimeAvg = workingTimeAvg
-            minWorkingTimeAvgIndex = i;
-        }
     }
 
-    aggregationResultList[minWorkingTimeAvgIndex]["aggregationResult"]["working_time_avg"] = "⭐️&nbsp;" + minWorkingTimeAvg;
-    aggregationResultList[maxItemQuantitySumIndex]["aggregationResult"]["item_quantity_sum"] = "⭐️&nbsp;" + maxItemQuantitySum;
-    aggregationResultList[maxItemSubTotalSumIndex]["aggregationResult"]["item_sub_total_sum"] = "⭐️&nbsp;" + maxItemSubTotalSum;
+    // convert aggregation result list for display
+    var minWorkingTimeAvgIndex = aggregationResultList.indexOfMinValue(function(e) {
+        return e["aggregationResult"]["working_time_avg"];
+    });
+    var maxItemQuantitySumIndex = aggregationResultList.indexOfMaxValue(function(e) {
+        return e["aggregationResult"]["item_quantity_sum"];
+    });
+    var maxItemSubTotalSumIndex = aggregationResultList.indexOfMaxValue(function(e) {
+        return e["aggregationResult"]["item_sub_total_sum"];
+    });
+
+    var aggregationResultForDisplay = convertAggregationResultForDisplay(aggregationResultList, function(key, value, groupID, index) {
+        if(minWorkingTimeAvgIndex.indexOfElement(index) > -1 && key == "working_time_avg") {
+            return "⭐️&nbsp;" + value;
+        }
+
+        if(maxItemQuantitySumIndex.indexOfElement(index) > -1 && key == "item_quantity_sum") {
+            return "⭐️&nbsp;" + value;
+        }
+
+        if(maxItemSubTotalSumIndex.indexOfElement(index) > -1 && key == "item_sub_total_sum") {
+            return "⭐️&nbsp;" + value;
+        }
+
+        return value;
+    });
 
     // display aggregation result on page
     var innerHTML = "";
-    for (var i = 0; i < aggregationResultList.length; i++) {
-        var coffeeMakerID = aggregationResultList[i]["groupID"];
-        var aggregationResult = aggregationResultList[i]["aggregationResult"];
+    for (var i = 0; i < aggregationResultForDisplay.length; i++) {
+        var coffeeMakerID = aggregationResultForDisplay[i]["groupID"];
+        var aggregationResult = aggregationResultForDisplay[i]["aggregationResultForDisplay"];
 
         innerHTML += "<tr><td>" + coffeeMakerMap[coffeeMakerID]["coffee_maker"]["name"]
                     + "</td><td>" + coffeeMakerMap[coffeeMakerID]["shop"]["name"]

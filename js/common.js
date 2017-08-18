@@ -146,7 +146,7 @@ Boolean.prototype.format = function(trueDisplay, falseDisplay) {
     return falseDisplay;
 }
 
-Array.prototype.indexOf = function(obj, getFieldValue) {
+Array.prototype.indexOfElement = function(obj, getFieldValue) {
     if(isUnavailable(obj)) {
         return -1;
     }

@@ -89,12 +89,10 @@ function analyzeDriver(eventSource) {
             var pickupTime = 0;
             if(isAvailable(timestampInDelivery) && isAvailable(timestampOrderAccepted)) {
                 pickupTime = timestampInDelivery - timestampOrderAccepted;
-                pickupTime = Number((pickupTime/(1000*60)).toFixed(0));
             }
             var deliveryTime = 0;
             if(isAvailable(timestampOrderCompleted) && isAvailable(timestampInDelivery)) {
                 deliveryTime = timestampOrderCompleted - timestampInDelivery;
-                deliveryTime = Number((deliveryTime/(1000*60)).toFixed(0));
             }
 
             var rawData = {
@@ -141,6 +139,16 @@ function aggregateDriverPerformanceAndDisplay(rawDataList) {
     // aggregate
     var aggregationResultList = aggregate(rawDataList, getGroupID, aggregateFieldAndFormula);
 
+    // convert time unit to minute
+    var convertToMinutes = function(millionSeconds) {
+        return Number((millionSeconds/(1000*60)).toFixed(0));
+    };
+    for (var i = 0; i < aggregationResultList.length; i++) {
+        var aggregationResult = aggregationResultList[i]["aggregationResult"];
+        aggregationResult["pickup_time_avg"] = convertToMinutes(aggregationResult["pickup_time_avg"]);
+        aggregationResult["delivery_time_avg"] = convertToMinutes(aggregationResult["delivery_time_avg"]);
+    }
+
     // convert aggregation result list for display
     var maxOrderIdCountIndex = aggregationResultList.indexOfMaxValue(function(e) {
         return e["aggregationResult"]["order_id_count"];
@@ -159,19 +167,19 @@ function aggregateDriverPerformanceAndDisplay(rawDataList) {
     });
 
     var aggregationResultForDisplay = convertAggregationResultForDisplay(aggregationResultList, function(key, value, groupID, index) {
-        if(maxOrderIdCountIndex.indexOf(index) > -1 && key == "order_id_count") {
+        if(maxOrderIdCountIndex.indexOfElement(index) > -1 && key == "order_id_count") {
             return "⭐️&nbsp;" + value;
         }
 
-        if(maxItemQuantitySumIndex.indexOf(index) > -1 && key == "item_quantity_sum") {
+        if(maxItemQuantitySumIndex.indexOfElement(index) > -1 && key == "item_quantity_sum") {
             return "⭐️&nbsp;" + value;
         }
 
-        if(minPickupTimeAvgIndex.indexOf(index) > -1 && key == "pickup_time_avg") {
+        if(minPickupTimeAvgIndex.indexOfElement(index) > -1 && key == "pickup_time_avg") {
             return "⭐️&nbsp;" + value;
         }
 
-        if(minDeliveryTimeAvgIndex.indexOf(index) > -1 && key == "delivery_time_avg") {
+        if(minDeliveryTimeAvgIndex.indexOfElement(index) > -1 && key == "delivery_time_avg") {
             return "⭐️&nbsp;" + value;
         }
 

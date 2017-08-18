@@ -211,7 +211,7 @@ function aggregateProductAndDisplay(chartElementId, getCategoryID, rawDataList, 
         dataListForDisplay.push({
             label: product + " Quantity",
             data: itemQuantityList,
-            backgroundColor: color,
+            backgroundColor: setOpacity(color, 0.5),
             stack: "stack quantity"
         });
         dataListForDisplay.push({
