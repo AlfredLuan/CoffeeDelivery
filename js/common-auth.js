@@ -198,6 +198,7 @@ function loadCurrentUserInfo(onSuccess, onFailure) {
         failure: function(theUser, errorString) {
             // Handle the error.
             console.log(errorString);
+            logout();
             onFailure();
         }
     })
@@ -240,7 +241,9 @@ function getAvailableLinksForUserRole(role) {
             break;
         case UserRole.ProductManager:
             links = [
+                "link_shoplist",
                 "link_producttemplatelist",
+                "link_analytics",
                 "link_productanalytics",
                 "link_myprofile",
                 "link_displayname",

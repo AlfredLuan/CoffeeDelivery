@@ -14,11 +14,28 @@
 /*
 * for integration testing
 */
-var KII_APP_ID = "2c1pzz9jg5dd";
+// var KII_APP_ID = "2c1pzz9jg5dd";
+//
+// var KII_APP_KEY = "5863d5a986e34b279b820fbf0cad2de8";
+//
+// var KII_SITE = KiiSite.JP;
 
-var KII_APP_KEY = "5863d5a986e34b279b820fbf0cad2de8";
+/*
+* for demo env
+*/
+var KII_APP_ID = "gn3224ksg9o6";
+
+var KII_APP_KEY = "f5f89328320a4dd095a76be62bd6a2b6";
 
 var KII_SITE = KiiSite.JP;
+
+// this is the fixed current location for testing or demo purpose
+// if need to use the real current location, please set it as undefined
+// var FIXED_CURRENT_LOCATION = undefined;
+var FIXED_CURRENT_LOCATION = {
+    lat: 13.7421592,
+    lng: 100.5955492
+};
 
 Kii.initializeWithSite(KII_APP_ID, KII_APP_KEY, KII_SITE);
 

@@ -112,6 +112,12 @@ function showMyLocation(map, infoWindow, onSuccess, onFailure) {
         onSuccess(location);
     };
 
+    if(isAvailable(FIXED_CURRENT_LOCATION)) {
+        console.log("use fixed current location", FIXED_CURRENT_LOCATION);
+        onLocationAvailable(FIXED_CURRENT_LOCATION);
+        return;
+    }
+
     // get current location and display
     var currentLocation = getCurrentLocationFromLocal();
 

@@ -543,7 +543,7 @@ function loadOwnedProductTemplateList(kiiUser, onSuccess, onFailure) {
 
             // sort basic info list
             productList.sort(function(a, b) {
-                return a.getCreated() < b.getCreated();
+                return a.get("name") > b.get("name");
             })
 
             // callback
