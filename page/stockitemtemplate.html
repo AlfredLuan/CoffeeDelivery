@@ -1,0 +1,23 @@
+
+<tr id="{StockItemID}_display">
+    <td>{Name}</td>
+    <td>{Price}</td>
+    <td>{Description}</td>
+    <td>{OnStock}</td>
+    <td>
+        <a href="#" onclick="changeOnStockStatus(this, '{StockItemID}', {OnStockNew})">{ChangeOnStock}</a> &nbsp;/&nbsp;
+        <a href="#" onclick="changeStockItemDisplayMode('{StockItemID}', 'edit')">{Edit}</a>
+    </td>
+</tr>
+<tr id="{StockItemID}_edit" style="display:none">
+    <td><input type="text" class="form-control" id="{StockItemID}_name" value="{Name}" /></td>
+    <td><input type="number" class="form-control" id="{StockItemID}_price" value="{Price}" /></td>
+    <td><textarea class="form-control" rows="1" id="{StockItemID}_description">{Description}</textarea></td>
+    <td>{OnStock}</td>
+    <td>
+        <div style="padding-top:7px">
+            <a href="#" onclick="updateStockItem(this, '{StockItemID}')">{Save}</a> &nbsp;&nbsp;
+            <a href="#" onclick="changeStockItemDisplayMode('{StockItemID}', 'display')">{Cancel}</a>
+        </div>
+    </td>
+</tr>

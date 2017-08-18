@@ -7,9 +7,15 @@
                 <span>{Name}</span> <span>{Role}</span>
             </a>
 
-            <!-- save -->
-            <a class="btn btn-default pull-right" href="{ShopDetailsLink}" target="_blank">
+            <!-- show shop and staffs mapping -->
+            <a style="display:{Details_display}; margin-left:3px; margin-right:3px"
+                class="btn btn-default pull-right" href="{ShopDetailsLink}" target="_blank">
                 {Details}</a>
+
+            <!-- show stock items -->
+            <a style="display:{ShowStockItemList_display}; margin-left:3px; margin-right:3px"
+                class="btn btn-default pull-right" href="{StockItemListLink}" target="_blank">
+                {ShowStockItemList}</a>
         </h4>
     </div>
     <div id="collapsePanel-{CollapsePanelID}" class="panel-collapse collapse in">

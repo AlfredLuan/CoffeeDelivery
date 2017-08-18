@@ -212,6 +212,7 @@ function getAvailableLinksForUserRole(role) {
     switch (role) {
         case UserRole.CoffeeMaker:
             links = [
+                "link_shoplist",
                 "link_orderlist",
                 "link_orderhistorylist",
                 "link_drivermap",
@@ -336,10 +337,13 @@ function checkLoginStatus(isBackToHomePage) {
             var link = "link_" + getHtmlName();
             console.log("current link", link);
             var currentLink = document.getElementById(link);
-            currentLink.style += ";text-decoration:underline";
+            if(isAvailable(currentLink)) {
+                currentLink.style += ";text-decoration:underline";
 
-            if(link.lastIndexOf("analytics") > 0) {
-                document.getElementById("link_analytics").style += ";text-decoration:underline";
+                // if it's analytics page (like "link_xxxxanalytics"), mark underline to "link_analytics" too
+                if(link.lastIndexOf("analytics") > 0) {
+                    document.getElementById("link_analytics").style += ";text-decoration:underline";
+                }
             }
 
             clearErrorMessage("navbar_error_message");

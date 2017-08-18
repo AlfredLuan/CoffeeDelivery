@@ -552,3 +552,30 @@ function loadOwnedProductTemplateList(kiiUser, onSuccess, onFailure) {
         }, onFailure);
     }, onFailure);
 }
+
+function saveStockItemInfo(stockItemID, stockItemInfo, onSuccess, onFailure) {
+    var bucket = Kii.bucketWithName(Bucket.AppScope.ProductList);
+    saveObjectByID(bucket, stockItemID, stockItemInfo, onSuccess, onFailure);
+}
+
+function saveObjectByID(bucket, objectID, objectInfo, onSuccess, onFailure) {
+
+    onSuccess = toSafeCallback(onSuccess);
+    onFailure = toSafeCallback(onFailure);
+
+    if(isUnavailable(bucket) || isUnavailable(objectID) || isUnavailable(objectInfo)) {
+        onFailure();
+    }
+
+    var object = bucket.createObjectWithID(objectID);
+
+    for (var key in objectInfo) {
+        object.set(key, objectInfo[key]);
+    }
+
+    object.save({
+      success: onSuccess,
+      failure: onFailure
+    });
+
+}

@@ -67,6 +67,13 @@ function loadSelectableUserList(kiiUser, onSuccess, onFailure) {
 
     var bucket = Kii.bucketWithName(Bucket.AppScope.UserList);
     loadAllObjects(bucket, clause, function(userList) {
+
+        if(isAvailable(userList)) {
+            userList.sort(function(a, b){
+                return a.get("display_name") > b.get("display_name");
+            });
+        }
+
         allUserIDList = [];
         for (var i = 0; i < userList.length; i++) {
             allUserIDList.push(userList[i].get("user_id"));

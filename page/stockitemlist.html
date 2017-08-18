@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/jquery-3.1.0.min.js" ></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../js/KiiSDK.min.js"></script>
+    <script type="text/javascript" src="../js/mqttws31.js"></script>
+    <script type="text/javascript" src="../js/common.js" ></script>
+    <script type="text/javascript" src="../js/common-auth.js" ></script>
+    <script type="text/javascript" src="../js/common-business.js" ></script>
+    <script type="text/javascript" src="../js/common-list-template.js" ></script>
+    <script type="text/javascript" src="../js/common-translate.js" ></script>
+    <script type="text/javascript" src="../js/stock-item-list.js" ></script>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/customise.css">
+
+    <link rel="shortcut icon" href="../img/icon.png" type="image/x-icon"/>
+    <title>{title}</title>
+
+</head>
+<body>
+
+    <!--nav bar-->
+    <script type="text/javascript">
+        var promise = loadTopNavBar(true);
+    </script>
+
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+
+            <div class="panel-group" id="accordion">
+
+                <!--display product list-->
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion"
+                               href="#collapseProductList">
+                                <span>{StockItemList}</span> - <span id="shop_name"></span>
+
+                                <!--error message-->
+                                <span style="margin-left:20px; color:red; display:none" id="stock_item_list_list_error_message">
+                                    Errormessagesss</span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseStockItemList" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <div class="center-block" style="width:80%">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:15%">{NameLabel}</th>
+                                            <!-- <th>{IceLabel}</th>
+                                            <th>{MilkLabel}</th>
+                                            <th>{SugarLabel}</th> -->
+                                            <th style="width:10%" >{PriceLabel}</th>
+                                            <th style="width:40%" >{DescriptionLabel}</th>
+                                            <th style="width:10%" >{OnStockLabel}</th>
+                                            <th style="width:25%">{OperateLabel}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="stock_item_list">
+                                        <!--<tr><td>123</td><td>some product</td></tr>-->
+                                        <!--<tr><td>124</td><td>some product</td></tr>-->
+                                        <!--<tr><td>125</td><td>some product</td></tr>-->
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+    <!-- script -->
+    <script type="text/javascript">
+
+        promise.then(function(){
+            translateHtmlPage();
+            loadStockItemListPage();
+        });
+
+    </script>
+
+</body>
+</html>

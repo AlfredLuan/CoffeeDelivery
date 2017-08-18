@@ -4,7 +4,15 @@ function loadShopListPage() {
     // setElementValue("new_shop_service_time_start", "09:00");
     // setElementValue("new_shop_service_time_end", "18:00");
 
-    loadOwnedShopListForDisplay();
+    var kiiUser = KiiUser.getCurrentUser();
+    var role = kiiUser.get(UserAttribute.Role);
+
+    // only show new shop button to operator
+    if(role == UserRole.Operator) {
+        showElement("link_new_shop");
+    }
+
+    loadShopListForDisplay();
 }
 
 var shopMarker = null;
@@ -149,21 +157,22 @@ function createShop(eventSoure) {
 
 }
 
-function changeShopDisplayMode(productID, mode) {
-
-    if (mode == 'display') {
-        showElement(productID + "_display");
-        hideElement(productID + "_edit");
-    } else if (mode == 'edit') {
-        hideElement(productID + "_display");
-        showElement(productID + "_edit");
-    }
-
-}
-
-function parseOwnedShopForDisplay(data, displayTemplate, htmlName) {
+function parseShopForDisplay(data, displayTemplate, htmlName) {
 
     var htmlContent = displayTemplate;
+
+    var kiiUser = KiiUser.getCurrentUser();
+    var userRole = kiiUser.get(UserAttribute.Role);
+    if(userRole == UserRole.Operator) {
+        htmlContent = htmlContent.replaceAll("{Details_display}", "display");
+        htmlContent = htmlContent.replaceAll("{ShowStockItemList_display}", "display");
+    } else if(userRole == UserRole.CoffeeMaker) {
+        htmlContent = htmlContent.replaceAll("{Details_display}", "none");
+        htmlContent = htmlContent.replaceAll("{ShowStockItemList_display}", "display");
+    } else {
+        htmlContent = htmlContent.replaceAll("{Details_display}", "none");
+        htmlContent = htmlContent.replaceAll("{ShowStockItemList_display}", "none");
+    }
 
     htmlContent = htmlContent.replaceAll("{CollapsePanelID}", data.get("id"));
 
@@ -204,13 +213,17 @@ function parseOwnedShopForDisplay(data, displayTemplate, htmlName) {
     htmlContent = htmlContent.replaceAll("{ShopDetailsLink}", shopDetailsLink);
     htmlContent = replaceTemplateContent(htmlContent, "{Details}", null, htmlName);
 
+    var stockItemListLink = "/page/stockitemlist.html?shop_id=" + data.get("id");
+    htmlContent = htmlContent.replaceAll("{StockItemListLink}", stockItemListLink);
+    htmlContent = replaceTemplateContent(htmlContent, "{ShowStockItemList}", null, htmlName);
+
     return "<tr>" + htmlContent + "<br/></tr>";
 };
 
-function loadOwnedShopList(kiiUser, onSuccess, onFailure) {
+function loadShopList(kiiUser, onSuccess, onFailure) {
 
-    // load all owned groups
-    loadOwnedGroups(kiiUser, function(groupList) {
+    // load all groups which current user is member of
+    loadGroups(kiiUser, function(groupList) {
 
         // load basic info list of all groups
         loadShopBasicInfoList(groupList, function(basicInfoList) {
@@ -226,14 +239,14 @@ function loadOwnedShopList(kiiUser, onSuccess, onFailure) {
     }, onFailure);
 }
 
-function loadOwnedShopListForDisplay() {
+function loadShopListForDisplay() {
 
     var currentUser = KiiUser.getCurrentUser();
 
     loadListForDisplay("shop_list", "/page/shoptemplate.html", function(onSuccess, onFailure) {
-        loadOwnedShopList(currentUser, onSuccess, onFailure);
+        loadShopList(currentUser, onSuccess, onFailure);
     }, function(data, displayTemplate, htmlName) {
-        return parseOwnedShopForDisplay(data, displayTemplate, htmlName);
+        return parseShopForDisplay(data, displayTemplate, htmlName);
     });
 
 }

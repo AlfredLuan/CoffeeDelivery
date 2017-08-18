@@ -203,6 +203,7 @@
     },
     "shoplist": {
         "ShopList": "Shop List",
+        "Create": "Create",
         "ShopRole-head": "(Head)",
         "NameLabel": "Name",
         "DeliveryFeeLabel": "Delivery Fee",
@@ -210,8 +211,23 @@
         "ServiceTimeEndLabel": "Service Time End",
         "AddressLabel": "Address",
         "MapIntroductionLabel": "* Right click mouse in below map to choose address",
-        "Details": "Details",
+        "Details": "Staffs",
+        "ShowStockItemList": "Stock Items",
         "CreateShop": "New Shop",
         "error-Failed-to-create-shop": "Failed to create shop"
+    },
+    "stockitemlist": {
+        "StockItemList": "Stock Item List",
+        "NameLabel": "Name",
+        "PriceLabel": "Price",
+        "DescriptionLabel": "Description",
+        "OperateLabel": "Operate",
+        "OnStockLabel": "On Stock",
+        "StockOn": "Stock On",
+        "StockOff": "Stock Off",
+        "Edit": "Edit",
+        "Save": "Save",
+        "Cancel": "Cancel",
+        "error-Please-join-in-head-shop": "Please join in head shop first"
     }
 }
