@@ -13,6 +13,7 @@
         "ShopAnalytics": "Shop Analytics",
         "ProductAnalytics": "Product Analytics",
         "CoffeeMakerAnalytics": "CoffeeMaker Analytics",
+        "DriverAnalytics": "Driver Analytics",
         "MyProfile": "My Profile",
         "placeholder-name": "user name",
         "placeholder-password": "password",
@@ -51,6 +52,19 @@
         "CoffeeCupsLabel": "Cups",
         "AverageTimeLabel": "Average Time",
         "CoffeeSubTotalLabel": "Income",
+        "error-Please-keep-date-range-within-one-month": "Please keep date range within 1 month"
+    },
+    "driveranalytics": {
+        "SearchConditionLabel": "Target Orders",
+        "StartDateLabel": "Start Date",
+        "EndDateLabel": "End Date",
+        "DriverAnalyticsLabel": "Driver Performance",
+        "AggregateLabel": "Analyze",
+        "DriverNameLabel": "Name",
+        "OrderDeliveredLabel": "Order Delivered",
+        "ItemDeliveredLabel": "Item Delivered",
+        "AverageDeliveryTimeLabel": "Avg Delivery Time",
+        "AveragePickupTimeLabel": "Avg Pickup Time",
         "error-Please-keep-date-range-within-one-month": "Please keep date range within 1 month"
     },
     "driverlist": {

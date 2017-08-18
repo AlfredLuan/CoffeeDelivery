@@ -4,8 +4,9 @@
         <h4 class="panel-title">
             <a data-toggle="collapse"
                href="#collapsePanel-{CollapsePanelID}">
-                Order ID: {OrderID} | {OrderStatus}
+                Order ID: {OrderID}
             </a>
+            <span style="background-color:#99ccff;margin-left:5px;padding:4px;border-radius:3px">{OrderStatus}</span>
 
             <!-- mark start making -->
             <a class="btn btn-default pull-right" style="margin-left:5px; display:{display-order-status-2}" onclick="updateOrderStatus(this, '{OrderID}', 2)">{UpdateOrderStatus1}</a>
