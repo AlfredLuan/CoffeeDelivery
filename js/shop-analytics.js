@@ -337,22 +337,23 @@ function aggregateShopComment(startDate, endDate, expectedShopIDList, onComplete
     console.log("endDate", endDate);
     console.log("expectedShopIDList", expectedShopIDList);
 
-    var bucket = Kii.bucketWithName(Bucket.AppScope.ShopComment);
+    var bucket = Kii.bucketWithName(Bucket.AppScope.CommentList);
 
     var clause1 = KiiClause.inClause("shop.id", expectedShopIDList);
     var clause2 = KiiClause.greaterThanOrEqual("_created", startDate.getTime());
     var clause3 = KiiClause.lessThanOrEqual("_created", endDate.getTime());
     var clause = KiiClause.and(clause1, clause2, clause3);
 
-    loadAllObjects(bucket, clause, function(shopCommentList) {
+    loadAllObjects(bucket, clause, function(commentList) {
 
-        console.log("shopCommentList", shopCommentList);
+        console.log("commentList", commentList);
 
         // prepare raw data for aggregation
-        var rawDataList = convertArray(shopCommentList, function(e){
+        var rawDataList = convertArray(commentList, function(e){
+            var shop = e.get("shop");
             var rawData = {
-                shop_id : e.get("shop")["id"],
-                star: e.get("star")
+                shop_id : shop["id"],
+                shop_star: shop["star"]
             };
             return rawData;
         });
@@ -362,7 +363,7 @@ function aggregateShopComment(startDate, endDate, expectedShopIDList, onComplete
         };
 
         var aggregateFieldAndFormula = [
-            ["star", "avg"]
+            ["shop_star", "avg"]
         ];
 
         // aggregate
@@ -371,7 +372,7 @@ function aggregateShopComment(startDate, endDate, expectedShopIDList, onComplete
         // format aggregation result for return
         var shopCommentMap = {};
         convertArray(aggregationResult, function(e){
-            var starAvg = e["aggregationResult"]["star_avg"];
+            var starAvg = e["aggregationResult"]["shop_star_avg"];
             starAvg =  Number(starAvg.toFixed(0));
             shopCommentMap[e["groupID"]] = starAvg;
             return e;
