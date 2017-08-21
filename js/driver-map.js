@@ -5,6 +5,8 @@ function showDriverMap(map, infoWindow) {
 
     loadMap(map, infoWindow, function(myPosition) {
 
+        showShopLocation(myPosition, map);
+
         // flush drivers' location by certain interval
         setInterval(function() {
 
@@ -48,7 +50,7 @@ function showDriverLocation(myPosition, map, markerMapOfDrivers) {
                 cleanMarkerMap(markerMapOfDrivers);
 
                 for (var i = 0; i < driverLocationList.length; i++) {
-                    
+
                     var driverLocation = driverLocationList[i];
                     var driverID = driverLocation.get("state").driver_id;
                     var location = driverLocation.get("state");
@@ -192,6 +194,66 @@ function loadApprovedDriverMap(driverIDList, onSuccess, onFailure) {
         }
 
         onSuccess(resultSet);
+    }, onFailure);
+
+}
+
+function showShopLocation(myPosition, map) {
+
+    // load shop basic info list
+    loadShopLocationList(myPosition, map, function(shopBasicInfoList) {
+
+        console.log("shopBasicInfoList", shopBasicInfoList);
+
+        for (var i = 0; i < shopBasicInfoList.length; i++) {
+
+            var shopBasicInfo = shopBasicInfoList[i];
+            var place = shopBasicInfo.get("place");
+            if(isUnavailable(place)) {
+                continue;
+            }
+
+            var location = place["geometry"]["location"];
+
+            console.log("shop location", location);
+
+            // draw marker in google map
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(location["lat"], location["lng"]),
+                map: map,
+                icon: "/img/Retail-shop-icon.png"
+            });
+        }
+
+    }, function() {
+        console.log("failed to load shop location list, retry");
+
+        setTimeout(function() {
+            showShopLocation(myPosition, map);
+        }, 3000);
+
+    });
+
+}
+
+
+function loadShopLocationList(myPosition, map, onSuccess, onFailure) {
+
+    var bounds = map.getBounds();
+    if(isUnavailable(bounds)) {
+        console.log("map bounds not available yet");
+        onFailure();
+        return;
+    }
+
+    var kiiUser = KiiUser.getCurrentUser();
+
+    // load shops
+    loadGroups(kiiUser, function(shopList) {
+
+        // load basic info list of shops
+        loadShopBasicInfoList(shopList, onSuccess, onFailure);
+
     }, onFailure);
 
 }
