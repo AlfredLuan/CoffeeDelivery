@@ -1,0 +1,29 @@
+{
+	"vendorThingID": "demosensor1",
+	"password": "1qaz2wsx",
+	"thingType": "sensor",
+	"dataGroupingInterval" : "1_MINUTE",
+
+	"randomStates" : true,
+	"pilotInterval": 5000,
+
+	"schema": {
+        "lat": {
+            "type": "float",
+            "controllable": true,
+            "min": 13.731737249559561,
+            "max": 13.752580686855016
+        },
+        "lon": {
+            "type": "float",
+            "controllable": true,
+            "min": 100.57113036912847,
+            "max": 100.61996803087163
+        },
+        "driver_id": {
+            "type": "string",
+            "controllable": true,
+            "value": "7b3f20b00022-12b8-7e11-3268-012655cd"
+        }
+	}
+}

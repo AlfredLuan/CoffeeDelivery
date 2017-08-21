@@ -1,0 +1,21 @@
+{
+  "name": "kii-thing",
+  "version": "1.0.0",
+  "description": "standalone thing demo in nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "iot"
+  ],
+  "author": "leon xu",
+  "license": "ISC",
+  "dependencies": {
+    "log4js": "^1.1.1",
+    "lowdb": "^0.16.2",
+    "mqtt": "^2.8.2",
+    "q": "^1.5.0",
+    "request": "^2.81.0"
+  }
+}
