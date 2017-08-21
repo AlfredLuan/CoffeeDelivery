@@ -51,9 +51,8 @@ function analyzeDriver(eventSource) {
     // - between the time range of start time and end time
     // - in completed status
     var clause1 = KiiClause.equals("order_status", OrderStatus.OrderCompleted);
-    var clause2 = KiiClause.greaterThanOrEqual("timestamp_order_status_0", startDate);
-    var clause3 = KiiClause.lessThanOrEqual("timestamp_order_status_0", endDate);
-    var clause = KiiClause.and(clause1, clause2, clause3);
+    var clause2 = KiiClause.inDateRange("timestamp_order_status_" + OrderStatus.OrderPlaced, startDate, endDate);
+    var clause = KiiClause.and(clause1, clause2);
 
     loadAllObjects(bucket, clause, function(orderList) {
 
@@ -122,6 +121,12 @@ function analyzeDriver(eventSource) {
 function aggregateDriverPerformanceAndDisplay(rawDataList) {
 
     if(rawDataList.length == 0) {
+        // clean aggregation result in page
+        setInnerHtml("driver_list", "");
+        for (var i = 0; i < DriverAnalyticsSortFieldList.length; i++) {
+            var sortField = DriverAnalyticsSortFieldList[i];
+            setInnerHtml(sortField + "_sort_icon", "");
+        }
         return;
     }
 

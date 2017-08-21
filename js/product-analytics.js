@@ -61,9 +61,8 @@ function analyzeProduct(eventSource) {
         // - in completed status
         var clause1 = KiiClause.inClause("shop.id", shopIDList);
         var clause2 = KiiClause.equals("order_status", OrderStatus.OrderCompleted);
-        var clause3 = KiiClause.greaterThanOrEqual("timestamp_order_status_0", startDate);
-        var clause4 = KiiClause.lessThanOrEqual("timestamp_order_status_0", endDate);
-        var clause = KiiClause.and(clause1, clause2, clause3, clause4);
+        var clause3 = KiiClause.inDateRange("timestamp_order_status_" + OrderStatus.OrderPlaced, startDate, endDate);
+        var clause = KiiClause.and(clause1, clause2, clause3);
 
         loadAllObjects(bucket, clause, function(orderList) {
 
@@ -76,7 +75,7 @@ function analyzeProduct(eventSource) {
                 var order = orderList[i];
 
                 // get date info
-                var dateString = new Date(order.get("timestamp_order_status_0")).format("yyyy-MM-dd");
+                var dateString = new Date(order.get("timestamp_order_status_" + OrderStatus.OrderPlaced)).format("yyyy-MM-dd");
 
                 // get shop info
                 var shop = order.get("shop");

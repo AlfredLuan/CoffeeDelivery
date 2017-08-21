@@ -202,6 +202,29 @@ Array.prototype.indexOfMinValue = function(getFieldValue, defaultMinValue) {
     return minValueIndex;
 }
 
+KiiClause.inDateRange = function(field, startDate, endDate) {
+
+    var seachStartDate = new Date(startDate);
+    seachStartDate.setHours(0);
+    seachStartDate.setMinutes(0);
+    seachStartDate.setSeconds(0);
+    seachStartDate.setMilliseconds(0);
+
+    var searchEndDate = new Date(endDate);
+    searchEndDate.setDate(endDate.getDate() + 1);
+    searchEndDate.setHours(0);
+    searchEndDate.setMinutes(0);
+    searchEndDate.setSeconds(0);
+    searchEndDate.setMilliseconds(0)
+
+    console.log("Kii Clause inDateRange", seachStartDate, searchEndDate);
+
+    var clause1 = KiiClause.greaterThanOrEqual(field, seachStartDate);
+    var clause2 = KiiClause.lessThan(field, searchEndDate);
+
+    return KiiClause.and(clause1, clause2);
+}
+
 /////////////////////////////////////////////////////
 // http call management
 /////////////////////////////////////////////////////
@@ -575,3 +598,132 @@ function convertArray(object, converter) {
 
     return result;
 }
+
+// function HtmlElementList() {
+//
+//     var _elementId = null;
+//
+//     var _element = null;
+//
+//     var _table = null;
+//
+//     var _parentElementId = null;
+//
+//     var _elements = [];
+//
+//     var _createFieldElement = null;
+//
+//     var _createValueElement = null;
+//
+//     HtmlElementList = function(elementId, initialData, createFieldElement, createValueElement) {
+//         this._elementId = elementId;
+//         this._element = document.createElement("div");
+//
+//         this._createFieldElement = createFieldElement;
+//         this._createValueElement = createValueElement;
+//
+//         // add table
+//         this._table = document.createElement("table");
+//         this._element.appendChild(this._table);
+//
+//         // add button
+//         var button = document.createElement("button");
+//         button.textContent = " + ";
+//         this._element.appendChild(button);
+//         button.onclick = "addElement()";
+//
+//         // fill in initial data
+//         if(isAvailable(initialData)) {
+//             for (var i = 0; i < initialData.length; i++) {
+//                 this.addElement(initialData[i]);
+//             }
+//         }
+//     }
+//
+//     function attach(parentElementId) {
+//         this._parentElementId = parentElementId;
+//         document.getElementById(parentElementId).appendChild(this._element);
+//     }
+//
+//     function getTrId(index) {
+//         return this._elementId + "_" + index;
+//     }
+//
+//     // function getFieldElementId(index) {
+//     //     return this._elementId + "_field_" + index;
+//     // }
+//     //
+//     // function getValueElementId(index) {
+//     //     return this._elementId + "_value_" + index;
+//     // }
+//
+//     function addElement(data) {
+//
+//         var index = this._elements.length;
+//
+//         var fieldElement = this._createFieldElement();
+//         var valueElement = this._createValueElement();
+//
+//         if(isAvailable(data)) {
+//             fieldElement.value = data["field"];
+//             valueElement.value = data["value"];
+//         }
+//
+//         // add element to _elements
+//         this._elements.push({
+//             "field": fieldElement,
+//             "value": valueElement
+//         })
+//
+//         // add element to parent element
+//         var tr = document.createElement("tr");
+//         tr.id = this.getTrId(index);
+//         var fieldTd = document.createElement("td");
+//         var valueTd = document.createElement("td");
+//         var buttonTd = document.createElement("td");
+//         var removeButton = document.createElement("button");
+//         removeButton.textContent = " - ";
+//         removeButton.onclick = "removeElement(" + index + ")";
+//
+//         fieldTd.appendChild(fieldElement);
+//         valueTd.appendChild(valueElement);
+//         buttonTd.appendChild(removeButton);
+//         tr.appendChild(fieldTd);
+//         tr.appendChild(valueTd);
+//         tr.appendChild(buttonTd);
+//         this._parentElement.appendChild(td);
+//     }
+//
+//     function removeElement(index) {
+//
+//         // mark element as removed from _elements
+//         this._elements[index]["removed"] = true;
+//
+//         // remove element from parent element
+//         var element = document.getElementById(this.getTrId(index));
+//         this._parentElement.removeChild(element);
+//     }
+//
+//     function getElementValueList() {
+//         var result = [];
+//
+//         for (var i = 0; i < this._elements.length; i++) {
+//             var e = this._elements[i];
+//             if(e["removed"] == true) {
+//                 continue;
+//             }
+//
+//             var fieldElement = e["field"];
+//             var valueElement = e["value"];
+//
+//             result.push({
+//                 "field": fieldElement.value,
+//                 "value": valueElement.value
+//             });
+//         }
+//
+//         return result;
+//     }
+//
+//
+// }
