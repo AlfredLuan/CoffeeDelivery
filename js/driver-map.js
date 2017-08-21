@@ -151,7 +151,7 @@ function loadDriverOrderMap(driverIDList, onSuccess, onFailure) {
         resultSet[driverIDList[i]] = [];
     }
 
-    var clause1 = KiiClause.inClause("driver.user_id", driverIDList);
+    var clause1 = KiiClause.inClause("driver.id", driverIDList);
     var clause2 = KiiClause.greaterThan("order_status", 0);
     var clause3 = KiiClause.lessThan("order_status", 5);
     var clause = KiiClause.and(clause1, clause2, clause3);
@@ -161,7 +161,7 @@ function loadDriverOrderMap(driverIDList, onSuccess, onFailure) {
 
         for (var i = 0; i < orderList.length; i++) {
             var order = orderList[i];
-            resultSet[order.get("driver")["user_id"]].push(order);
+            resultSet[order.get("driver")["id"]].push(order);
         }
 
         onSuccess(resultSet);
