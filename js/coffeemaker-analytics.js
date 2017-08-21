@@ -220,8 +220,15 @@ function aggregateCoffeeMakerPerformanceAndDisplay(rawDataList, coffeeMakerMap) 
         var coffeeMakerID = aggregationResultForDisplay[i]["groupID"];
         var aggregationResult = aggregationResultForDisplay[i]["aggregationResultForDisplay"];
 
-        innerHTML += "<tr><td>" + coffeeMakerMap[coffeeMakerID]["coffee_maker"]["name"]
-                    + "</td><td>" + coffeeMakerMap[coffeeMakerID]["shop"]["name"]
+        var coffeeMaker = coffeeMakerMap[coffeeMakerID]["coffee_maker"];
+        var shop = coffeeMakerMap[coffeeMakerID]["shop"];
+
+        if(isUnavailable(coffeeMaker) || isUnavailable(shop)) {
+            continue;
+        }
+
+        innerHTML += "<tr><td>" + coffeeMaker["name"]
+                    + "</td><td>" + shop["name"]
                     + "</td><td style='text-align:right'>" + aggregationResult["item_quantity_sum"]
                     + "</td><td style='text-align:right'>" + aggregationResult["working_time_avg"]
                     + "</td><td style='text-align:right'>" + aggregationResult["item_sub_total_sum"]
