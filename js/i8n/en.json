@@ -238,6 +238,7 @@
         "PriceLabel": "Price",
         "DescriptionLabel": "Description",
         "OperateLabel": "Operate",
+        "OptionsLabel": "Options",
         "OnStockLabel": "On Stock",
         "StockOn": "Stock On",
         "StockOff": "Stock Off",

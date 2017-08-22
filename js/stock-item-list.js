@@ -65,6 +65,28 @@ function loadStockItemListForDisplay(shopID) {
         loadStockItemList(shopID, onSuccess, onFailure);
     }, function(data, displayTemplate, htmlName) {
         return parseStockItemForDisplay(data, displayTemplate, htmlName);
+    }, function(stockItemList) {
+
+        // add options of each stock item
+        for (var i = 0; i < stockItemList.length; i++) {
+            var stockItem = stockItemList[i];
+            var stockItemID = stockItem.getID();
+            var options = stockItem.get("options");
+
+            console.log("options for stock item", stockItemID, options);
+
+            if(isUnavailable(options)) {
+                options = [];
+            }
+
+            // add options of each stock item for display
+            addOptionsForDisplay(stockItemID, options, stockItemID + "_options_display");
+
+            // add options of each stock item for edit
+            addOptionsForEdit(stockItemID, options, stockItemID + "_options_edit");
+
+        }
+
     });
 
 }
@@ -115,10 +137,13 @@ function updateStockItem(eventSource, stockItemID) {
     var price = getElementValue(stockItemID + "_price");
     var description = getElementValue(stockItemID + "_description");
 
+    var optionList = getOptionListForSave(stockItemID);
+
     var stockItemInfo = {
         "name": name,
         "price": Number(price),
-        "description": description
+        "description": description,
+        "options": optionList
     };
 
     var currentUser = KiiUser.getCurrentUser();
