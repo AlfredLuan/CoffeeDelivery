@@ -27,7 +27,7 @@ function createProductTemplate(eventSource) {
         "monthly_sold": 0,
         "likes": 0,
         "price": Number(price),
-        "options": null, // TODO
+        "options": [],
         "description": description
     };
 

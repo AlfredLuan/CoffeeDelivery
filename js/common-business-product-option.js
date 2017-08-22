@@ -249,7 +249,7 @@ function addOptionValues(optionElement, values) {
         var result = {
             "price_modifier" : {
                 "type": type,
-                "value": value
+                "value": Number(value)
             }
         }
 
