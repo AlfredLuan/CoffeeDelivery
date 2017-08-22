@@ -64,7 +64,7 @@ function loadListForDisplay(listElementID, templateUrl, loadDataList, parseDataF
             setInnerHtml(listElementID, htmlContent, false);
 
             // callback
-            onSuccess();
+            onSuccess(dataList);
 
         }, onFailure);
 

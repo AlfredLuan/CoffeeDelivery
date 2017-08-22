@@ -1,1 +1,4 @@
 .git/
+driver-emulator/states_sensor1.json
+driver-emulator/states_sensor2.json
+driver-emulator/states_sensor3.json

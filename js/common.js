@@ -14,20 +14,20 @@
 /*
 * for integration testing
 */
-// var KII_APP_ID = "2c1pzz9jg5dd";
-//
-// var KII_APP_KEY = "5863d5a986e34b279b820fbf0cad2de8";
-//
-// var KII_SITE = KiiSite.JP;
+var KII_APP_ID = "2c1pzz9jg5dd";
+
+var KII_APP_KEY = "5863d5a986e34b279b820fbf0cad2de8";
+
+var KII_SITE = KiiSite.JP;
 
 /*
 * for demo env
 */
-var KII_APP_ID = "gn3224ksg9o6";
-
-var KII_APP_KEY = "f5f89328320a4dd095a76be62bd6a2b6";
-
-var KII_SITE = KiiSite.JP;
+// var KII_APP_ID = "gn3224ksg9o6";
+//
+// var KII_APP_KEY = "f5f89328320a4dd095a76be62bd6a2b6";
+//
+// var KII_SITE = KiiSite.JP;
 
 // this is the fixed current location for testing or demo purpose
 // if need to use the real current location, please set it as undefined
@@ -572,7 +572,7 @@ function isString(obj) {
 function convertArray(object, converter) {
 
     if(isUnavailable(object)) {
-        return array;
+        return object;
     }
 
     var method = null;
@@ -599,131 +599,163 @@ function convertArray(object, converter) {
     return result;
 }
 
-// function HtmlElementList() {
-//
-//     var _elementId = null;
-//
-//     var _element = null;
-//
-//     var _table = null;
-//
-//     var _parentElementId = null;
-//
-//     var _elements = [];
-//
-//     var _createFieldElement = null;
-//
-//     var _createValueElement = null;
-//
-//     HtmlElementList = function(elementId, initialData, createFieldElement, createValueElement) {
-//         this._elementId = elementId;
-//         this._element = document.createElement("div");
-//
-//         this._createFieldElement = createFieldElement;
-//         this._createValueElement = createValueElement;
-//
-//         // add table
-//         this._table = document.createElement("table");
-//         this._element.appendChild(this._table);
-//
-//         // add button
-//         var button = document.createElement("button");
-//         button.textContent = " + ";
-//         this._element.appendChild(button);
-//         button.onclick = "addElement()";
-//
-//         // fill in initial data
-//         if(isAvailable(initialData)) {
-//             for (var i = 0; i < initialData.length; i++) {
-//                 this.addElement(initialData[i]);
-//             }
-//         }
-//     }
-//
-//     function attach(parentElementId) {
-//         this._parentElementId = parentElementId;
-//         document.getElementById(parentElementId).appendChild(this._element);
-//     }
-//
-//     function getTrId(index) {
-//         return this._elementId + "_" + index;
-//     }
-//
-//     // function getFieldElementId(index) {
-//     //     return this._elementId + "_field_" + index;
-//     // }
-//     //
-//     // function getValueElementId(index) {
-//     //     return this._elementId + "_value_" + index;
-//     // }
-//
-//     function addElement(data) {
-//
-//         var index = this._elements.length;
-//
-//         var fieldElement = this._createFieldElement();
-//         var valueElement = this._createValueElement();
-//
-//         if(isAvailable(data)) {
-//             fieldElement.value = data["field"];
-//             valueElement.value = data["value"];
-//         }
-//
-//         // add element to _elements
-//         this._elements.push({
-//             "field": fieldElement,
-//             "value": valueElement
-//         })
-//
-//         // add element to parent element
-//         var tr = document.createElement("tr");
-//         tr.id = this.getTrId(index);
-//         var fieldTd = document.createElement("td");
-//         var valueTd = document.createElement("td");
-//         var buttonTd = document.createElement("td");
-//         var removeButton = document.createElement("button");
-//         removeButton.textContent = " - ";
-//         removeButton.onclick = "removeElement(" + index + ")";
-//
-//         fieldTd.appendChild(fieldElement);
-//         valueTd.appendChild(valueElement);
-//         buttonTd.appendChild(removeButton);
-//         tr.appendChild(fieldTd);
-//         tr.appendChild(valueTd);
-//         tr.appendChild(buttonTd);
-//         this._parentElement.appendChild(td);
-//     }
-//
-//     function removeElement(index) {
-//
-//         // mark element as removed from _elements
-//         this._elements[index]["removed"] = true;
-//
-//         // remove element from parent element
-//         var element = document.getElementById(this.getTrId(index));
-//         this._parentElement.removeChild(element);
-//     }
-//
-//     function getElementValueList() {
-//         var result = [];
-//
-//         for (var i = 0; i < this._elements.length; i++) {
-//             var e = this._elements[i];
-//             if(e["removed"] == true) {
-//                 continue;
-//             }
-//
-//             var fieldElement = e["field"];
-//             var valueElement = e["value"];
-//
-//             result.push({
-//                 "field": fieldElement.value,
-//                 "value": valueElement.value
-//             });
-//         }
-//
-//         return result;
-//     }
-//
-//
-// }
+var HtmlElementListMap = {};
+
+HtmlElementList = (function() {
+
+    function HtmlElementList(elementId, initialData, createFieldElement, createValueElement, getField, getValue, editable) {
+
+        console.log("HtmlElementList", elementId, initialData);
+
+        HtmlElementListMap[elementId] = this;
+
+        this.getTrId = function(index) {
+            return this._elementId + "_" + index;
+        }
+
+        this.addElement = function(data) {
+
+            var index = this._elements.length;
+
+            console.log("add element for index", index);
+
+            var field = null;
+            var value = null;
+
+            if(isAvailable(data)) {
+                field = data["field"];
+                value = data["value"];
+            }
+
+            var fieldElement = this._createFieldElement(elementId, index, field);
+            var valueElement = this._createValueElement(elementId, index, value);
+
+            // add element to _elements
+            this._elements.push({
+                "field": fieldElement,
+                "value": valueElement
+            })
+
+            // add element to parent element
+            var tr = document.createElement("tr");
+            tr.style = "vertical-align:top;";
+            tr.id = this.getTrId(index);
+            var fieldTd = document.createElement("td");
+            var valueTd = document.createElement("td");
+
+            fieldTd.appendChild(fieldElement);
+            valueTd.appendChild(valueElement);
+            tr.appendChild(fieldTd);
+            tr.appendChild(valueTd);
+            this._table.appendChild(tr);
+
+            // if this is editable, add remove button
+            if(this._editable == true) {
+                var buttonTd = document.createElement("td");
+                var removeButton = document.createElement("button");
+                removeButton.className = "btn btn-default";
+                removeButton.style="margin:3px; margin-left:7px";
+                removeButton.textContent = " - ";
+                removeButton.onclick = function() {
+                    HtmlElementList.removeElementFromInstance(elementId, index);
+                }
+
+                buttonTd.appendChild(removeButton);
+                tr.appendChild(buttonTd);
+            }
+        }
+
+        this.removeElement = function(index) {
+
+            // mark element as removed from _elements
+            this._elements[index]["removed"] = true;
+
+            // remove element from parent element
+            var element = document.getElementById(this.getTrId(index));
+            this._table.removeChild(element);
+        }
+
+        // construct the instance
+        this._editable = true;
+        if(isAvailable(editable)) {
+            this._editable = editable;
+        }
+
+        this._elements = [];
+        this._parentElement = null;
+
+        this._elementId = elementId;
+        this._element = document.createElement("div");
+
+        this._createFieldElement = createFieldElement;
+        this._createValueElement = createValueElement;
+
+        this._getField = getField;
+        this._getValue = getValue;
+
+        // add table
+        this._table = document.createElement("table");
+        this._table.className = "table";
+        this._table.style = "width:100%;margin-bottom:0px";
+        this._element.appendChild(this._table);
+
+        // add button
+        if(this._editable == true) {
+            var addButton = document.createElement("button");
+            addButton.className = "btn btn-default";
+            addButton.style="margin:7px; width:70px";
+            addButton.textContent = " + ";
+            this._element.appendChild(addButton);
+            addButton.onclick = function() {
+                HtmlElementList.addElementToInstance(elementId);
+            };
+        }
+
+        // fill in initial data
+        if(isAvailable(initialData)) {
+            for (var i = 0; i < initialData.length; i++) {
+                this.addElement(initialData[i]);
+            }
+        }
+    }
+
+    HtmlElementList.prototype.attach = function(parentElement) {
+        this._parentElement = parentElement;
+        this._parentElement.appendChild(this._element);
+    }
+
+    HtmlElementList.prototype.getElementFieldAndValueList = function() {
+        var result = [];
+
+        for (var i = 0; i < this._elements.length; i++) {
+            var e = this._elements[i];
+            if(e["removed"] == true) {
+                continue;
+            }
+            result.push({
+                "field": this._getField(this._elementId, i, e["field"]),
+                "value": this._getValue(this._elementId, i, e["value"])
+            });
+        }
+
+        return result;
+    }
+
+    HtmlElementList.addElementToInstance = function(elementId) {
+        console.log("HtmlElementList.addElementToInstance", elementId);
+        var instance = HtmlElementListMap[elementId];
+        if(isAvailable(instance)) {
+            instance.addElement();
+        }
+    }
+
+    HtmlElementList.removeElementFromInstance = function(elementId, index) {
+        console.log("HtmlElementList.removeElementFromInstance", elementId, index);
+        var instance = HtmlElementListMap[elementId];
+        if(isAvailable(instance)) {
+            instance.removeElement(index);
+        }
+    }
+
+    return HtmlElementList;
+})();
