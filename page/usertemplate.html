@@ -1,0 +1,23 @@
+
+<tr id="{UserID}" >
+    <td style="vertical-align:middle;">{DisplayName}</td>
+    <td style="vertical-align:middle;">{Phone}</td>
+    <td style="vertical-align:middle;">{Mail}</td>
+    <td style="vertical-align:middle;">
+        <select class="form-control" id="{UserID}_Role">
+            <option value="coffee_maker" {coffee_maker_role_selected} >Coffee Maker</option>
+            <option value="product_manager" {product_manager_role_selected} >Product Manager</option>
+            <option value="driver" {driver_role_selected} >Driver</option>
+        </select>
+    </td>
+    <td style="vertical-align:middle;">{Online}</td>
+    <td style="vertical-align:middle;">
+        <label class="checkbox-inline">
+            <input type="checkbox" id="{UserID}_Approved" {Checked} />
+            {ApprovedLabel}
+        </label>
+    </td>
+    <td style="vertical-align:middle;">
+        <a class="btn btn-default pull-right" style="display:{UserID_display}" href="#" onclick="saveUserInfo(this,'{UserID}')">{SaveLabel}</a>
+    </td>
+</tr>

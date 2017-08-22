@@ -9,6 +9,7 @@
         "OrderHistoryList": "Order History",
         "DriverMap": "Driver Map",
         "DriverList": "Driver List",
+        "UserManagement": "User Management",
         "Analytics": "Analytics",
         "ShopAnalytics": "Shop Analytics",
         "ProductAnalytics": "Product Analytics",
@@ -40,6 +41,9 @@
     },
     "errorpage": {
         "return-to-home-page": "Please click here to return to home page"
+    },
+    "nonapprovalpage": {
+        "return-to-home-page": "Please require user admin to approve your account before accessing this web console"
     },
     "coffeemakeranalytics": {
         "SearchConditionLabel": "Target Orders",
@@ -246,5 +250,16 @@
         "Save": "Save",
         "Cancel": "Cancel",
         "error-Please-join-in-head-shop": "Please join in head shop first"
+    },
+    "usermanagement": {
+        "UserManagement": "User Management",
+        "DisplayNameLabel": "Display Name",
+        "PhoneLabel": "Phone",
+        "MailLabel": "Mail",
+        "RoleLabel": "Role",
+        "OnlineLabel": "Online",
+        "ApprovedLabel": "Approved",
+        "SaveLabel": "Save",
+        "error-Failed-to-approve-driver": "Failed to approve driver"
     }
 }

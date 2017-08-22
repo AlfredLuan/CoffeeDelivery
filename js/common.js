@@ -37,6 +37,10 @@ var FIXED_CURRENT_LOCATION = {
     lng: 100.5955492
 };
 
+// this param is used to enable/disable validation on user approval when page loads
+// if it's enabled (true), the users without approval will be redirected to error page
+var VALIDATE_USER_APPROVAL = false;
+
 Kii.initializeWithSite(KII_APP_ID, KII_APP_KEY, KII_SITE);
 
 var GOOGLE_MAP_KEY = "AIzaSyBGJuotfOlzXBw7rOyVYtrLnPfeX_VblLs";
@@ -46,7 +50,8 @@ var UserRole = {
     Operator: "operator",
     ProductManager: "product_manager",
     Driver: "driver",
-    Consumer: "consumer"
+    Consumer: "consumer",
+    Admin: "admin"
 };
 
 var ShopRole = {
@@ -400,6 +405,9 @@ function getHtmlName() {
     // this case could happen while accessing to "http://host:port" directly without inputting html page in url
     if (htmlName == "") {
         htmlName = "index";
+    }
+    if (isArray(htmlName)) {
+        htmlName = htmlName[0];
     }
 
     return htmlName;

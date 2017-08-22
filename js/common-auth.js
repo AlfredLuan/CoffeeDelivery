@@ -1,3 +1,79 @@
+
+
+function getAvailableLinksForUserRole(role) {
+
+    console.log("user role", role);
+
+    var links = [];
+
+    switch (role) {
+        case UserRole.CoffeeMaker:
+            links = [
+                "link_shoplist",
+                "link_orderlist",
+                "link_orderhistorylist",
+                "link_drivermap",
+                "link_myprofile",
+                "link_displayname",
+                "link_logout"
+            ];
+            break;
+        case UserRole.Operator:
+            links = [
+                "link_shoplist",
+                "link_producttemplatelist",
+                "link_orderlist",
+                "link_orderhistorylist",
+                "link_drivermap",
+                "link_driverlist",
+                "link_analytics",
+                "link_shopanalytics",
+                "link_productanalytics",
+                "link_coffeemakeranalytics",
+                "link_driveranalytics",
+                "link_myprofile",
+                "link_displayname",
+                "link_logout"
+            ];
+            break;
+        case UserRole.ProductManager:
+            links = [
+                "link_shoplist",
+                "link_producttemplatelist",
+                "link_analytics",
+                "link_productanalytics",
+                "link_myprofile",
+                "link_displayname",
+                "link_logout"
+            ];
+            break;
+        case UserRole.Driver:
+            links = [
+                "link_myprofile",
+                "link_displayname",
+                "link_logout"
+            ];
+            break;
+        case UserRole.Consumer:
+            links = [
+                "link_myprofile",
+                "link_displayname",
+                "link_logout"
+            ];
+            break;
+        case UserRole.Admin:
+            links = [
+                "link_usermanagement",
+                "link_myprofile",
+                "link_displayname",
+                "link_logout"
+            ];
+            break;
+    }
+
+    return links;
+}
+
 function getRedirectUrlAfterLogin(kiiUser) {
 
     var role = kiiUser.get(UserAttribute.Role);
@@ -12,6 +88,9 @@ function getRedirectUrlAfterLogin(kiiUser) {
             break;
         case UserRole.ProductManager:
             url = "/page/producttemplatelist.html";
+            break;
+        case UserRole.Admin:
+            url = "/page/usermanagement.html";
             break;
         default:
             url = "/page/errorpage.html";
@@ -204,72 +283,6 @@ function loadCurrentUserInfo(onSuccess, onFailure) {
     })
 }
 
-function getAvailableLinksForUserRole(role) {
-
-    console.log("user role", role);
-
-    var links = [];
-
-    switch (role) {
-        case UserRole.CoffeeMaker:
-            links = [
-                "link_shoplist",
-                "link_orderlist",
-                "link_orderhistorylist",
-                "link_drivermap",
-                "link_myprofile",
-                "link_displayname",
-                "link_logout"
-            ];
-            break;
-        case UserRole.Operator:
-            links = [
-                "link_shoplist",
-                "link_producttemplatelist",
-                "link_orderlist",
-                "link_orderhistorylist",
-                "link_drivermap",
-                "link_driverlist",
-                "link_analytics",
-                "link_shopanalytics",
-                "link_productanalytics",
-                "link_coffeemakeranalytics",
-                "link_driveranalytics",
-                "link_myprofile",
-                "link_displayname",
-                "link_logout"
-            ];
-            break;
-        case UserRole.ProductManager:
-            links = [
-                "link_shoplist",
-                "link_producttemplatelist",
-                "link_analytics",
-                "link_productanalytics",
-                "link_myprofile",
-                "link_displayname",
-                "link_logout"
-            ];
-            break;
-        case UserRole.Driver:
-            links = [
-                "link_myprofile",
-                "link_displayname",
-                "link_logout"
-            ];
-            break;
-        case UserRole.Consumer:
-            links = [
-                "link_myprofile",
-                "link_displayname",
-                "link_logout"
-            ];
-            break;
-    }
-
-    return links;
-}
-
 function loadTopNavBar(isBackToHomePage) {
     return loadTopNavBarHtml().then(function() {
         return checkLoginStatus(isBackToHomePage);
@@ -298,6 +311,27 @@ function loadTopNavBarHtml() {
     return d.promise();
 }
 
+//
+// either of below conditions will return true; otherwise, return false
+// - the user is admin (UserRole.Admin) or operator (UserRole.Operator)
+// - validation on user approval is disabled
+// - validation on user approval is enabled, and user is approved
+function checkUserApproval(kiiUser) {
+
+    var role = kiiUser.get(UserAttribute.Role);
+    if(role == UserRole.Admin || role == UserRole.Operator) {
+        return true;
+    }
+
+    var approved = toSafeBoolean(kiiUser.get(UserAttribute.Approved));
+
+    if(VALIDATE_USER_APPROVAL == true) {
+        return approved;
+    }
+
+    return true;
+}
+
 // check login status
 // based on login status, change the display of top nav bar
 function checkLoginStatus(isBackToHomePage) {
@@ -318,6 +352,23 @@ function checkLoginStatus(isBackToHomePage) {
 
             var availableLinks = getAvailableLinksForUserRole(theUser.get(UserAttribute.Role));
 
+            // check user approval, to decide whether jump to non approval page
+            if(checkUserApproval(theUser) == false) {
+                var htmlName = getHtmlName();
+                console.log("current page", htmlName);
+                // if user is not approved, still can stay in below pages
+                var availablePagesWhenUserNotApproved = [
+                    "nonapprovalpage",
+                    "index",
+                    "myprofile"
+                ];
+                if(availablePagesWhenUserNotApproved.indexOf(htmlName) < 0) {
+                    console.log("current user is not approved, jump to non approval page");
+                    // go to non approval page
+                    window.location.href = "/page/nonapprovalpage.html";
+                }
+            }
+
             // show login info
             for (var i = 0; i < elementsBeforeLogin.length; i++) {
                 elementsBeforeLogin[i].style.display = "none";
@@ -326,6 +377,21 @@ function checkLoginStatus(isBackToHomePage) {
             for (var i = 0; i < elementsAfterLogin.length; i++) {
 
                 elementsAfterLogin[i].style.display = "none";
+
+                // check user approval, to decide whether display the links in top nav bar
+                if(checkUserApproval(theUser) == false) {
+
+                    // if user is not approved, still can see below links in top nav bar
+                    var availableLinksWhenUserNotApproved = [
+                        "link_myprofile",
+                        "link_displayname",
+                        "link_logout"
+                    ];
+
+                    if(availableLinksWhenUserNotApproved.indexOf(elementsAfterLogin[i].id) < 0) {
+                        continue;
+                    }
+                }
 
                 // only display the corresponding links for the role
                 for (var j = 0; j < availableLinks.length; j++) {
@@ -352,7 +418,7 @@ function checkLoginStatus(isBackToHomePage) {
 
             clearErrorMessage("navbar_error_message");
 
-            // display login name and role
+            // display login name
             var displayName = theUser.getDisplayName();
             if(isUnavailable(displayName)) {
                 displayName = loginName;

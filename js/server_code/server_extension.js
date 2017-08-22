@@ -4,7 +4,8 @@ var UserRole = {
     Operator: "operator",
     ProductManager: "product_manager",
     Driver: "driver",
-    Consumer: "consumer"
+    Consumer: "consumer",
+    Admin: "admin"
 };
 
 var UserAttribute = {
@@ -361,7 +362,7 @@ function updateUserAttribute(params, context, done) {
     loadCaller(context, function(currentUser) {
         // check caller role
         var role = currentUser.get(UserAttribute.Role);
-        if(role != UserRole.Operator) {
+        if(role != UserRole.Operator && role != UserRole.Admin) {
             done(failureResponse("permission denied"));
             return;
         }
