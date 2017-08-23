@@ -1,6 +1,14 @@
 
 function showDriverMap(map, infoWindow) {
 
+    // get role of current login user
+    var currentUser = KiiUser.getCurrentUser();
+    var role = currentUser.get(UserAttribute.Role);
+
+    if(role == UserRole.Operator) {
+        document.getElementById("driver_icon_label").style.display = "inline";
+    }
+
     var markerMapOfDrivers = {};
 
     loadMap(map, infoWindow, function(myPosition) {
@@ -49,6 +57,10 @@ function showDriverLocation(myPosition, map, markerMapOfDrivers) {
                 // clean up marker map
                 cleanMarkerMap(markerMapOfDrivers);
 
+                // get role of current login user
+                var currentUser = KiiUser.getCurrentUser();
+                var role = currentUser.get(UserAttribute.Role);
+
                 for (var i = 0; i < driverLocationList.length; i++) {
 
                     var driverLocation = driverLocationList[i];
@@ -60,21 +72,27 @@ function showDriverLocation(myPosition, map, markerMapOfDrivers) {
                     // console.log("location", location);
 
                     // if driver is not approved, don't show it
-                    // if driver is offline, mark gray
+                    // if driver is offline, mark gray, only show it for operator
                     // if driver is online and without order, mark green
-                    // if driver is online and with order, mark red
+                    // if driver is online and with order, mark red, only show if for operator
                     var markerIcon = null;
                     if(isUnavailable(driver)) {
                         console.log("driver " + driverID + " is not approved");
                         continue;
                     } else if (toSafeBoolean(driver.get(UserAttribute.Online)) == false) {
                         console.log("driver " + driverID + " is offline");
+                        if(role != UserRole.Operator) {
+                            continue;
+                        }
                         markerIcon = "http://maps.google.com/mapfiles/marker_grey.png";
                     } else if (driverOrderMap[driverID].length == 0) {
                         console.log("driver " + driverID + " is without order");
                         markerIcon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
                     } else {
                         console.log("driver " + driverID + " is with order");
+                        if(role != UserRole.Operator) {
+                            continue;
+                        }
                         markerIcon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
                     }
 
