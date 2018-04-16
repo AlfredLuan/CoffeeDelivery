@@ -14,6 +14,11 @@ The other two parts of coffee delivery solution are:
 - [CoffeeMe](https://github.com/leonardean/CoffeeMe), a mobile app for consumers to place orders on coffee shops.
 - [CoffeeDrive](https://github.com/leonardean/CoffeeDrive), a mobile app for the drivers who deliver coffee between coffee shops and consumers.
 
+**Notice**
+
+- Portal and the two mobile apps have no dependency with each other's interface directly, all of them are utilizing Kii Cloud as backend and interact with the same Kii App.
+- The recommended browser is Chrome, some scripts are not supported by IE, the other browsers are not tested.
+
 More details of coffee delivery solution can be found in the project folder.
 
 ## Deployment
