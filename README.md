@@ -57,6 +57,13 @@ http-server
 
 It will open port 8080 by default and portal is available there with url [http://localhost:8080/page/index.html](http://localhost:8080/page/index.html).
 
+#### Step 4. Deploy Server Extension
+
+To make each function work fine, before end users starting to work with coffee delivery solution, we also need to upload below server extension and hook config files to Kii App via Kii developer portal:
+
+- ./js/server_code/server_extension.js
+- ./js/server_code/hook_config.js
+
 ------
 
 # Driver Emulator
@@ -95,7 +102,7 @@ node generateOwnerInfo.js
 
 #### Step 4. Create Sensor Config (Optional)
 
-If need to create a new sensor, a file with name `constants_{sensor_name}.json` should be created under folder `driver-emulator` as this new sensor's config. 
+If need to create a new sensor, a file with name `constants_{sensor_name}.json` should be created under folder `driver-emulator` as this new sensor's config.
 
 There are `constants_sensor1.json`, `constants_sensor2.json` and `constants_sensor3.json` already created, can refer to these files for the config format.
 
@@ -127,11 +134,3 @@ Run below command under folder `driver-emulator` to start emulator:
 
 > - the `{sensor_name}` must be consistent with the one in the corresponding config file name `constants_{sensor_name}.json`.
 > - to emulate multiple sensors, please run above command in new command line window with different sensor config.
-
-
-
-
-
-
-
-
